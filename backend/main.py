@@ -1,9 +1,18 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List
-import random
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+# ... other imports ...
 
-app = FastAPI(root_path="/api")
+app = FastAPI()
+
+# Setup CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://frontend-service-xxx.a.run.app"],  # Replace with your actual frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Pydantic models for request/response bodies
 class NameRequest(BaseModel):
@@ -52,6 +61,7 @@ async def submit_labels(submission: LabelSubmission):
     print(f"Example scores: {submission.exampleScores}")
     return {"message": "Labels submitted successfully"}
 
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)
