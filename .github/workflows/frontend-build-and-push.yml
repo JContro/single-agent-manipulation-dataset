@@ -1,21 +1,26 @@
-name: Build and Push to Artifact Registry
+name: Frontend Build and Push to Artifact Registry
 
 on:
   push:
     branches: [main]
+    paths:
+      - "frontend/**"
   pull_request:
     branches: [main]
+    paths:
+      - "frontend/**"
 
 env:
   PROJECT_ID: alpine-anvil-244411
   REPOSITORY_NAME: combined-app
   REGION: europe-west2
-  IMAGE_NAME: combined-app
+  IMAGE_NAME: frontend-app
 
 jobs:
-  build-and-push:
+  build-and-push-frontend:
     runs-on: ubuntu-latest
     environment: GCP-env
+
     steps:
       - name: Checkout code into workspace directory
         uses: actions/checkout@v4
@@ -53,6 +58,7 @@ jobs:
           --description="Repository for combined-app"
 
       - name: Build Docker image
+        working-directory: ./frontend
         run: |
           docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
 
