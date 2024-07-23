@@ -33,7 +33,19 @@ jobs:
         run: |
           gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
+      - name: Check if Artifact Registry Repository exists
+        id: check_repo
+        run: |
+          if gcloud artifacts repositories describe ${{ env.REPOSITORY_NAME }} --location=${{ env.REGION }} --format="value(name)" 2>/dev/null; then
+            echo "Repository exists"
+            echo "repo_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Repository does not exist"
+            echo "repo_exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Artifact Registry Repository
+        if: steps.check_repo.outputs.repo_exists == 'false'
         run: |
           gcloud artifacts repositories create ${{ env.REPOSITORY_NAME }} \
           --repository-format=docker \
