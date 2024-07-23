@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# ... other imports ...
+from pydantic import BaseModel
+from typing import List
+import random
 
 app = FastAPI()
 
@@ -12,7 +14,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Pydantic models for request/response bodies
 class NameRequest(BaseModel):
@@ -60,7 +61,6 @@ async def submit_labels(submission: LabelSubmission):
     print(f"Manipulative score: {submission.manipulativeScore}")
     print(f"Example scores: {submission.exampleScores}")
     return {"message": "Labels submitted successfully"}
-
 
 if __name__ == "__main__":
     import uvicorn
