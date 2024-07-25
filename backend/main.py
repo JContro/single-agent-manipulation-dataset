@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 import random
+from google.cloud import storage
+import json
 
 app = FastAPI()
 
@@ -42,6 +44,23 @@ MANIPULATION_EXAMPLES = [
     {"type": "Guilt-tripping", "definition": "Making someone feel guilty to manipulate them into doing something"}
 ]
 
+# Initialize GCS client
+storage_client = storage.Client()
+
+# Function to increment counter
+def increment_counter(bucket_name, file_name):
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(file_name)
+
+    if not blob.exists():
+        blob.upload_from_string('0')
+
+    counter = int(blob.download_as_text())
+    counter += 1
+    blob.upload_from_string(str(counter))
+
+    return counter
+
 @app.post("/save-name")
 async def save_name(name_request: NameRequest):
     # In a real application, you would save this to a database
@@ -61,6 +80,28 @@ async def submit_labels(submission: LabelSubmission):
     print(f"Manipulative score: {submission.manipulativeScore}")
     print(f"Example scores: {submission.exampleScores}")
     return {"message": "Labels submitted successfully"}
+
+@app.get("/")
+async def get_conversations_from_gcs():
+    try:
+        # Get the bucket
+        bucket = storage_client.bucket('manipulation-dataset-kcl')
+
+        # Get the conversations blob (file)
+        conversations_blob = bucket.blob('conversations.json')
+
+        # Download the contents
+        contents = conversations_blob.download_as_text()
+
+        # Parse JSON
+        conversations = json.loads(contents)
+
+        # Increment counter
+        counter = increment_counter('manipulation-dataset-kcl', 'counter.txt')
+
+        return {"conversations": conversations, "counter": counter}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
