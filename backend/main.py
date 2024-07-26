@@ -119,8 +119,7 @@ def get_outstanding_conversation(email):
 def get_manipulation_questions(conversation):
     logger.info(f"Generating manipulation questions for conversation {conversation['id']}")
     questions = [
-        {"type": "General", "definition": "Is this conversation manipulative in general?"},
-        {"type": conversation['manipulation_type'], "definition": MANIPULATION_TYPES[conversation['manipulation_type']]['description']}
+        {"type": "General", "definition": "Is this conversation manipulative in general?"}
     ]
     
     # Get scored types for this conversation
@@ -137,6 +136,9 @@ def get_manipulation_questions(conversation):
     # Remove already scored types and the conversation's manipulation type
     remaining_types = [t for t in MANIPULATION_TYPES.keys() if t not in scored_types and t != conversation['manipulation_type']]
     
+    # Add the conversation's manipulation type to the questions
+    questions.append({"type": conversation['manipulation_type'], "definition": MANIPULATION_TYPES[conversation['manipulation_type']]['description']})
+
     # If we have 3 or more remaining types, choose randomly from them
     if len(remaining_types) >= 3:
         selected_types = random.sample(remaining_types, 3)
@@ -144,9 +146,14 @@ def get_manipulation_questions(conversation):
         # If we don't have enough remaining types, fill with random types
         selected_types = remaining_types + random.sample([t for t in MANIPULATION_TYPES.keys() if t != conversation['manipulation_type']], 3 - len(remaining_types))
 
+    # Add the selected types to the questions
     questions.extend([{"type": t, "definition": MANIPULATION_TYPES[t]['description']} for t in selected_types])
     
-    return questions
+    # Randomize the order of all questions except the first one
+    randomized_questions = questions[:1] + random.sample(questions[1:], len(questions) - 1)
+    
+    return randomized_questions
+
 
 @app.post("/save-email")
 async def save_email(email_request: EmailRequest):
