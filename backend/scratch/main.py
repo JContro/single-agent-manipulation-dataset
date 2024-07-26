@@ -1,3 +1,4 @@
+import os
 import json
 import logging
 import random
@@ -5,7 +6,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
-from google.cloud import storage
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -31,41 +31,31 @@ class LabelSubmission(BaseModel):
     conversation_id: str
     scores: Dict[str, int]
 
-# GCS configuration
-BUCKET_NAME = 'manipulation-dataset-kcl'
-MANIPULATION_DEFINITIONS_BLOB = 'manipulation-definitions.json'
-CONVERSATIONS_BLOB = 'conversations.json'
-HUMAN_RESPONSES_BLOB = 'human_responses.json'
-
-# Initialize GCS client
-storage_client = storage.Client()
-bucket = storage_client.bucket(BUCKET_NAME)
+# File paths
+DATA_DIR = "data"
+MANIPULATION_DEFINITIONS_FILE = os.path.join(DATA_DIR, "manipulation-definitions.json")
+CONVERSATIONS_FILE = os.path.join(DATA_DIR, "conversations.json")
+HUMAN_RESPONSES_FILE = os.path.join(DATA_DIR, "human_responses.json")
 
 # Helper functions
-def read_json_from_gcs(blob_name):
-    logger.info(f"Reading {blob_name} from GCS bucket {BUCKET_NAME}")
-    blob = bucket.blob(blob_name)
-    content = blob.download_as_text()
-    return json.loads(content)
+def read_json_from_file(file_path):
+    logger.info(f"Reading {file_path}")
+    with open(file_path, 'r') as file:
+        return json.load(file)
 
-def write_json_to_gcs(blob_name, data):
-    logger.info(f"Writing to {blob_name} in GCS bucket {BUCKET_NAME}")
-    blob = bucket.blob(blob_name)
-    blob.upload_from_string(json.dumps(data))
-
-MANIPULATION_TYPES = read_json_from_gcs(MANIPULATION_DEFINITIONS_BLOB)
+MANIPULATION_TYPES = read_json_from_file(MANIPULATION_DEFINITIONS_FILE)
 logger.info("Manipulation types loaded successfully")
 
-def get_conversations_from_gcs():
-    logger.info("Fetching conversations from GCS")
-    return read_json_from_gcs(CONVERSATIONS_BLOB)
+def get_conversations_from_file():
+    logger.info("Fetching conversations from file")
+    return read_json_from_file(CONVERSATIONS_FILE)
 
 def save_human_responses(new_response):
-    logger.info("Saving human response to GCS")
+    logger.info("Saving human response to file")
     
-    blob = bucket.blob(HUMAN_RESPONSES_BLOB)
-    if blob.exists():
-        responses = json.loads(blob.download_as_text())
+    if os.path.exists(HUMAN_RESPONSES_FILE):
+        with open(HUMAN_RESPONSES_FILE, 'r') as file:
+            responses = json.load(file)
     else:
         responses = []
 
@@ -78,18 +68,19 @@ def save_human_responses(new_response):
         # If no existing response found, append the new one
         responses.append(new_response)
 
-    write_json_to_gcs(HUMAN_RESPONSES_BLOB, responses)
+    with open(HUMAN_RESPONSES_FILE, 'w') as file:
+        json.dump(responses, file)
     logger.info(f"Saved response for conversation {new_response['conversation_id']}")
 
 def get_outstanding_conversation(email):
     logger.info(f"Finding outstanding conversation for email: {email}")
     
     # Get all conversations and human responses
-    conversations = get_conversations_from_gcs()
+    conversations = get_conversations_from_file()
     
-    blob = bucket.blob(HUMAN_RESPONSES_BLOB)
-    if blob.exists():
-        human_responses = json.loads(blob.download_as_text())
+    if os.path.exists(HUMAN_RESPONSES_FILE):
+        with open(HUMAN_RESPONSES_FILE, 'r') as file:
+            human_responses = json.load(file)
     else:
         human_responses = []
 
@@ -124,9 +115,9 @@ def get_manipulation_questions(conversation):
     ]
     
     # Get scored types for this conversation
-    blob = bucket.blob(HUMAN_RESPONSES_BLOB)
-    if blob.exists():
-        human_responses = json.loads(blob.download_as_text())
+    if os.path.exists(HUMAN_RESPONSES_FILE):
+        with open(HUMAN_RESPONSES_FILE, 'r') as file:
+            human_responses = json.load(file)
         scored_types = set()
         for response in human_responses:
             if response['conversation_id'] == conversation['id']:
@@ -167,7 +158,7 @@ async def submit_labels(submission: LabelSubmission):
     logger.info(f"For conversation: {submission.conversation_id}")
     logger.info(f"Scores: {submission.scores}")
     
-    # Save the submission to GCS
+    # Save the submission to file
     save_human_responses(submission.dict())
     
     return {"message": "Labels submitted successfully"}

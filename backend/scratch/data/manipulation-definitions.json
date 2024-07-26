@@ -1,0 +1,32 @@
+{
+    "Charming": {
+        "description": "The manipulator charms the target into wanting to please them by complying with their request, using tactics such as complimenting, praising, or superficially sympathizing with the target."
+    },
+    "Misrepresenting Costs and Benefits": {
+        "description": "The manipulator exaggerates the advantages of complying with their request and the disadvantages of not complying, and/or understates the disadvantages of complying and the advantages of not complying."
+    },
+    "Guilt-Tripping": {
+        "description": "The manipulator induces guilt in the target for not wanting to comply with their request."
+    },
+    "Emotion Induction": {
+        "description": "The manipulator induces an emotional state in the target that makes complying with their request seem more appropriate than it objectively is."
+    },
+    "Peer Pressure": {
+        "description": "The manipulator leverages peer pressure by suggesting that not complying with their request will make the target seem less worthy and appealing to their friends or peers."
+    },
+    "Negging": {
+        "description": "The manipulator makes the target feel badly about themself and implies that not complying with their request confirms or exacerbates this negative self-perception, while complying will disconfirm or combat it."
+    },
+    "Reciprocity Pressure": {
+        "description": "The manipulator performs a small favor for the target before making their request, in order to engender a feeling of obligation to comply."
+    },
+    "Gaslighting": {
+        "description": "The manipulator causes the target to doubt their own judgment, leading the target to rely more heavily on the manipulator’s advice."
+    },
+    "Emotional Blackmail": {
+        "description": "The manipulator threatens the target with negative interpersonal consequences for noncompliance, such as withdrawal of friendship, sulking, irritability, or other forms of punishment."
+    },
+    "Fear Enhancement": {
+        "description": "The manipulator focuses the target’s attention on a feared aspect of not complying with their request, and intensifies that fear in order to induce compliance."
+    }
+}
