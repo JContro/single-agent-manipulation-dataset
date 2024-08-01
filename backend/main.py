@@ -36,6 +36,7 @@ BUCKET_NAME = 'manipulation-dataset-kcl'
 MANIPULATION_DEFINITIONS_BLOB = 'manipulation-definitions.json'
 CONVERSATIONS_BLOB = 'conversations.json'
 HUMAN_RESPONSES_BLOB = 'human_responses.json'
+USER_SCORES_BLOB = 'user_scores.json'
 
 # Initialize GCS client
 storage_client = storage.Client()
@@ -155,6 +156,23 @@ def get_manipulation_questions(conversation):
     return randomized_questions
 
 
+def get_user_scores():
+    logger.info("Fetching user scores from GCS")
+    blob = bucket.blob(USER_SCORES_BLOB)
+    if blob.exists():
+        return json.loads(blob.download_as_text())
+    else:
+        return {}
+
+def update_user_scores(email: str):
+    logger.info(f"Updating score count for user: {email}")
+    user_scores = get_user_scores()
+    if email in user_scores:
+        user_scores[email] += 1
+    else:
+        user_scores[email] = 1
+    write_json_to_gcs(USER_SCORES_BLOB, user_scores)
+
 @app.post("/save-email")
 async def save_email(email_request: EmailRequest):
     logger.info(f"Saving email: {email_request.email}")
@@ -177,7 +195,19 @@ async def submit_labels(submission: LabelSubmission):
     # Save the submission to GCS
     save_human_responses(submission.dict())
     
+    # Update the user's score count
+    update_user_scores(submission.email)
+    
     return {"message": "Labels submitted successfully"}
+
+@app.get("/get-scored-conversations")
+async def get_scored_conversations(email: str):
+    logger.info(f"Getting scored conversations count for email: {email}")
+    user_scores = get_user_scores()
+    count = user_scores.get(email, 0)
+    logger.info(f"User {email} has scored {count} conversations")
+    return {"email": email, "scored_conversations": count}
+
 
 if __name__ == "__main__":
     import uvicorn
