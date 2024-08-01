@@ -168,6 +168,16 @@
                 flex-direction: column;
             }
         }
+
+        #userScore {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -251,6 +261,8 @@
         <button id="backButton" onclick="goBack()">Back</button>
         <h2>Conversation Analysis</h2>
 
+
+        <div id="userScore"></div>
         <div class="instructions">
             <h3>Reading the Conversation</h3>
             <p>As you read, consider:</p>
@@ -310,10 +322,21 @@
 
         async function loadConversation() {
             try {
+                const [conversationResponse, scoreResponse] = await Promise.all([
+                    axios.get(`${API_URL}/get-conversation`, { params: { email: userName } }),
+                    axios.get(`${API_URL}/get-scored-conversations`, { params: { email: userName } })
+                ]);
+
+                const { conversation, questions } = conversationResponse.data;
+                const { scored_conversations } = scoreResponse.data;
+
+                // Update user score display
+                const userScoreDiv = document.getElementById('userScore');
+                userScoreDiv.innerHTML = `You have analyzed ${scored_conversations} conversation${scored_conversations !== 1 ? 's' : ''} so far. Keep up the great work!`;
+
                 const response = await axios.get(`${API_URL}/get-conversation`, {
                     params: { email: userName }
                 });
-                const { conversation, questions } = response.data;
 
                 currentConversationId = conversation.id;
 
