@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
 from google.cloud import storage
+from datetime import datetime, timezone
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +38,7 @@ MANIPULATION_DEFINITIONS_BLOB = 'manipulation-definitions.json'
 CONVERSATIONS_BLOB = 'conversations.json'
 HUMAN_RESPONSES_BLOB = 'human_responses.json'
 USER_SCORES_BLOB = 'user_scores.json'
+TIMING_BLOB = 'user_timing.json'  # New blob for storing timing information
 
 # Initialize GCS client
 storage_client = storage.Client()
@@ -82,6 +84,25 @@ def save_human_responses(new_response):
     write_json_to_gcs(HUMAN_RESPONSES_BLOB, responses)
     logger.info(f"Saved response for conversation {new_response['conversation_id']}")
 
+def save_timing_info(email: str, conversation_id: str, request_time: str, submission_time: str = None):
+    logger.info(f"Saving timing info for email: {email}, conversation: {conversation_id}")
+    blob = bucket.blob(TIMING_BLOB)
+    if blob.exists():
+        timing_info = json.loads(blob.download_as_text())
+    else:
+        timing_info = {}
+
+    if email not in timing_info:
+        timing_info[email] = {}
+
+    if conversation_id not in timing_info[email]:
+        timing_info[email][conversation_id] = {"request_time": request_time}
+    
+    if submission_time:
+        timing_info[email][conversation_id]["submission_time"] = submission_time
+
+    write_json_to_gcs(TIMING_BLOB, timing_info)
+    
 def get_outstanding_conversation(email):
     logger.info(f"Finding outstanding conversation for email: {email}")
     
@@ -155,7 +176,6 @@ def get_manipulation_questions(conversation):
     
     return randomized_questions
 
-
 def get_user_scores():
     logger.info("Fetching user scores from GCS")
     blob = bucket.blob(USER_SCORES_BLOB)
@@ -173,16 +193,42 @@ def update_user_scores(email: str):
         user_scores[email] = 1
     write_json_to_gcs(USER_SCORES_BLOB, user_scores)
 
+# New function to save timing information
+def save_timing_info(email: str, conversation_id: str, request_time: str, submission_time: str = None):
+    logger.info(f"Saving timing info for email: {email}, conversation: {conversation_id}")
+    blob = bucket.blob(TIMING_BLOB)
+    if blob.exists():
+        timing_info = json.loads(blob.download_as_text())
+    else:
+        timing_info = {}
+
+    if email not in timing_info:
+        timing_info[email] = {}
+
+    if conversation_id not in timing_info[email]:
+        timing_info[email][conversation_id] = {"request_time": request_time}
+    
+    if submission_time:
+        timing_info[email][conversation_id]["submission_time"] = submission_time
+
+    write_json_to_gcs(TIMING_BLOB, timing_info)
+
 @app.post("/save-email")
 async def save_email(email_request: EmailRequest):
     logger.info(f"Saving email: {email_request.email}")
     return {"message": "Email saved successfully"}
+
 
 @app.get("/get-conversation")
 async def get_conversation(email: str):
     logger.info(f"Getting conversation for email: {email}")
     conversation = get_outstanding_conversation(email)
     questions = get_manipulation_questions(conversation)
+    
+    # Save request timestamp
+    request_time = datetime.now(timezone.utc).isoformat()
+    save_timing_info(email, conversation['id'], request_time)
+    
     logger.info(f"Returning conversation {conversation['id']} with {len(questions)} questions")
     return {"conversation": conversation, "questions": questions}
 
@@ -198,6 +244,10 @@ async def submit_labels(submission: LabelSubmission):
     # Update the user's score count
     update_user_scores(submission.email)
     
+    # Save submission timestamp
+    submission_time = datetime.now(timezone.utc).isoformat()
+    save_timing_info(submission.email, submission.conversation_id, request_time=None, submission_time=submission_time)
+    
     return {"message": "Labels submitted successfully"}
 
 @app.get("/get-scored-conversations")
@@ -208,6 +258,19 @@ async def get_scored_conversations(email: str):
     logger.info(f"User {email} has scored {count} conversations")
     return {"email": email, "scored_conversations": count}
 
+# New endpoint to get timing information
+@app.get("/get-timing-info")
+async def get_timing_info(email: str = None):
+    logger.info(f"Getting timing info for email: {email}")
+    blob = bucket.blob(TIMING_BLOB)
+    if blob.exists():
+        timing_info = json.loads(blob.download_as_text())
+        if email:
+            return {"email": email, "timing_info": timing_info.get(email, {})}
+        else:
+            return timing_info
+    else:
+        return {}
 
 if __name__ == "__main__":
     import uvicorn

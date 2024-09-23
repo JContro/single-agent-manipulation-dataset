@@ -178,7 +178,35 @@
             font-size: 18px;
             text-align: center;
         }
+
+        #doneButton {
+            background-color: white;
+            color: #333;
+            border: 2px solid #27ae60;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #doneButton:hover {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        #thankYouMessage {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
     </style>
+
 </head>
 
 <body>
@@ -291,6 +319,13 @@
         </div>
 
         <button onclick="submitLabels()" id="submitButton">Submit and Load Next</button>
+
+        <button id="doneButton" onclick="showThankYouMessage()">I'm done!</button>
+
+        <div id="thankYouMessage">
+            Thank you so much for your help! You can close the browser and Jack will be in touch regarding the vouchers
+            via the email you entered. You can always do more conversations using the same link at a later time!
+        </div>
     </div>
 
     <script>
@@ -320,6 +355,11 @@
             }
         }
 
+        function showThankYouMessage() {
+            document.getElementById('labelingSection').innerHTML = '';
+            document.getElementById('thankYouMessage').style.display = 'block';
+        }
+
         async function loadConversation() {
             try {
                 const [conversationResponse, scoreResponse] = await Promise.all([
@@ -330,15 +370,21 @@
                 const { conversation, questions } = conversationResponse.data;
                 const { scored_conversations } = scoreResponse.data;
 
-                // Update user score display
+                // Update user score display with new reward structure
                 const userScoreDiv = document.getElementById('userScore');
-                userScoreDiv.innerHTML = `You have analyzed ${scored_conversations} conversation${scored_conversations !== 1 ? 's' : ''} so far. Keep up the great work!`;
+                let scoreMessage = `You have analyzed ${scored_conversations} conversation${scored_conversations !== 1 ? 's' : ''}.<br>`;
 
-                const response = await axios.get(`${API_URL}/get-conversation`, {
-                    params: { email: userName }
-                });
+                if (scored_conversations < 10) {
+                    scoreMessage += `${scored_conversations}/10 to enter the ballot to win a £100 Amazon voucher!`;
+                } else if (scored_conversations < 50) {
+                    scoreMessage += `${scored_conversations}/50 to win £5! (You're already entered in the £100 ballot)`;
+                } else {
+                    const nextMilestone = Math.ceil(scored_conversations / 50) * 50;
+                    const currentReward = Math.floor(scored_conversations / 50) * 5;
+                    scoreMessage += `${scored_conversations}/${nextMilestone} to win £${currentReward + 5}! (You've already won £${currentReward})`;
+                }
 
-                currentConversationId = conversation.id;
+                userScoreDiv.innerHTML = scoreMessage;
 
                 // Display the conversation context
                 const conversationDiv = document.getElementById('conversation');
@@ -367,6 +413,9 @@
                     `;
                     questionsDiv.appendChild(questionDiv);
                 });
+
+                // Show the thank you message
+                document.getElementById('thankYouMessage').style.display = 'block';
 
                 // Scroll to the top of the page
                 window.scrollTo(0, 0);
@@ -432,6 +481,10 @@
                 submitButton.innerHTML = 'Submit and Load Next';
                 submitButton.disabled = false;
             }
+        }
+
+        function finishLabeling() {
+            document.body.innerHTML = '';
         }
 
         function goBack() {
