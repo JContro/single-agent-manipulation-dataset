@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "manip-ds-backend"
+version = "0.1.0"
+description = ""
+authors = ["Jack Contro <jack.contro@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.115.0"
+google-cloud = "^0.34.0"
+uvicorn = "^0.30.6"
+google-cloud-core = "^2.4.1"
+google-cloud-storage = "^2.18.2"
+google-cloud-firestore = "^2.18.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
