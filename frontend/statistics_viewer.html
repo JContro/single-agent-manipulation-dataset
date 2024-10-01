@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Statistics Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h2 {
+            font-size: 1.2em;
+            margin-top: 0;
+            color: #34495e;
+        }
+
+        .stat-card p {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 10px 0 0;
+            color: #2980b9;
+        }
+
+        #reviewsPerDayChart {
+            max-width: 100%;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Review Statistics Dashboard</h1>
+    <div class="dashboard">
+        <div class="stat-card">
+            <h2>Total Conversations</h2>
+            <p id="totalConversations"></p>
+        </div>
+        <div class="stat-card">
+            <h2>Reviewed Conversations</h2>
+            <p id="reviewedConversations"></p>
+        </div>
+        <div class="stat-card">
+            <h2>Individual Reviewers</h2>
+            <p id="individualReviewers"></p>
+        </div>
+        <div class="stat-card">
+            <h2>Avg Review Time</h2>
+            <p id="averageReviewTime"></p>
+        </div>
+        <div class="stat-card">
+            <h2>Median Review Time</h2>
+            <p id="medianReviewTime"></p>
+        </div>
+    </div>
+    <canvas id="reviewsPerDayChart"></canvas>
+
+    <script>
+        // Simulated API call (replace with actual API call)
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://backend-api-gztrxlc7wa-nw.a.run.app/get-statistics', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any necessary headers here, such as authentication tokens
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("There was a problem fetching the statistics:", error);
+                // Handle the error appropriately, e.g., show an error message to the user
+                return null;
+            }
+        };
+
+        const updateDashboard = (data) => {
+            document.getElementById('totalConversations').textContent = data.total_conversations;
+            document.getElementById('reviewedConversations').textContent = data.reviewed_conversations;
+            document.getElementById('individualReviewers').textContent = data.individual_reviewers;
+            document.getElementById('averageReviewTime').textContent = `${data.average_review_time_seconds.toFixed(2)}s`;
+            document.getElementById('medianReviewTime').textContent = `${data.median_review_time_seconds.toFixed(2)}s`;
+
+            const ctx = document.getElementById('reviewsPerDayChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data.reviews_per_day),
+                    datasets: [{
+                        label: 'Reviews per Day',
+                        data: Object.values(data.reviews_per_day),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Reviews'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        // Load data and update dashboard
+        fetchData().then(updateDashboard);
+    </script>
+</body>
+
+</html>
