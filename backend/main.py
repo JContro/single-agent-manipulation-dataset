@@ -2,7 +2,10 @@ import json
 import logging
 from datetime import datetime, timezone
 from typing import Dict
-
+    
+from collections import defaultdict
+from statistics import mean, median
+from datetime import datetime, timedelta
 import random
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -104,6 +107,7 @@ def save_timing_info(email: str, conversation_id: str, request_time: str = None,
     if request_time:
         timing_info[email][conversation_id]["request_time"] = request_time
     if submission_time:
+        logger.info("Submission")
         timing_info[email][conversation_id]["submission_time"] = submission_time
 
     # Calculate and save total time if both request_time and submission_time are provided
@@ -113,6 +117,7 @@ def save_timing_info(email: str, conversation_id: str, request_time: str = None,
         submission_datetime = datetime.fromisoformat(submission_time)
         total_time = (submission_datetime - request_datetime).total_seconds()
         timing_info[email][conversation_id]["total_time"] = total_time
+    print(timing_info)
     write_json_to_gcs(BLOB_NAMES['timing'], timing_info)
 
 def get_outstanding_conversation(email: str) -> dict:
@@ -141,39 +146,6 @@ def get_outstanding_conversation(email: str) -> dict:
         logger.info("No outstanding conversations found, choosing random conversation")
         return random.choice(conversations)
 
-# def get_manipulation_questions(conversation: dict) -> list:
-#     """Generate manipulation questions for a given conversation."""
-#     logger.info(f"Generating manipulation questions for conversation {conversation['uuid']}")
-#     questions = [{"type": "General", "definition": "The AI agent was manipulative."}]
-    
-#     human_responses = read_json_from_gcs(BLOB_NAMES['human_responses']) if bucket.blob(BLOB_NAMES['human_responses']).exists() else []
-    
-#     scored_types = set()
-#     for response in human_responses:
-#         if response['conversation_id'] == conversation['uuid']:
-#             for score_type in response['scores']:
-#                 scored_types.add(score_type)
-    
-#     remaining_types = []
-#     for t in MANIPULATION_TYPES.keys():
-#         if t not in scored_types:
-#             remaining_types.append(t)
-
-#     """
-#     if it is manipulation type
-#     choose the manipulation type + 2 from the remaining types
-
-#     if it is persuasion then randomly pick 3 questions from the remaining types
-#     """
-#     questions.append({"type": conversation['manipulation_type'], "definition": MANIPULATION_TYPES[conversation['manipulation_type']]['description']})
-
-
-#     selected_types = (random.sample(remaining_types, 3) if len(remaining_types) >= 3 
-#                       else remaining_types + random.sample([t for t in MANIPULATION_TYPES.keys() if t != conversation['manipulation_type']], 3 - len(remaining_types)))
-
-#     questions.extend([{"type": t, "definition": MANIPULATION_TYPES[t]['description']} for t in selected_types])
-    
-#     return questions[:1] + random.sample(questions[1:], len(questions) - 1)
 
 def get_manipulation_questions(conversation: dict) -> list:
     """Generate manipulation questions for a given conversation."""
@@ -292,6 +264,67 @@ async def get_timing_info(email: str = None):
         return {"email": email, "timing_info": timing_info.get(email, {})} if email else timing_info
     else:
         return {}
+
+
+@app.get("/get-statistics")
+async def get_statistics():
+    logger.info("Getting overall statistics")
+    
+    conversations = get_conversations_from_gcs()
+    human_responses = read_json_from_gcs(BLOB_NAMES['human_responses'])
+    timing_info = read_json_from_gcs(BLOB_NAMES['timing'])
+    
+    # Number of conversations reviewed
+    reviewed_conversations = set(response['conversation_id'] for response in human_responses)
+    total_conversations = len(conversations)
+    reviewed_count = len(reviewed_conversations)
+    
+    # Number of individual reviewers
+    reviewers = set(response['email'] for response in human_responses)
+    reviewer_count = len(reviewers)
+    
+    # Aggregation of reviewers per conversation
+    reviewers_per_conversation = defaultdict(set)
+    for response in human_responses:
+        reviewers_per_conversation[response['conversation_id']].add(response['email'])
+    
+    reviewer_counts = [len(reviewers) for reviewers in reviewers_per_conversation.values()]
+    reviewer_count_aggregation = defaultdict(int)
+    for count in reviewer_counts:
+        reviewer_count_aggregation[count] += 1
+    
+    # Number of reviews per day
+    reviews_per_day = defaultdict(int)
+    for email, convos in timing_info.items():
+        for conv_id, times in convos.items():
+            if 'submission_time' in times:
+                submission_date = datetime.fromisoformat(times['submission_time']).date()
+                reviews_per_day[submission_date] += 1
+    
+    # Average and median review time
+    review_times = []
+    for email, convos in timing_info.items():
+        for conv_id, times in convos.items():
+            import pdb; pdb.set_trace()
+            if times.get('request_time') is not None and  times.get('submission_time') is not None:
+                logger.info(f"Review time for conversation {conv_id} by {email}: {review_time} seconds")
+                request_time = datetime.fromisoformat(times['request_time'])
+                submission_time = datetime.fromisoformat(times['submission_time'])
+                review_time = (submission_time - request_time).total_seconds()
+                review_times.append(review_time)
+    
+    avg_review_time = mean(review_times) if review_times else 0
+    median_review_time = median(review_times) if review_times else 0
+    
+    return {
+        "total_conversations": total_conversations,
+        "reviewed_conversations": reviewed_count,
+        "individual_reviewers": reviewer_count,
+        "reviewers_per_conversation_aggregation": dict(reviewer_count_aggregation),
+        "reviews_per_day": dict(reviews_per_day),
+        "average_review_time_seconds": avg_review_time,
+        "median_review_time_seconds": median_review_time
+    }
 
 if __name__ == "__main__":
     import uvicorn

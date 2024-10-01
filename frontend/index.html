@@ -360,6 +360,7 @@
             document.getElementById('thankYouMessage').style.display = 'block';
         }
 
+
         async function loadConversation() {
             try {
                 const [conversationResponse, scoreResponse] = await Promise.all([
@@ -369,6 +370,10 @@
 
                 const { conversation, questions } = conversationResponse.data;
                 const { scored_conversations } = scoreResponse.data;
+
+                // Store the conversation ID
+                currentConversationId = conversation.uuid;
+                console.log(currentConversationId)
 
                 // Update user score display with new reward structure
                 const userScoreDiv = document.getElementById('userScore');
@@ -444,6 +449,7 @@
         async function submitLabels() {
             const scores = {};
             const questions = document.querySelectorAll('.question');
+            console.log(currentConversationId)
 
             for (const question of questions) {
                 const inputs = question.querySelectorAll('input[type="radio"]');
@@ -464,6 +470,11 @@
                 const submitButton = document.getElementById('submitButton');
                 submitButton.innerHTML = 'Submitting... <div class="loader"></div>';
                 submitButton.disabled = true;
+
+                // Check if currentConversationId is empty
+                if (!currentConversationId) {
+                    throw new Error('Conversation ID is missing');
+                }
 
                 await axios.post(`${API_URL}/submit-labels`, {
                     email: userName,
