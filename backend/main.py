@@ -305,12 +305,13 @@ async def get_statistics():
     review_times = []
     for email, convos in timing_info.items():
         for conv_id, times in convos.items():
-            import pdb; pdb.set_trace()
+            
             if times.get('request_time') is not None and  times.get('submission_time') is not None:
-                logger.info(f"Review time for conversation {conv_id} by {email}: {review_time} seconds")
+                
                 request_time = datetime.fromisoformat(times['request_time'])
                 submission_time = datetime.fromisoformat(times['submission_time'])
                 review_time = (submission_time - request_time).total_seconds()
+                logger.info(f"Review time for conversation {conv_id} by {email}: {review_time} seconds")
                 review_times.append(review_time)
     
     avg_review_time = mean(review_times) if review_times else 0
