@@ -82,6 +82,10 @@
             <p id="reviewedConversations"></p>
         </div>
         <div class="stat-card">
+            <h2>Total Reviews</h2>
+            <p id="totalReviews"></p>
+        </div>
+        <div class="stat-card">
             <h2>Individual Reviewers</h2>
             <p id="individualReviewers"></p>
         </div>
@@ -126,6 +130,7 @@
         const updateDashboard = (data) => {
             document.getElementById('totalConversations').textContent = data.total_conversations;
             document.getElementById('reviewedConversations').textContent = data.reviewed_conversations;
+            document.getElementById('totalReviews').textContent = data.total_reviews;
             document.getElementById('individualReviewers').textContent = data.individual_reviewers;
             document.getElementById('averageReviewTime').textContent = `${data.average_review_time_seconds.toFixed(2)}s`;
             document.getElementById('medianReviewTime').textContent = `${data.median_review_time_seconds.toFixed(2)}s`;
