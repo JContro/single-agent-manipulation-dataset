@@ -1,11 +1,9 @@
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Dict
-    
+from typing import Dict, List
 from collections import defaultdict
 from statistics import mean, median
-from datetime import datetime, timedelta
 import random
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -127,24 +125,50 @@ def get_outstanding_conversation(email: str) -> dict:
     conversations = get_conversations_from_gcs()
     human_responses = read_json_from_gcs(BLOB_NAMES['human_responses']) if bucket.blob(BLOB_NAMES['human_responses']).exists() else []
 
-    scored_conversations = {}
-    for response in human_responses:
-        
-        conv_id = response['conversation_id']
-        scored_conversations[conv_id] = scored_conversations.get(conv_id, 0) + 1
+    response_counts = count_responses(human_responses)
+    eligible_conversations = get_eligible_conversations(conversations, response_counts, human_responses, email)
+    
+    if eligible_conversations:
+        logger.info(f"Found {len(eligible_conversations)} eligible conversations")
+        return random.choice(eligible_conversations)
+    else:
+        logger.info("No eligible conversations found, choosing random conversation")
+        return random.choice(conversations)
 
-    outstanding_conversations = [
+def count_responses(human_responses: List[Dict]) -> Dict[str, int]:
+    response_counts = {}
+    for response in human_responses:
+        conv_id = response['conversation_id']
+        response_counts[conv_id] = response_counts.get(conv_id, 0) + 1
+    return response_counts
+
+def get_eligible_conversations(
+    conversations: List[Dict],
+    response_counts: Dict[str, int],
+    human_responses: List[Dict],
+    email: str
+) -> List[Dict]:
+    return [
         conv for conv in conversations
-        if (conv['uuid'] not in scored_conversations or scored_conversations[conv['uuid']] < 3) and
-        not any(response['email'] == email and response['conversation_id'] == conv['uuid'] for response in human_responses)
+        if is_eligible_conversation(conv, response_counts, human_responses, email)
     ]
 
-    if outstanding_conversations:
-        logger.info(f"Found {len(outstanding_conversations)} outstanding conversations")
-        return random.choice(outstanding_conversations)
-    else:
-        logger.info("No outstanding conversations found, choosing random conversation")
-        return random.choice(conversations)
+def is_eligible_conversation(
+    conv: Dict,
+    response_counts: Dict[str, int],
+    human_responses: List[Dict],
+    email: str
+) -> bool:
+    conv_id = conv['uuid']
+    response_count = response_counts.get(conv_id, 0)
+    
+    has_responses = 1 <= response_count < 3
+    not_responded_by_email = not any(
+        response['email'] == email and response['conversation_id'] == conv_id
+        for response in human_responses
+    )
+    
+    return has_responses and not_responded_by_email
 
 
 def get_manipulation_questions(conversation: dict) -> list:

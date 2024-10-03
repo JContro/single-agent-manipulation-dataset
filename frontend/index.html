@@ -213,7 +213,18 @@
     <div id="projectDescription">
         <h1>AI Manipulation Detection Study</h1>
 
-        <p>Welcome to our research project on AI-generated conversations and manipulation detection!</p>
+        <p>Welcome! This is a survey in on whether some AI generated conversations are manipulative</p>
+        <p>
+            If you fill in 5 conversations, you will be added to the ballot to win 100£ of Amazon vouchers. If you fill
+            in 10 conversations,
+            you will be added 3 times! So it's definitely worth it!
+        </p>
+        <p>
+            If risk is not your thing, you can guarantee yourself 5£ voucher every 50 conversations - but be aware that
+            there are measures in place
+            to check you are filling in truthfully the survey and have read the conversations. No cheating! We need high
+            quality data please!!
+        </p>
 
         <h2>Project Overview</h2>
 
@@ -242,8 +253,19 @@
         <h2>Participation and Rewards</h2>
 
         <ul>
-            <li>The more conversations you analyze, the more opportunities you'll have to win voucher prizes. (See the
-                prizes section for details)</li>
+            <li>The more conversations you analyze, the more opportunities you'll have to win voucher prizes.
+                <ul>
+                    <li>
+                        5 conversations: you get entered into a ballot to win 100£ of amazon vouchers
+                    </li>
+                    <li>
+                        10 conversations: you get entered 3 times into a ballot to win 100£ of amazon vouchers
+                    </li>
+                    <li>
+                        every 50 conversations: you are sent a 5£ amazon voucher
+                    </li>
+                </ul>
+            </li>
             <li>We have measures in place to ensure data quality. Non-legitimate responses will be removed from the
                 dataset, and those participants will not be eligible for vouchers.</li>
         </ul>
@@ -320,7 +342,7 @@
 
         <button onclick="submitLabels()" id="submitButton">Submit and Load Next</button>
 
-        <button id="doneButton" onclick="showThankYouMessage()">I'm done!</button>
+        <button id="doneButton" onclick="handleDoneButton()">I'm done | Back to First Page</button>
 
         <div id="thankYouMessage">
             Thank you so much for your help! You can close the browser and Jack will be in touch regarding the vouchers
@@ -373,20 +395,21 @@
 
                 // Store the conversation ID
                 currentConversationId = conversation.uuid;
-                console.log(currentConversationId)
 
-                // Update user score display with new reward structure
+
                 const userScoreDiv = document.getElementById('userScore');
                 let scoreMessage = `You have analyzed ${scored_conversations} conversation${scored_conversations !== 1 ? 's' : ''}.<br>`;
 
-                if (scored_conversations < 10) {
-                    scoreMessage += `${scored_conversations}/10 to enter the ballot to win a £100 Amazon voucher!`;
+                if (scored_conversations < 5) {
+                    scoreMessage += `${scored_conversations}/5 to enter the ballot to win a £100 Amazon voucher!`;
+                } else if (scored_conversations < 10) {
+                    scoreMessage += `${scored_conversations}/10 to triple your chances of winning a £100 Amazon voucher!`;
                 } else if (scored_conversations < 50) {
-                    scoreMessage += `${scored_conversations}/50 to win £5! (You're already entered in the £100 ballot)`;
+                    scoreMessage += `${scored_conversations}/50 to win a guaranteed £5 Amazon voucher! (You're already entered in the £100 ballot)`;
                 } else {
                     const nextMilestone = Math.ceil(scored_conversations / 50) * 50;
                     const currentReward = Math.floor(scored_conversations / 50) * 5;
-                    scoreMessage += `${scored_conversations}/${nextMilestone} to win £${currentReward + 5}! (You've already won £${currentReward})`;
+                    scoreMessage += `${scored_conversations}/${nextMilestone} to win another £5! (You've already won £${currentReward})`;
                 }
 
                 userScoreDiv.innerHTML = scoreMessage;
@@ -449,7 +472,6 @@
         async function submitLabels() {
             const scores = {};
             const questions = document.querySelectorAll('.question');
-            console.log(currentConversationId)
 
             for (const question of questions) {
                 const inputs = question.querySelectorAll('input[type="radio"]');
@@ -516,6 +538,53 @@
             document.getElementById('ethicsStatement').classList.add('hidden');
             document.getElementById('labelingSection').classList.remove('hidden');
             loadConversation();
+        }
+
+        function handleDoneButton() {
+            const questions = document.querySelectorAll('.question');
+            let allAnswered = true;
+
+            // Check if all questions have been answered
+            for (const question of questions) {
+                const inputs = question.querySelectorAll('input[type="radio"]');
+                if (inputs.length > 0) {
+                    const answered = Array.from(inputs).some(input => input.checked);
+                    if (!answered) {
+                        allAnswered = false;
+                        break;
+                    }
+                }
+            }
+
+            if (allAnswered) {
+                // If all questions are answered, submit the survey
+                submitLabels().then(() => {
+                    // After successful submission, go back to the first page
+                    goToFirstPage();
+                }).catch(error => {
+                    console.error('Error submitting labels:', error);
+                    alert('Error submitting labels. Please try again.');
+                });
+            } else {
+                // If not all questions are answered, just go back to the first page
+                goToFirstPage();
+            }
+        }
+
+        function goToFirstPage() {
+            // Reset the view to the first page
+            document.getElementById('labelingSection').classList.add('hidden');
+            document.getElementById('projectDescription').classList.remove('hidden');
+            document.getElementById('ethicsStatement').classList.remove('hidden');
+            document.getElementById('nameForm').classList.remove('hidden');
+            userName = '';
+            localStorage.removeItem('userName');
+            // Clear any existing conversation data
+            document.getElementById('conversation').innerHTML = '';
+            document.getElementById('questions').innerHTML = '';
+            document.getElementById('generalComments').value = '';
+            // Scroll to the top of the page
+            window.scrollTo(0, 0);
         }
     </script>
 </body>
