@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List
 from collections import defaultdict
 from statistics import mean, median
@@ -124,10 +124,14 @@ def get_outstanding_conversation(email: str) -> dict:
     
     conversations = get_conversations_from_gcs()
     human_responses = read_json_from_gcs(BLOB_NAMES['human_responses']) if bucket.blob(BLOB_NAMES['human_responses']).exists() else []
+    
+    # Add this line to fetch timing information
+    timing_info = read_json_from_gcs(BLOB_NAMES['timing']) if bucket.blob(BLOB_NAMES['timing']).exists() else {}
 
     response_counts = count_responses(human_responses)
-    eligible_conversations = get_eligible_conversations(conversations, response_counts, human_responses, email)
+    eligible_conversations = get_eligible_conversations(conversations, response_counts, human_responses, email, timing_info)  # Add timing_info here
     
+
     if eligible_conversations:
         logger.info(f"Found {len(eligible_conversations)} eligible conversations")
         return random.choice(eligible_conversations)
@@ -146,18 +150,21 @@ def get_eligible_conversations(
     conversations: List[Dict],
     response_counts: Dict[str, int],
     human_responses: List[Dict],
-    email: str
+    email: str,
+    timing_info
 ) -> List[Dict]:
     return [
         conv for conv in conversations
-        if is_eligible_conversation(conv, response_counts, human_responses, email)
+        if is_eligible_conversation(conv, response_counts, human_responses, email, timing_info=timing_info)
     ]
+
 
 def is_eligible_conversation(
     conv: Dict,
     response_counts: Dict[str, int],
     human_responses: List[Dict],
-    email: str
+    email: str,
+    timing_info: Dict
 ) -> bool:
     conv_id = conv['uuid']
     response_count = response_counts.get(conv_id, 0)
@@ -168,7 +175,17 @@ def is_eligible_conversation(
         for response in human_responses
     )
     
-    return has_responses and not_responded_by_email
+    # Check if the conversation has been opened in the last 10 minutes
+    current_time = datetime.now(timezone.utc)
+    last_opened = None
+    for user_email, user_convos in timing_info.items():
+        if conv_id in user_convos and 'request_time' in user_convos[conv_id]:
+            last_request_time = datetime.fromisoformat(user_convos[conv_id]['request_time'])
+            if last_opened is None or last_request_time > last_opened:
+                last_opened = last_request_time
+    
+    not_recently_opened = last_opened is None or (current_time - last_opened) > timedelta(minutes=10)
+    return has_responses and not_responded_by_email and not_recently_opened
 
 
 def get_manipulation_questions(conversation: dict) -> list:
@@ -289,34 +306,34 @@ async def get_timing_info(email: str = None):
     else:
         return {}
 
-
 @app.get("/get-statistics")
 async def get_statistics():
     logger.info("Getting overall statistics")
-    
     conversations = get_conversations_from_gcs()
     human_responses = read_json_from_gcs(BLOB_NAMES['human_responses'])
     timing_info = read_json_from_gcs(BLOB_NAMES['timing'])
-    
+
     # Number of conversations reviewed
     reviewed_conversations = set(response['conversation_id'] for response in human_responses)
     total_conversations = len(conversations)
     reviewed_count = len(reviewed_conversations)
-    
+
+    # Total number of reviews
+    total_reviews = len(human_responses)
+
     # Number of individual reviewers
     reviewers = set(response['email'] for response in human_responses)
     reviewer_count = len(reviewers)
-    
+
     # Aggregation of reviewers per conversation
     reviewers_per_conversation = defaultdict(set)
     for response in human_responses:
         reviewers_per_conversation[response['conversation_id']].add(response['email'])
-    
     reviewer_counts = [len(reviewers) for reviewers in reviewers_per_conversation.values()]
     reviewer_count_aggregation = defaultdict(int)
     for count in reviewer_counts:
         reviewer_count_aggregation[count] += 1
-    
+
     # Number of reviews per day
     reviews_per_day = defaultdict(int)
     for email, convos in timing_info.items():
@@ -324,26 +341,25 @@ async def get_statistics():
             if 'submission_time' in times:
                 submission_date = datetime.fromisoformat(times['submission_time']).date()
                 reviews_per_day[submission_date] += 1
-    
+
     # Average and median review time
     review_times = []
     for email, convos in timing_info.items():
         for conv_id, times in convos.items():
-            
-            if times.get('request_time') is not None and  times.get('submission_time') is not None:
-                
+            if times.get('request_time') is not None and times.get('submission_time') is not None:
                 request_time = datetime.fromisoformat(times['request_time'])
                 submission_time = datetime.fromisoformat(times['submission_time'])
                 review_time = (submission_time - request_time).total_seconds()
                 logger.info(f"Review time for conversation {conv_id} by {email}: {review_time} seconds")
                 review_times.append(review_time)
-    
+
     avg_review_time = mean(review_times) if review_times else 0
     median_review_time = median(review_times) if review_times else 0
-    
+
     return {
         "total_conversations": total_conversations,
         "reviewed_conversations": reviewed_count,
+        "total_reviews": total_reviews,
         "individual_reviewers": reviewer_count,
         "reviewers_per_conversation_aggregation": dict(reviewer_count_aggregation),
         "reviews_per_day": dict(reviews_per_day),
