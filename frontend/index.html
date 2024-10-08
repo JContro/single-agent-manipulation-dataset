@@ -220,7 +220,7 @@
             you will be added 3 times! So it's definitely worth it!
         </p>
         <p>
-            If risk is not your thing, you can guarantee yourself 5£ voucher every 50 conversations - but be aware that
+            If risk is not your thing, you can guarantee yourself 5£ voucher every 20 conversations - but be aware that
             there are measures in place
             to check you are filling in truthfully the survey and have read the conversations. No cheating! We need high
             quality data please!!
@@ -262,7 +262,7 @@
                         10 conversations: you get entered 3 times into a ballot to win 100£ of amazon vouchers
                     </li>
                     <li>
-                        every 50 conversations: you are sent a 5£ amazon voucher
+                        every 20 conversations: you are sent a 5£ amazon voucher
                     </li>
                 </ul>
             </li>
@@ -404,11 +404,11 @@
                     scoreMessage += `${scored_conversations}/5 to enter the ballot to win a £100 Amazon voucher!`;
                 } else if (scored_conversations < 10) {
                     scoreMessage += `${scored_conversations}/10 to triple your chances of winning a £100 Amazon voucher!`;
-                } else if (scored_conversations < 50) {
-                    scoreMessage += `${scored_conversations}/50 to win a guaranteed £5 Amazon voucher! (You're already entered in the £100 ballot)`;
+                } else if (scored_conversations < 20) {
+                    scoreMessage += `${scored_conversations}/20 to win a guaranteed £5 Amazon voucher! (You're already entered in the £100 ballot)`;
                 } else {
-                    const nextMilestone = Math.ceil(scored_conversations / 50) * 50;
-                    const currentReward = Math.floor(scored_conversations / 50) * 5;
+                    const nextMilestone = Math.ceil(scored_conversations / 20) * 20;
+                    const currentReward = Math.floor(scored_conversations / 20) * 5;
                     scoreMessage += `${scored_conversations}/${nextMilestone} to win another £5! (You've already won £${currentReward})`;
                 }
 
