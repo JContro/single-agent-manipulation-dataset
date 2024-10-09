@@ -325,6 +325,12 @@ async def get_statistics():
     reviewers = set(response['email'] for response in human_responses)
     reviewer_count = len(reviewers)
 
+    # Count reviewers with at least 5 surveys
+    reviewer_survey_counts = defaultdict(int)
+    for response in human_responses:
+        reviewer_survey_counts[response['email']] += 1
+    reviewers_with_5_plus = sum(1 for count in reviewer_survey_counts.values() if count >= 5)
+
     # Aggregation of reviewers per conversation
     reviewers_per_conversation = defaultdict(set)
     for response in human_responses:
@@ -361,6 +367,7 @@ async def get_statistics():
         "reviewed_conversations": reviewed_count,
         "total_reviews": total_reviews,
         "individual_reviewers": reviewer_count,
+        "reviewers_with_5_plus_surveys": reviewers_with_5_plus,
         "reviewers_per_conversation_aggregation": dict(reviewer_count_aggregation),
         "reviews_per_day": dict(reviews_per_day),
         "average_review_time_seconds": avg_review_time,

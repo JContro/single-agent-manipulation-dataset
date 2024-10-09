@@ -90,6 +90,10 @@
             <p id="individualReviewers"></p>
         </div>
         <div class="stat-card">
+            <h2>Reviewers with 5+ Surveys</h2>
+            <p id="reviewersWith5Plus"></p>
+        </div>
+        <div class="stat-card">
             <h2>Avg Review Time</h2>
             <p id="averageReviewTime"></p>
         </div>
@@ -132,6 +136,7 @@
             document.getElementById('reviewedConversations').textContent = data.reviewed_conversations;
             document.getElementById('totalReviews').textContent = data.total_reviews;
             document.getElementById('individualReviewers').textContent = data.individual_reviewers;
+            document.getElementById('reviewersWith5Plus').textContent = data.reviewers_with_5_plus_surveys;
             document.getElementById('averageReviewTime').textContent = `${data.average_review_time_seconds.toFixed(2)}s`;
             document.getElementById('medianReviewTime').textContent = `${data.median_review_time_seconds.toFixed(2)}s`;
 
