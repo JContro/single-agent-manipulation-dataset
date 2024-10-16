@@ -184,7 +184,7 @@ def is_eligible_conversation(
             if last_opened is None or last_request_time > last_opened:
                 last_opened = last_request_time
     
-    not_recently_opened = last_opened is None or (current_time - last_opened) > timedelta(minutes=10)
+    not_recently_opened = last_opened is None or (current_time - last_opened) > timedelta(minutes=1000)
     return has_responses and not_responded_by_email and not_recently_opened
 
 
