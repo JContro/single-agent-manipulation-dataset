@@ -350,6 +350,7 @@ async def get_statistics():
 
     # Average and median review time
     review_times = []
+    tot_bad_reviews = 0
     for email, convos in timing_info.items():
         for conv_id, times in convos.items():
             if times.get('request_time') is not None and times.get('submission_time') is not None:
@@ -358,9 +359,20 @@ async def get_statistics():
                 review_time = (submission_time - request_time).total_seconds()
                 logger.info(f"Review time for conversation {conv_id} by {email}: {review_time} seconds")
                 review_times.append(review_time)
+                if review_time < 20: 
+                    tot_bad_reviews += 1
+
 
     avg_review_time = mean(review_times) if review_times else 0
     median_review_time = median(review_times) if review_times else 0
+
+    # Calculating spend
+    twenty_batches = 0
+    for email, convos in timing_info.items():
+        twenty_batches += len(convos.keys()) // 20 
+
+
+
 
     return {
         "total_conversations": total_conversations,
@@ -371,7 +383,9 @@ async def get_statistics():
         "reviewers_per_conversation_aggregation": dict(reviewer_count_aggregation),
         "reviews_per_day": dict(reviews_per_day),
         "average_review_time_seconds": avg_review_time,
-        "median_review_time_seconds": median_review_time
+        "median_review_time_seconds": median_review_time,
+        "total_spend": twenty_batches * 5,
+        "tot_bad_reviews": tot_bad_reviews
     }
 
 if __name__ == "__main__":

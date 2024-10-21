@@ -101,6 +101,14 @@
             <h2>Median Review Time</h2>
             <p id="medianReviewTime"></p>
         </div>
+        <div class="stat-card">
+            <h2>Total Bad Reviews</h2>
+            <p id="totalBadReviews"></p>
+        </div>
+        <div class="stat-card">
+            <h2>Total Spend</h2>
+            <p id="totalSpend"></p>
+        </div>
     </div>
     <div class="additional-stats">
         <h2>Additional Statistics</h2>
@@ -139,6 +147,8 @@
             document.getElementById('reviewersWith5Plus').textContent = data.reviewers_with_5_plus_surveys;
             document.getElementById('averageReviewTime').textContent = `${data.average_review_time_seconds.toFixed(2)}s`;
             document.getElementById('medianReviewTime').textContent = `${data.median_review_time_seconds.toFixed(2)}s`;
+            document.getElementById('totalBadReviews').textContent = data.tot_bad_reviews;
+            document.getElementById('totalSpend').textContent = `$${data.total_spend}`;
 
             const reviewsPerDay = Object.entries(data.reviews_per_day)
                 .map(([date, count]) => `${date}: ${count}`)
