@@ -12,6 +12,7 @@ google-cloud-core = "^2.4.1"
 google-cloud-storage = "^2.18.2"
 google-cloud-firestore = "^2.18.0"
 ipython = "^8.27.0"
+pandas = "^2.2.3"
 
 
 

@@ -1,0 +1,187 @@
+2024-10-30 15:15:32,957 - INFO - Loading data files
+2024-10-30 15:15:32,976 - INFO - Loading data files
+2024-10-30 15:15:32,999 - INFO - Responses processed:
+2024-10-30 15:15:32,999 - INFO - Initial responses: 1729
+2024-10-30 15:15:32,999 - INFO - Valid responses: 1474
+2024-10-30 15:15:32,999 - INFO - Removed responses: 255
+2024-10-30 15:15:32,999 - INFO - Removal rate: 14.75%
+2024-10-30 15:16:21,155 - INFO - Loading data files
+2024-10-30 15:16:21,174 - INFO - Loading data files
+2024-10-30 15:16:21,199 - INFO - Responses processed:
+2024-10-30 15:16:21,199 - INFO - Initial responses: 1729
+2024-10-30 15:16:21,199 - INFO - Valid responses: 1474
+2024-10-30 15:16:21,199 - INFO - Removed responses: 255
+2024-10-30 15:16:21,200 - INFO - Removal rate: 14.75%
+2024-10-30 15:16:59,800 - INFO - Loading data files
+2024-10-30 15:16:59,817 - INFO - Loading data files
+2024-10-30 15:16:59,869 - INFO - ---------------------
+2024-10-30 15:16:59,869 - INFO - Responses processed:
+2024-10-30 15:16:59,869 - INFO - Initial responses: 1729
+2024-10-30 15:16:59,869 - INFO - Valid responses: 1474
+2024-10-30 15:16:59,869 - INFO - Removed responses: 255
+2024-10-30 15:16:59,869 - INFO - Removal rate: 14.75%
+2024-10-30 15:16:59,869 - INFO - ---------------------
+2024-10-30 15:39:19,394 - INFO - Loading data files
+2024-10-30 15:39:19,413 - INFO - Loading data files
+2024-10-30 15:39:19,437 - INFO - ---------------------
+2024-10-30 15:39:19,437 - INFO - Responses processed:
+2024-10-30 15:39:19,437 - INFO - Initial responses: 1729
+2024-10-30 15:39:19,437 - INFO - Valid responses: 1474
+2024-10-30 15:39:19,437 - INFO - Removed responses: 255
+2024-10-30 15:39:19,437 - INFO - Removal rate: 14.75%
+2024-10-30 15:39:19,438 - INFO - ---------------------
+2024-10-30 15:39:19,439 - INFO - Checking_incompleteness
+2024-10-30 15:40:12,539 - INFO - Loading data files
+2024-10-30 15:40:12,556 - INFO - Loading data files
+2024-10-30 15:40:12,584 - INFO - ---------------------
+2024-10-30 15:40:12,584 - INFO - Responses processed:
+2024-10-30 15:40:12,584 - INFO - Initial responses: 1729
+2024-10-30 15:40:12,584 - INFO - Valid responses: 1474
+2024-10-30 15:40:12,584 - INFO - Removed responses: 255
+2024-10-30 15:40:12,584 - INFO - Removal rate: 14.75%
+2024-10-30 15:40:12,584 - INFO - ---------------------
+2024-10-30 15:40:12,586 - INFO - Checking_incompleteness
+2024-10-30 15:40:12,586 - INFO - Number of incomplete questions: 3
+2024-10-30 15:40:12,586 - INFO - ---------------------
+2024-10-30 15:43:54,361 - INFO - Loading data files
+2024-10-30 15:43:54,381 - INFO - Loading data files
+2024-10-30 15:43:54,404 - INFO - ---------------------
+2024-10-30 15:43:54,405 - INFO - Responses processed:
+2024-10-30 15:43:54,405 - INFO - Initial responses: 1729
+2024-10-30 15:43:54,405 - INFO - Valid responses: 1474
+2024-10-30 15:43:54,405 - INFO - Removed responses: 255
+2024-10-30 15:43:54,405 - INFO - Removal rate: 14.75%
+2024-10-30 15:43:54,405 - INFO - ---------------------
+2024-10-30 15:43:54,407 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:43:54,407 - INFO - Number of incomplete questions: 3
+2024-10-30 15:43:54,407 - INFO - ---------------------
+2024-10-30 15:48:50,222 - INFO - Loading data files
+2024-10-30 15:48:50,241 - INFO - Loading data files
+2024-10-30 15:48:50,264 - INFO - ---------------------
+2024-10-30 15:48:50,264 - INFO - Responses processed:
+2024-10-30 15:48:50,264 - INFO - Initial responses: 1729
+2024-10-30 15:48:50,264 - INFO - Valid responses: 1474
+2024-10-30 15:48:50,264 - INFO - Removed responses: 255
+2024-10-30 15:48:50,264 - INFO - Removal rate: 14.75%
+2024-10-30 15:48:50,264 - INFO - ---------------------
+2024-10-30 15:48:50,266 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:48:50,266 - INFO - Number of incomplete questions: 3
+2024-10-30 15:48:50,266 - INFO - ---------------------
+2024-10-30 15:49:12,488 - INFO - Loading data files
+2024-10-30 15:49:12,506 - INFO - Loading data files
+2024-10-30 15:49:12,531 - INFO - ---------------------
+2024-10-30 15:49:12,531 - INFO - Responses processed:
+2024-10-30 15:49:12,531 - INFO - Initial responses: 1729
+2024-10-30 15:49:12,531 - INFO - Valid responses: 1474
+2024-10-30 15:49:12,531 - INFO - Removed responses: 255
+2024-10-30 15:49:12,531 - INFO - Removal rate: 14.75%
+2024-10-30 15:49:12,531 - INFO - ---------------------
+2024-10-30 15:49:12,533 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:49:12,533 - INFO - Number of incomplete questions: 3
+2024-10-30 15:49:12,533 - INFO - ---------------------
+2024-10-30 15:56:17,392 - INFO - Loading data files
+2024-10-30 15:56:17,421 - INFO - Loading data files
+2024-10-30 15:56:17,444 - INFO - ---------------------
+2024-10-30 15:56:17,445 - INFO - Responses processed:
+2024-10-30 15:56:17,445 - INFO - Initial responses: 1729
+2024-10-30 15:56:17,445 - INFO - Valid responses: 1474
+2024-10-30 15:56:17,445 - INFO - Removed responses: 255
+2024-10-30 15:56:17,445 - INFO - Removal rate: 14.75%
+2024-10-30 15:56:17,445 - INFO - ---------------------
+2024-10-30 15:56:17,446 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:56:17,446 - INFO - Number of incomplete questions: 3
+2024-10-30 15:56:17,447 - INFO - ---------------------
+2024-10-30 15:56:23,985 - INFO - Loading data files
+2024-10-30 15:56:24,001 - INFO - Loading data files
+2024-10-30 15:56:24,028 - INFO - ---------------------
+2024-10-30 15:56:24,028 - INFO - Responses processed:
+2024-10-30 15:56:24,028 - INFO - Initial responses: 1729
+2024-10-30 15:56:24,028 - INFO - Valid responses: 1474
+2024-10-30 15:56:24,028 - INFO - Removed responses: 255
+2024-10-30 15:56:24,028 - INFO - Removal rate: 14.75%
+2024-10-30 15:56:24,028 - INFO - ---------------------
+2024-10-30 15:56:24,030 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:56:24,030 - INFO - Number of incomplete questions: 3
+2024-10-30 15:56:24,030 - INFO - ---------------------
+2024-10-30 15:57:46,396 - INFO - Loading data files
+2024-10-30 15:57:46,414 - INFO - Loading data files
+2024-10-30 15:57:46,438 - INFO - ---------------------
+2024-10-30 15:57:46,438 - INFO - Responses processed:
+2024-10-30 15:57:46,438 - INFO - Initial responses: 1729
+2024-10-30 15:57:46,438 - INFO - Valid responses: 1474
+2024-10-30 15:57:46,438 - INFO - Removed responses: 255
+2024-10-30 15:57:46,438 - INFO - Removal rate: 14.75%
+2024-10-30 15:57:46,438 - INFO - ---------------------
+2024-10-30 15:57:46,440 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:57:46,440 - INFO - Number of incomplete questions: 3
+2024-10-30 15:57:46,440 - INFO - ---------------------
+2024-10-30 15:58:18,563 - INFO - Loading data files
+2024-10-30 15:58:18,585 - INFO - Loading data files
+2024-10-30 15:58:18,607 - INFO - ---------------------
+2024-10-30 15:58:18,607 - INFO - Responses processed:
+2024-10-30 15:58:18,607 - INFO - Initial responses: 1729
+2024-10-30 15:58:18,607 - INFO - Valid responses: 1474
+2024-10-30 15:58:18,607 - INFO - Removed responses: 255
+2024-10-30 15:58:18,607 - INFO - Removal rate: 14.75%
+2024-10-30 15:58:18,607 - INFO - ---------------------
+2024-10-30 15:58:18,609 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:58:18,609 - INFO - Number of incomplete questions: 3
+2024-10-30 15:58:18,609 - INFO - ---------------------
+2024-10-30 15:58:34,194 - INFO - Loading data files
+2024-10-30 15:58:34,212 - INFO - Loading data files
+2024-10-30 15:58:34,240 - INFO - ---------------------
+2024-10-30 15:58:34,240 - INFO - Responses processed:
+2024-10-30 15:58:34,240 - INFO - Initial responses: 1729
+2024-10-30 15:58:34,240 - INFO - Valid responses: 1474
+2024-10-30 15:58:34,240 - INFO - Removed responses: 255
+2024-10-30 15:58:34,240 - INFO - Removal rate: 14.75%
+2024-10-30 15:58:34,240 - INFO - ---------------------
+2024-10-30 15:58:34,242 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:58:34,242 - INFO - Number of incomplete questions: 3
+2024-10-30 15:58:34,242 - INFO - ---------------------
+2024-10-30 15:59:21,254 - INFO - Loading data files
+2024-10-30 15:59:21,274 - INFO - Loading data files
+2024-10-30 15:59:21,296 - INFO - ---------------------
+2024-10-30 15:59:21,296 - INFO - Responses processed:
+2024-10-30 15:59:21,296 - INFO - Initial responses: 1729
+2024-10-30 15:59:21,296 - INFO - Valid responses: 1474
+2024-10-30 15:59:21,296 - INFO - Removed responses: 255
+2024-10-30 15:59:21,296 - INFO - Removal rate: 14.75%
+2024-10-30 15:59:21,296 - INFO - ---------------------
+2024-10-30 15:59:21,298 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:59:21,298 - INFO - Number of incomplete questions: 3
+2024-10-30 15:59:21,298 - INFO - ---------------------
+2024-10-30 15:59:32,931 - INFO - Loading data files
+2024-10-30 15:59:32,950 - INFO - Loading data files
+2024-10-30 15:59:32,975 - INFO - ---------------------
+2024-10-30 15:59:32,975 - INFO - Responses processed:
+2024-10-30 15:59:32,975 - INFO - Initial responses: 1729
+2024-10-30 15:59:32,975 - INFO - Valid responses: 1474
+2024-10-30 15:59:32,975 - INFO - Removed responses: 255
+2024-10-30 15:59:32,975 - INFO - Removal rate: 14.75%
+2024-10-30 15:59:32,975 - INFO - ---------------------
+2024-10-30 15:59:32,977 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 15:59:32,977 - INFO - Number of incomplete questions: 3
+2024-10-30 15:59:32,977 - INFO - ---------------------
+2024-10-30 15:59:32,995 - INFO - DataFrames merged successfully
+2024-10-30 15:59:32,995 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:00:39,017 - INFO - Loading data files
+2024-10-30 16:00:39,035 - INFO - Loading data files
+2024-10-30 16:00:39,061 - INFO - ---------------------
+2024-10-30 16:00:39,061 - INFO - Responses processed:
+2024-10-30 16:00:39,061 - INFO - Initial responses: 1729
+2024-10-30 16:00:39,062 - INFO - Valid responses: 1474
+2024-10-30 16:00:39,062 - INFO - Removed responses: 255
+2024-10-30 16:00:39,062 - INFO - Removal rate: 14.75%
+2024-10-30 16:00:39,062 - INFO - ---------------------
+2024-10-30 16:00:39,064 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:00:39,064 - INFO - Number of incomplete questions: 3
+2024-10-30 16:00:39,064 - INFO - ---------------------
+2024-10-30 16:00:39,071 - INFO - DataFrames merged successfully
+2024-10-30 16:00:39,071 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:00:39,071 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:00:39,071 - INFO - ---------------------

@@ -1,62 +1,149 @@
-from data_connection import create_gcs_file_handler 
-from collections import defaultdict
+import json
+import os
+import logging
+from pathlib import Path
+import pandas as pd
+from typing import Dict, Union
+from utils.filtering_testing import remove_bad_responses, check_conversation_completeness
 
-BUCKET_NAME = 'manipulation-dataset-kcl'
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('data_processing.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
-file_handler = create_gcs_file_handler(BUCKET_NAME)
-
-# Use the file handler to open different files
-manipulation_definitions = file_handler('manipulation-definitions.json')
-conversations = file_handler('conversations.json')
-human_responses = file_handler('human_responses.json')
-user_scores = file_handler('user_scores.json')
-user_timing = file_handler('user_timing.json')
-
-# print(human_responses[0])
-# print(manipulation_definitions.keys())
-
-# get the keys 
-    # """
-    # make something that looks like 
-    #     conversation_id: {
-    #         n_responses
-    #         answers: 
-    #             {
-    #                 manip_type: [score]
-    #             }
-    #         }
-    # """
-
-def transform_responses(human_responses):
-    result = {}
+def handle_data_files(download_flag=False) -> Dict[str, Union[dict, pd.DataFrame]]:
+    """
+    Handle data files and convert to appropriate format.
+    Returns manipulation_definitions as dict, others as pandas DataFrames.
+    """
+    data_folder = Path('data')
+    data_folder.mkdir(exist_ok=True)
     
-    for response in human_responses:
-        conv_id = response['conversation_id']
-        
-        if conv_id not in result:
-            result[conv_id] = {"n_responses": 0, "answers": {}}
-        
-        result[conv_id]['n_responses'] += 1
-        
-        for manip_type, score in response['scores'].items():
-            if manip_type not in result[conv_id]['answers']:
-                result[conv_id]['answers'][manip_type] = []
-            result[conv_id]['answers'][manip_type].append(score)
+    files = {
+        'manipulation_definitions': 'manipulation-definitions.json',
+        'conversations': 'conversations.json',
+        'human_responses': 'human_responses.json',
+        'user_scores': 'user_scores.json',
+        'user_timing': 'user_timing.json'
+    }
     
-    return result
+    if download_flag:
+        logger.debug("Downloading files from GCS bucket")
+        from data_connection import create_gcs_file_handler
+        file_handler = create_gcs_file_handler('manipulation-dataset-kcl')
+        
+        for filename in files.values():
+            data = file_handler(filename)
+            with open(data_folder / filename, 'w') as f:
+                json.dump(data, f)
+            logger.debug(f"Downloaded and saved {filename}")
+
+    # Load and convert data
+    logger.info("Loading data files")
+    data = {}
+    for key, filename in files.items():
+        try:
+            data[key] = json.load(open(data_folder / filename))
+            logger.debug(f"Loaded {filename}")
+        except Exception as e:
+            logger.error(f"Error loading {filename}: {str(e)}")
+            raise
+    
+    return data
+
+# Usage
+(
+    manipulation_definitions,
+    conversations,
+    human_responses,
+    user_scores,
+    user_timing
+) = handle_data_files(download_flag=False).values()
+
+data = handle_data_files(download_flag=False)
+(
+    manipulation_definitions,
+    conversations,
+    human_responses,
+    user_scores,
+    user_timing
+) = data.values()
+
+initial_responses = len(human_responses)
+clean_human_responses = remove_bad_responses(human_responses=human_responses, user_timing=user_timing)
+final_responses = len(clean_human_responses)
+
+logger.info("---------------------")
+logger.info(f"Responses processed:")
+logger.info(f"Initial responses: {initial_responses}")
+logger.info(f"Valid responses: {final_responses}")
+logger.info(f"Removed responses: {initial_responses - final_responses}")
+logger.info(f"Removal rate: {((initial_responses - final_responses) / initial_responses * 100):.2f}%")
+logger.info("---------------------")
+    
+transformed_data, incomplete = check_conversation_completeness(human_responses=human_responses, required_manip_types=manipulation_definitions)
+
+logger.info("Checking incompleteness of manipulation questions")
+logger.info(f"Number of incomplete questions: {len(incomplete)}")
+logger.info("---------------------")
+
+# print(transformed_data)
+# print(type(transformed_data))
+conversations_df = pd.DataFrame(conversations) 
+transformed_data_df = pd.DataFrame(transformed_data).T
 
 
-def check_conversation_completeness(transformed_data, required_manip_types):
-    incomplete_conversations = {}
-    for conv_id, conv_data in transformed_data.items():
-        if conv_data['n_responses'] >= 3:
-            missing_types = set(required_manip_types) - set(conv_data['answers'].keys())
-            if missing_types:
-                incomplete_conversations[conv_id] = list(missing_types)
+# Set 'uuid' as the index for both DataFrames
+conversations_df.set_index('uuid', inplace=True)
+transformed_data_df.index.name = 'uuid'
 
-    return incomplete_conversations
+# Join the DataFrames on 'uuid'
+analytics_df = conversations_df.join(transformed_data_df, lsuffix='_conv', rsuffix='_trans')
 
-transformed_data = transform_responses(human_responses=human_responses)
-print(check_conversation_completeness(transformed_data=transformed_data, required_manip_types=manipulation_definitions.keys()))
+# Log the result of the merge
+logger.info("DataFrames merged successfully")
+logger.info(f"Merged DataFrame shape: {analytics_df.shape}")
+logger.info(f"The columns are: {analytics_df.columns}")
+logger.info("---------------------")
+
+notes = """
+Notes:
+Only check the conversations that have had at least 3 responses 
+
+- remove the junk responses -DONE
+
+- how strong is manipulation score vs it is actually manipulation
+    so check if a conversation is prompted manipulative and see what the average score is. 4 being neutral 
+        binary output? 
+            accuracy and recall on getting the prompt or not 
+            check some answers that are incorrect - see if there is something to learn 
+        see what the variance is of the responses 
+            mean and median variance 
+            see some examples of high and low variance answers 
+            what is the variance of the variance? 
+                plot the distribution of variance
+
+- correlation confusion matrix 
+    see correlation between the different categories 
+        look up different types of correlation
+
+- for each category of prompt
+    - how many are categorised as manipulative or not
+    - by model too 
+    - check persuasion and helpfulness 
+        - look at examples where this is not the case
+
+- check the comments what they are saying
+- calculate who is owed money 
+    - remove shit responses 
+        5£ per 20 before 27 october
+        5£ per 10 after 27 october 
 
 
+    """
