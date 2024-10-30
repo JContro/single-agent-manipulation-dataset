@@ -185,3 +185,390 @@
        'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
       dtype='object')
 2024-10-30 16:00:39,071 - INFO - ---------------------
+2024-10-30 16:03:44,030 - INFO - Loading data files
+2024-10-30 16:03:44,048 - INFO - Loading data files
+2024-10-30 16:03:44,074 - INFO - ---------------------
+2024-10-30 16:03:44,116 - INFO - Responses processed:
+2024-10-30 16:03:44,116 - INFO - Initial responses: 1729
+2024-10-30 16:03:44,116 - INFO - Valid responses: 1474
+2024-10-30 16:03:44,116 - INFO - Removed responses: 255
+2024-10-30 16:03:44,116 - INFO - Removal rate: 14.75%
+2024-10-30 16:03:44,116 - INFO - ---------------------
+2024-10-30 16:03:44,118 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:03:44,118 - INFO - Number of incomplete questions: 3
+2024-10-30 16:03:44,118 - INFO - ---------------------
+2024-10-30 16:03:44,127 - INFO - DataFrames merged successfully
+2024-10-30 16:03:44,128 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:03:44,129 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:03:44,129 - INFO - ---------------------
+2024-10-30 16:04:21,608 - INFO - Loading data files
+2024-10-30 16:04:21,627 - INFO - Loading data files
+2024-10-30 16:04:21,651 - INFO - ---------------------
+2024-10-30 16:04:21,651 - INFO - Responses processed:
+2024-10-30 16:04:21,651 - INFO - Initial responses: 1729
+2024-10-30 16:04:21,651 - INFO - Valid responses: 1474
+2024-10-30 16:04:21,651 - INFO - Removed responses: 255
+2024-10-30 16:04:21,651 - INFO - Removal rate: 14.75%
+2024-10-30 16:04:21,651 - INFO - ---------------------
+2024-10-30 16:04:21,653 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:04:21,653 - INFO - Number of incomplete questions: 3
+2024-10-30 16:04:21,653 - INFO - ---------------------
+2024-10-30 16:04:21,661 - INFO - DataFrames merged successfully
+2024-10-30 16:04:21,661 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:04:21,661 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:04:21,661 - INFO - ---------------------
+2024-10-30 16:05:09,440 - INFO - Loading data files
+2024-10-30 16:05:09,459 - INFO - Loading data files
+2024-10-30 16:05:09,482 - INFO - ---------------------
+2024-10-30 16:05:09,482 - INFO - Responses processed:
+2024-10-30 16:05:09,482 - INFO - Initial responses: 1729
+2024-10-30 16:05:09,482 - INFO - Valid responses: 1474
+2024-10-30 16:05:09,482 - INFO - Removed responses: 255
+2024-10-30 16:05:09,482 - INFO - Removal rate: 14.75%
+2024-10-30 16:05:09,482 - INFO - ---------------------
+2024-10-30 16:05:09,484 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:05:09,484 - INFO - Number of incomplete questions: 3
+2024-10-30 16:05:09,485 - INFO - ---------------------
+2024-10-30 16:05:09,492 - INFO - DataFrames merged successfully
+2024-10-30 16:05:09,492 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:05:09,492 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:05:09,492 - INFO - ---------------------
+2024-10-30 16:08:58,872 - INFO - Loading data files
+2024-10-30 16:08:58,893 - INFO - Loading data files
+2024-10-30 16:08:58,915 - INFO - ---------------------
+2024-10-30 16:08:58,916 - INFO - Responses processed:
+2024-10-30 16:08:58,916 - INFO - Initial responses: 1729
+2024-10-30 16:08:58,916 - INFO - Valid responses: 1474
+2024-10-30 16:08:58,916 - INFO - Removed responses: 255
+2024-10-30 16:08:58,916 - INFO - Removal rate: 14.75%
+2024-10-30 16:08:58,916 - INFO - ---------------------
+2024-10-30 16:08:58,918 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:08:58,918 - INFO - Number of incomplete questions: 3
+2024-10-30 16:08:58,918 - INFO - ---------------------
+2024-10-30 16:08:58,925 - INFO - DataFrames merged successfully
+2024-10-30 16:08:58,925 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:08:58,925 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:08:58,925 - INFO - ---------------------
+2024-10-30 16:09:16,773 - INFO - Loading data files
+2024-10-30 16:09:16,793 - INFO - Loading data files
+2024-10-30 16:09:16,818 - INFO - ---------------------
+2024-10-30 16:09:16,818 - INFO - Responses processed:
+2024-10-30 16:09:16,818 - INFO - Initial responses: 1729
+2024-10-30 16:09:16,818 - INFO - Valid responses: 1474
+2024-10-30 16:09:16,818 - INFO - Removed responses: 255
+2024-10-30 16:09:16,818 - INFO - Removal rate: 14.75%
+2024-10-30 16:09:16,818 - INFO - ---------------------
+2024-10-30 16:09:16,820 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:09:16,820 - INFO - Number of incomplete questions: 3
+2024-10-30 16:09:16,820 - INFO - ---------------------
+2024-10-30 16:09:16,828 - INFO - DataFrames merged successfully
+2024-10-30 16:09:16,828 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:09:16,828 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:09:16,828 - INFO - ---------------------
+2024-10-30 16:09:24,109 - WARNING - Matplotlib is building the font cache; this may take a moment.
+2024-10-30 16:09:28,210 - INFO - Failed to extract font properties from /System/Library/Fonts/LastResort.otf: tuple indices must be integers or slices, not str
+2024-10-30 16:09:28,233 - INFO - Failed to extract font properties from /System/Library/Fonts/Supplemental/NISC18030.ttf: In FT2Font: Could not set the fontsize (invalid pixel size; error code 0x17)
+2024-10-30 16:09:28,289 - INFO - Failed to extract font properties from /System/Library/Fonts/Apple Color Emoji.ttc: In FT2Font: Could not set the fontsize (invalid pixel size; error code 0x17)
+2024-10-30 16:09:28,346 - INFO - generated new fontManager
+2024-10-30 16:10:33,354 - INFO - Loading data files
+2024-10-30 16:10:33,374 - INFO - Loading data files
+2024-10-30 16:10:33,397 - INFO - ---------------------
+2024-10-30 16:10:33,397 - INFO - Responses processed:
+2024-10-30 16:10:33,397 - INFO - Initial responses: 1729
+2024-10-30 16:10:33,397 - INFO - Valid responses: 1474
+2024-10-30 16:10:33,397 - INFO - Removed responses: 255
+2024-10-30 16:10:33,397 - INFO - Removal rate: 14.75%
+2024-10-30 16:10:33,397 - INFO - ---------------------
+2024-10-30 16:10:33,399 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:10:33,399 - INFO - Number of incomplete questions: 3
+2024-10-30 16:10:33,399 - INFO - ---------------------
+2024-10-30 16:10:33,407 - INFO - DataFrames merged successfully
+2024-10-30 16:10:33,407 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:10:33,407 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:10:33,407 - INFO - ---------------------
+2024-10-30 16:11:25,793 - INFO - Loading data files
+2024-10-30 16:11:25,813 - INFO - Loading data files
+2024-10-30 16:11:25,841 - INFO - ---------------------
+2024-10-30 16:11:25,841 - INFO - Responses processed:
+2024-10-30 16:11:25,841 - INFO - Initial responses: 1729
+2024-10-30 16:11:25,841 - INFO - Valid responses: 1474
+2024-10-30 16:11:25,841 - INFO - Removed responses: 255
+2024-10-30 16:11:25,841 - INFO - Removal rate: 14.75%
+2024-10-30 16:11:25,841 - INFO - ---------------------
+2024-10-30 16:11:25,843 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:11:25,843 - INFO - Number of incomplete questions: 3
+2024-10-30 16:11:25,843 - INFO - ---------------------
+2024-10-30 16:11:25,851 - INFO - DataFrames merged successfully
+2024-10-30 16:11:25,851 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:11:25,851 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:11:25,851 - INFO - ---------------------
+2024-10-30 16:24:27,018 - INFO - Loading data files
+2024-10-30 16:24:27,041 - INFO - Loading data files
+2024-10-30 16:24:27,064 - INFO - ---------------------
+2024-10-30 16:24:27,064 - INFO - Responses processed:
+2024-10-30 16:24:27,064 - INFO - Initial responses: 1729
+2024-10-30 16:24:27,064 - INFO - Valid responses: 1474
+2024-10-30 16:24:27,064 - INFO - Removed responses: 255
+2024-10-30 16:24:27,064 - INFO - Removal rate: 14.75%
+2024-10-30 16:24:27,064 - INFO - ---------------------
+2024-10-30 16:24:27,066 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:24:27,066 - INFO - Number of incomplete questions: 3
+2024-10-30 16:24:27,066 - INFO - ---------------------
+2024-10-30 16:24:27,082 - INFO - DataFrames merged successfully
+2024-10-30 16:24:27,082 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:24:27,083 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:24:27,083 - INFO - ---------------------
+2024-10-30 16:27:05,610 - INFO - Loading data files
+2024-10-30 16:27:05,628 - INFO - Loading data files
+2024-10-30 16:27:05,653 - INFO - ---------------------
+2024-10-30 16:27:05,653 - INFO - Responses processed:
+2024-10-30 16:27:05,653 - INFO - Initial responses: 1729
+2024-10-30 16:27:05,653 - INFO - Valid responses: 1474
+2024-10-30 16:27:05,653 - INFO - Removed responses: 255
+2024-10-30 16:27:05,653 - INFO - Removal rate: 14.75%
+2024-10-30 16:27:05,653 - INFO - ---------------------
+2024-10-30 16:27:05,655 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:27:05,655 - INFO - Number of incomplete questions: 3
+2024-10-30 16:27:05,655 - INFO - ---------------------
+2024-10-30 16:27:05,669 - INFO - DataFrames merged successfully
+2024-10-30 16:27:05,669 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:27:05,669 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:27:05,669 - INFO - ---------------------
+2024-10-30 16:48:33,566 - INFO - Loading data files
+2024-10-30 16:48:33,585 - INFO - Loading data files
+2024-10-30 16:48:33,610 - INFO - ---------------------
+2024-10-30 16:48:33,610 - INFO - Responses processed:
+2024-10-30 16:48:33,610 - INFO - Initial responses: 1729
+2024-10-30 16:48:33,610 - INFO - Valid responses: 1474
+2024-10-30 16:48:33,610 - INFO - Removed responses: 255
+2024-10-30 16:48:33,610 - INFO - Removal rate: 14.75%
+2024-10-30 16:48:33,610 - INFO - ---------------------
+2024-10-30 16:48:33,612 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:48:33,612 - INFO - Number of incomplete questions: 3
+2024-10-30 16:48:33,612 - INFO - ---------------------
+2024-10-30 16:48:52,211 - INFO - Loading data files
+2024-10-30 16:48:52,229 - INFO - Loading data files
+2024-10-30 16:48:52,252 - INFO - ---------------------
+2024-10-30 16:48:52,252 - INFO - Responses processed:
+2024-10-30 16:48:52,252 - INFO - Initial responses: 1729
+2024-10-30 16:48:52,252 - INFO - Valid responses: 1474
+2024-10-30 16:48:52,252 - INFO - Removed responses: 255
+2024-10-30 16:48:52,252 - INFO - Removal rate: 14.75%
+2024-10-30 16:48:52,252 - INFO - ---------------------
+2024-10-30 16:48:52,254 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:48:52,254 - INFO - Number of incomplete questions: 3
+2024-10-30 16:48:52,254 - INFO - ---------------------
+2024-10-30 16:48:59,919 - INFO - Loading data files
+2024-10-30 16:48:59,934 - INFO - Loading data files
+2024-10-30 16:48:59,961 - INFO - ---------------------
+2024-10-30 16:48:59,961 - INFO - Responses processed:
+2024-10-30 16:48:59,961 - INFO - Initial responses: 1729
+2024-10-30 16:48:59,961 - INFO - Valid responses: 1474
+2024-10-30 16:48:59,961 - INFO - Removed responses: 255
+2024-10-30 16:48:59,961 - INFO - Removal rate: 14.75%
+2024-10-30 16:48:59,961 - INFO - ---------------------
+2024-10-30 16:48:59,963 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:48:59,963 - INFO - Number of incomplete questions: 3
+2024-10-30 16:48:59,963 - INFO - ---------------------
+2024-10-30 16:48:59,975 - INFO - DataFrames merged successfully
+2024-10-30 16:48:59,975 - INFO - Merged DataFrame shape: (746, 17)
+2024-10-30 16:48:59,975 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'answers'],
+      dtype='object')
+2024-10-30 16:48:59,975 - INFO - ---------------------
+2024-10-30 16:50:39,578 - INFO - Loading data files
+2024-10-30 16:50:39,601 - INFO - Loading data files
+2024-10-30 16:50:39,624 - INFO - ---------------------
+2024-10-30 16:50:39,624 - INFO - Responses processed:
+2024-10-30 16:50:39,624 - INFO - Initial responses: 1729
+2024-10-30 16:50:39,624 - INFO - Valid responses: 1474
+2024-10-30 16:50:39,625 - INFO - Removed responses: 255
+2024-10-30 16:50:39,625 - INFO - Removal rate: 14.75%
+2024-10-30 16:50:39,625 - INFO - ---------------------
+2024-10-30 16:50:39,627 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:50:39,627 - INFO - Number of incomplete questions: 3
+2024-10-30 16:50:39,627 - INFO - ---------------------
+2024-10-30 16:50:39,636 - INFO - DataFrames merged successfully
+2024-10-30 16:50:39,636 - INFO - Merged DataFrame shape: (746, 24)
+2024-10-30 16:50:39,636 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses',
+       'peer pressure', 'reciprocity pressure', 'gaslighting',
+       'guilt-tripping', 'emotional blackmail', 'general', 'fear enhancement',
+       'negging'],
+      dtype='object')
+2024-10-30 16:50:39,636 - INFO - ---------------------
+2024-10-30 16:52:35,125 - INFO - Loading data files
+2024-10-30 16:52:35,144 - INFO - Loading data files
+2024-10-30 16:52:35,175 - INFO - ---------------------
+2024-10-30 16:52:35,175 - INFO - Responses processed:
+2024-10-30 16:52:35,175 - INFO - Initial responses: 1729
+2024-10-30 16:52:35,175 - INFO - Valid responses: 1474
+2024-10-30 16:52:35,175 - INFO - Removed responses: 255
+2024-10-30 16:52:35,175 - INFO - Removal rate: 14.75%
+2024-10-30 16:52:35,175 - INFO - ---------------------
+2024-10-30 16:52:35,177 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:52:35,177 - INFO - Number of incomplete questions: 3
+2024-10-30 16:52:35,177 - INFO - ---------------------
+2024-10-30 16:52:35,186 - INFO - DataFrames merged successfully
+2024-10-30 16:52:35,186 - INFO - Merged DataFrame shape: (746, 24)
+2024-10-30 16:52:35,186 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses',
+       'guilt-tripping', 'gaslighting', 'general', 'peer pressure',
+       'emotional blackmail', 'reciprocity pressure', 'fear enhancement',
+       'negging'],
+      dtype='object')
+2024-10-30 16:52:35,186 - INFO - ---------------------
+2024-10-30 16:53:38,280 - INFO - Loading data files
+2024-10-30 16:53:38,302 - INFO - Loading data files
+2024-10-30 16:53:38,325 - INFO - ---------------------
+2024-10-30 16:53:38,325 - INFO - Responses processed:
+2024-10-30 16:53:38,325 - INFO - Initial responses: 1729
+2024-10-30 16:53:38,325 - INFO - Valid responses: 1474
+2024-10-30 16:53:38,325 - INFO - Removed responses: 255
+2024-10-30 16:53:38,325 - INFO - Removal rate: 14.75%
+2024-10-30 16:53:38,325 - INFO - ---------------------
+2024-10-30 16:53:38,327 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:53:38,327 - INFO - Number of incomplete questions: 3
+2024-10-30 16:53:38,327 - INFO - ---------------------
+2024-10-30 16:53:38,337 - INFO - DataFrames merged successfully
+2024-10-30 16:53:38,337 - INFO - Merged DataFrame shape: (746, 24)
+2024-10-30 16:53:38,337 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'negging',
+       'gaslighting', 'fear enhancement', 'emotional blackmail',
+       'peer pressure', 'guilt-tripping', 'general', 'reciprocity pressure'],
+      dtype='object')
+2024-10-30 16:53:38,337 - INFO - ---------------------
+2024-10-30 16:53:49,286 - INFO - Loading data files
+2024-10-30 16:53:49,306 - INFO - Loading data files
+2024-10-30 16:53:49,328 - INFO - ---------------------
+2024-10-30 16:53:49,329 - INFO - Responses processed:
+2024-10-30 16:53:49,329 - INFO - Initial responses: 1729
+2024-10-30 16:53:49,329 - INFO - Valid responses: 1474
+2024-10-30 16:53:49,329 - INFO - Removed responses: 255
+2024-10-30 16:53:49,329 - INFO - Removal rate: 14.75%
+2024-10-30 16:53:49,329 - INFO - ---------------------
+2024-10-30 16:53:49,331 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:53:49,331 - INFO - Number of incomplete questions: 3
+2024-10-30 16:53:49,331 - INFO - ---------------------
+2024-10-30 16:53:49,340 - INFO - DataFrames merged successfully
+2024-10-30 16:53:49,340 - INFO - Merged DataFrame shape: (746, 24)
+2024-10-30 16:53:49,340 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses',
+       'emotional blackmail', 'negging', 'reciprocity pressure', 'general',
+       'guilt-tripping', 'peer pressure', 'fear enhancement', 'gaslighting'],
+      dtype='object')
+2024-10-30 16:53:49,340 - INFO - ---------------------
+2024-10-30 16:54:18,812 - INFO - Loading data files
+2024-10-30 16:54:18,833 - INFO - Loading data files
+2024-10-30 16:54:18,858 - INFO - ---------------------
+2024-10-30 16:54:18,858 - INFO - Responses processed:
+2024-10-30 16:54:18,858 - INFO - Initial responses: 1729
+2024-10-30 16:54:18,858 - INFO - Valid responses: 1474
+2024-10-30 16:54:18,858 - INFO - Removed responses: 255
+2024-10-30 16:54:18,858 - INFO - Removal rate: 14.75%
+2024-10-30 16:54:18,858 - INFO - ---------------------
+2024-10-30 16:54:18,860 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:54:18,860 - INFO - Number of incomplete questions: 3
+2024-10-30 16:54:18,860 - INFO - ---------------------
+2024-10-30 16:54:18,900 - INFO - DataFrames merged successfully
+2024-10-30 16:54:18,901 - INFO - Merged DataFrame shape: (746, 24)
+2024-10-30 16:54:18,901 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses',
+       'fear enhancement', 'general', 'guilt-tripping', 'negging',
+       'reciprocity pressure', 'peer pressure', 'emotional blackmail',
+       'gaslighting'],
+      dtype='object')
+2024-10-30 16:54:18,901 - INFO - ---------------------
+2024-10-30 16:55:05,456 - INFO - Loading data files
+2024-10-30 16:55:05,475 - INFO - Loading data files
+2024-10-30 16:55:05,498 - INFO - ---------------------
+2024-10-30 16:55:05,498 - INFO - Responses processed:
+2024-10-30 16:55:05,498 - INFO - Initial responses: 1729
+2024-10-30 16:55:05,498 - INFO - Valid responses: 1474
+2024-10-30 16:55:05,498 - INFO - Removed responses: 255
+2024-10-30 16:55:05,498 - INFO - Removal rate: 14.75%
+2024-10-30 16:55:05,498 - INFO - ---------------------
+2024-10-30 16:55:05,500 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:55:05,500 - INFO - Number of incomplete questions: 3
+2024-10-30 16:55:05,500 - INFO - ---------------------
+2024-10-30 16:55:05,509 - INFO - DataFrames merged successfully
+2024-10-30 16:55:05,509 - INFO - Merged DataFrame shape: (746, 24)
+2024-10-30 16:55:05,510 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses',
+       'reciprocity pressure', 'peer pressure', 'negging',
+       'emotional blackmail', 'fear enhancement', 'gaslighting',
+       'guilt-tripping', 'general'],
+      dtype='object')
+2024-10-30 16:55:05,510 - INFO - ---------------------
+2024-10-30 16:55:21,325 - INFO - Loading data files
+2024-10-30 16:55:21,347 - INFO - Loading data files
+2024-10-30 16:55:21,371 - INFO - ---------------------
+2024-10-30 16:55:21,371 - INFO - Responses processed:
+2024-10-30 16:55:21,371 - INFO - Initial responses: 1729
+2024-10-30 16:55:21,371 - INFO - Valid responses: 1474
+2024-10-30 16:55:21,371 - INFO - Removed responses: 255
+2024-10-30 16:55:21,371 - INFO - Removal rate: 14.75%
+2024-10-30 16:55:21,371 - INFO - ---------------------
+2024-10-30 16:55:21,373 - INFO - Checking incompleteness of manipulation questions
+2024-10-30 16:55:21,373 - INFO - Number of incomplete questions: 3
+2024-10-30 16:55:21,373 - INFO - ---------------------
+2024-10-30 16:55:21,382 - INFO - DataFrames merged successfully
+2024-10-30 16:55:21,382 - INFO - Merged DataFrame shape: (746, 24)
+2024-10-30 16:55:21,382 - INFO - The columns are: Index(['title', 'model', 'context', 'option', 'prompt_type', 'prompt',
+       'manipulation_type', 'manipulation_description', 'chat_completion',
+       'processing_time', 'timestamp', 'error', 'persuasion_strength',
+       'generated_text', 'cleaned_conversation', 'n_responses', 'general',
+       'emotional blackmail', 'peer pressure', 'guilt-tripping',
+       'reciprocity pressure', 'negging', 'gaslighting', 'fear enhancement'],
+      dtype='object')
+2024-10-30 16:55:21,382 - INFO - ---------------------
