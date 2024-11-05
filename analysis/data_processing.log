@@ -572,3 +572,854 @@
        'reciprocity pressure', 'negging', 'gaslighting', 'fear enhancement'],
       dtype='object')
 2024-10-30 16:55:21,382 - INFO - ---------------------
+2024-10-30 16:57:33,357 - INFO - Starting data processing pipeline
+2024-10-30 16:57:33,403 - INFO - Response processing results:
+2024-10-30 16:57:33,403 - INFO - Initial responses: 1729
+2024-10-30 16:57:33,403 - INFO - Valid responses: 1474
+2024-10-30 16:57:33,403 - INFO - Removed responses: 255
+2024-10-30 16:57:33,403 - INFO - Removal rate: 14.75%
+2024-10-30 16:57:33,405 - INFO - Found 3 incomplete conversations
+2024-10-30 16:57:33,414 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-30 16:57:33,414 - INFO - Starting data analysis
+2024-10-30 16:57:33,414 - INFO - Calculating variance and mean scores
+2024-10-30 16:57:33,440 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.73
+2024-10-30 16:57:33,441 - INFO - Variance statistics - Mean: 2.44, Median: 2.35, Variance of variance: 1.42
+2024-10-30 16:57:33,441 - INFO - Generating variance distribution plot
+2024-10-30 16:57:33,652 - INFO - Calculating correlation matrices
+2024-10-30 16:57:33,671 - INFO - Calculated correlations using methods: pearson, spearman, kendall
+2024-10-30 16:57:33,672 - INFO - Analyzing prompt types
+2024-10-30 16:57:33,674 - INFO - 
+Prompt Type Analysis by Model:
+2024-10-30 16:57:33,677 - INFO - 
+                    is_manipulative_score                  persuasion_strength
+                                    count  mean                       <lambda>
+prompt_type  model                                                            
+manipulation gemini                   147  0.52                             {}
+             gpt4                     155  0.45                             {}
+             llama                    148  0.51                             {}
+persuasion   gemini                   100  0.15  {'helpful': 52, 'strong': 48}
+             gpt4                     104  0.08  {'strong': 52, 'helpful': 52}
+             llama                     92  0.16  {'helpful': 48, 'strong': 44}
+2024-10-30 16:57:33,678 - INFO - 
+Found 118 incorrect classifications
+2024-10-30 16:57:33,679 - INFO - 
+Analysis complete
+2024-10-30 16:57:33,679 - INFO - Data processing pipeline completed successfully
+2024-10-31 11:01:51,953 - INFO - Starting data processing pipeline
+2024-10-31 11:01:51,994 - INFO - Response processing results:
+2024-10-31 11:01:51,994 - INFO - Initial responses: 1729
+2024-10-31 11:01:51,994 - INFO - Valid responses: 1474
+2024-10-31 11:01:51,994 - INFO - Removed responses: 255
+2024-10-31 11:01:51,994 - INFO - Removal rate: 14.75%
+2024-10-31 11:01:51,997 - INFO - Found 3 incomplete conversations
+2024-10-31 11:01:52,013 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 11:03:55,500 - INFO - Starting data processing pipeline
+2024-10-31 11:03:55,533 - INFO - Response processing results:
+2024-10-31 11:03:55,533 - INFO - Initial responses: 1729
+2024-10-31 11:03:55,533 - INFO - Valid responses: 1474
+2024-10-31 11:03:55,533 - INFO - Removed responses: 255
+2024-10-31 11:03:55,533 - INFO - Removal rate: 14.75%
+2024-10-31 11:03:55,536 - INFO - Found 3 incomplete conversations
+2024-10-31 11:03:55,546 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 14:42:21,433 - INFO - Starting data processing pipeline
+2024-10-31 14:42:21,483 - INFO - Response processing results:
+2024-10-31 14:42:21,483 - INFO - Initial responses: 1729
+2024-10-31 14:42:21,483 - INFO - Valid responses: 1474
+2024-10-31 14:42:21,483 - INFO - Removed responses: 255
+2024-10-31 14:42:21,484 - INFO - Removal rate: 14.75%
+2024-10-31 14:42:21,485 - INFO - Found 3 incomplete conversations
+2024-10-31 14:42:21,499 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 14:42:21,499 - INFO - Starting data analysis
+2024-10-31 14:42:58,030 - INFO - Starting data processing pipeline
+2024-10-31 14:42:58,079 - INFO - Response processing results:
+2024-10-31 14:42:58,079 - INFO - Initial responses: 1729
+2024-10-31 14:42:58,079 - INFO - Valid responses: 1474
+2024-10-31 14:42:58,079 - INFO - Removed responses: 255
+2024-10-31 14:42:58,079 - INFO - Removal rate: 14.75%
+2024-10-31 14:42:58,081 - INFO - Found 3 incomplete conversations
+2024-10-31 14:42:58,090 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 14:42:58,090 - INFO - Starting data analysis
+2024-10-31 14:47:28,068 - INFO - Starting data processing pipeline
+2024-10-31 14:47:28,120 - INFO - Response processing results:
+2024-10-31 14:47:28,120 - INFO - Initial responses: 1729
+2024-10-31 14:47:28,120 - INFO - Valid responses: 1474
+2024-10-31 14:47:28,120 - INFO - Removed responses: 255
+2024-10-31 14:47:28,120 - INFO - Removal rate: 14.75%
+2024-10-31 14:47:28,122 - INFO - Found 3 incomplete conversations
+2024-10-31 14:47:28,130 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 14:47:28,130 - INFO - Starting data analysis
+2024-10-31 14:47:28,199 - INFO - Data processing pipeline completed successfully
+2024-10-31 15:24:12,919 - INFO - Starting data processing pipeline
+2024-10-31 15:24:12,966 - INFO - Response processing results:
+2024-10-31 15:24:12,966 - INFO - Initial responses: 1729
+2024-10-31 15:24:12,966 - INFO - Valid responses: 1474
+2024-10-31 15:24:12,966 - INFO - Removed responses: 255
+2024-10-31 15:24:12,966 - INFO - Removal rate: 14.75%
+2024-10-31 15:24:12,968 - INFO - Found 3 incomplete conversations
+2024-10-31 15:24:12,983 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 15:24:12,983 - INFO - Starting data analysis
+2024-10-31 15:24:13,052 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 15:25:16,377 - INFO - Starting data processing pipeline
+2024-10-31 15:25:16,428 - INFO - Response processing results:
+2024-10-31 15:25:16,428 - INFO - Initial responses: 1729
+2024-10-31 15:25:16,428 - INFO - Valid responses: 1474
+2024-10-31 15:25:16,428 - INFO - Removed responses: 255
+2024-10-31 15:25:16,428 - INFO - Removal rate: 14.75%
+2024-10-31 15:25:16,430 - INFO - Found 3 incomplete conversations
+2024-10-31 15:25:16,439 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 15:25:16,439 - INFO - Starting data analysis
+2024-10-31 15:25:16,507 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 15:25:16,508 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-10-31 15:25:16,816 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-10-31 15:25:16,816 - INFO - Data processing pipeline completed successfully
+2024-10-31 16:01:04,309 - INFO - Starting data processing pipeline
+2024-10-31 16:01:04,358 - INFO - Response processing results:
+2024-10-31 16:01:04,358 - INFO - Initial responses: 1729
+2024-10-31 16:01:04,358 - INFO - Valid responses: 1474
+2024-10-31 16:01:04,358 - INFO - Removed responses: 255
+2024-10-31 16:01:04,358 - INFO - Removal rate: 14.75%
+2024-10-31 16:01:04,360 - INFO - Found 3 incomplete conversations
+2024-10-31 16:01:04,383 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 16:01:04,383 - INFO - Starting data analysis
+2024-10-31 16:01:04,485 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 16:01:04,486 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-10-31 16:01:04,771 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-10-31 16:01:04,771 - INFO - Generating variance distribution plot
+2024-10-31 16:01:04,849 - INFO - Data processing pipeline completed successfully
+2024-10-31 16:01:45,944 - INFO - Starting data processing pipeline
+2024-10-31 16:01:45,992 - INFO - Response processing results:
+2024-10-31 16:01:45,992 - INFO - Initial responses: 1729
+2024-10-31 16:01:45,992 - INFO - Valid responses: 1474
+2024-10-31 16:01:45,992 - INFO - Removed responses: 255
+2024-10-31 16:01:45,992 - INFO - Removal rate: 14.75%
+2024-10-31 16:01:45,994 - INFO - Found 3 incomplete conversations
+2024-10-31 16:01:46,003 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 16:01:46,003 - INFO - Starting data analysis
+2024-10-31 16:01:46,070 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 16:01:46,071 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-10-31 16:01:46,316 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-10-31 16:01:46,316 - INFO - Generating variance distribution plot
+2024-10-31 16:01:46,391 - INFO - Data processing pipeline completed successfully
+2024-10-31 16:21:59,200 - INFO - Starting data processing pipeline
+2024-10-31 16:21:59,246 - INFO - Response processing results:
+2024-10-31 16:21:59,246 - INFO - Initial responses: 1729
+2024-10-31 16:21:59,246 - INFO - Valid responses: 1474
+2024-10-31 16:21:59,246 - INFO - Removed responses: 255
+2024-10-31 16:21:59,247 - INFO - Removal rate: 14.75%
+2024-10-31 16:21:59,248 - INFO - Found 3 incomplete conversations
+2024-10-31 16:21:59,257 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 16:21:59,258 - INFO - Starting data analysis
+2024-10-31 16:21:59,326 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 16:21:59,326 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-10-31 16:21:59,326 - INFO - Generating confusion matrices for each manipulation type
+2024-10-31 16:21:59,603 - INFO - 
+Confusion matrix for peer pressure:
+2024-10-31 16:21:59,603 - INFO - Accuracy: 0.65
+2024-10-31 16:21:59,603 - INFO - Recall: 0.00
+2024-10-31 16:21:59,603 - INFO - Matrix:
+[[319 171]
+ [  0   0]]
+2024-10-31 16:21:59,673 - INFO - 
+Confusion matrix for reciprocity pressure:
+2024-10-31 16:21:59,674 - INFO - Accuracy: 0.69
+2024-10-31 16:21:59,674 - INFO - Recall: 0.00
+2024-10-31 16:21:59,674 - INFO - Matrix:
+[[336 153]
+ [  0   0]]
+2024-10-31 16:21:59,745 - INFO - 
+Confusion matrix for gaslighting:
+2024-10-31 16:21:59,745 - INFO - Accuracy: 0.45
+2024-10-31 16:21:59,745 - INFO - Recall: 0.00
+2024-10-31 16:21:59,745 - INFO - Matrix:
+[[222 267]
+ [  0   0]]
+2024-10-31 16:21:59,814 - INFO - 
+Confusion matrix for guilt-tripping:
+2024-10-31 16:21:59,814 - INFO - Accuracy: 0.54
+2024-10-31 16:21:59,814 - INFO - Recall: 0.00
+2024-10-31 16:21:59,815 - INFO - Matrix:
+[[263 225]
+ [  0   0]]
+2024-10-31 16:21:59,888 - INFO - 
+Confusion matrix for emotional blackmail:
+2024-10-31 16:21:59,888 - INFO - Accuracy: 0.67
+2024-10-31 16:21:59,888 - INFO - Recall: 0.00
+2024-10-31 16:21:59,888 - INFO - Matrix:
+[[328 160]
+ [  0   0]]
+2024-10-31 16:21:59,962 - INFO - 
+Confusion matrix for general:
+2024-10-31 16:21:59,962 - INFO - Accuracy: 0.41
+2024-10-31 16:21:59,963 - INFO - Recall: 0.00
+2024-10-31 16:21:59,963 - INFO - Matrix:
+[[203 291]
+ [  0   0]]
+2024-10-31 16:22:00,040 - INFO - 
+Confusion matrix for fear enhancement:
+2024-10-31 16:22:00,040 - INFO - Accuracy: 0.52
+2024-10-31 16:22:00,040 - INFO - Recall: 0.00
+2024-10-31 16:22:00,040 - INFO - Matrix:
+[[256 232]
+ [  0   0]]
+2024-10-31 16:22:00,122 - INFO - 
+Confusion matrix for negging:
+2024-10-31 16:22:00,123 - INFO - Accuracy: 0.57
+2024-10-31 16:22:00,123 - INFO - Recall: 0.00
+2024-10-31 16:22:00,123 - INFO - Matrix:
+[[279 212]
+ [  0   0]]
+2024-10-31 16:22:01,289 - INFO - All confusion matrices have been saved to 'manipulation_confusion_matrices.png'
+2024-10-31 16:22:01,289 - INFO - Generating variance distribution plot
+2024-10-31 16:22:01,364 - INFO - Data processing pipeline completed successfully
+2024-10-31 16:23:21,210 - INFO - Starting data processing pipeline
+2024-10-31 16:23:21,263 - INFO - Response processing results:
+2024-10-31 16:23:21,263 - INFO - Initial responses: 1729
+2024-10-31 16:23:21,263 - INFO - Valid responses: 1474
+2024-10-31 16:23:21,263 - INFO - Removed responses: 255
+2024-10-31 16:23:21,263 - INFO - Removal rate: 14.75%
+2024-10-31 16:23:21,265 - INFO - Found 3 incomplete conversations
+2024-10-31 16:23:21,274 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 16:23:21,274 - INFO - Starting data analysis
+2024-10-31 16:23:21,340 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 16:23:21,340 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-10-31 16:23:21,555 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-10-31 16:23:21,555 - INFO - Generating confusion matrices for each manipulation type
+2024-10-31 16:23:21,692 - INFO - 
+Confusion matrix for peer pressure:
+2024-10-31 16:23:21,693 - INFO - Accuracy: 0.65
+2024-10-31 16:23:21,693 - INFO - Recall: 0.00
+2024-10-31 16:23:21,693 - INFO - Matrix:
+[[319 171]
+ [  0   0]]
+2024-10-31 16:23:21,761 - INFO - 
+Confusion matrix for reciprocity pressure:
+2024-10-31 16:23:21,761 - INFO - Accuracy: 0.69
+2024-10-31 16:23:21,761 - INFO - Recall: 0.00
+2024-10-31 16:23:21,761 - INFO - Matrix:
+[[336 153]
+ [  0   0]]
+2024-10-31 16:23:21,830 - INFO - 
+Confusion matrix for gaslighting:
+2024-10-31 16:23:21,831 - INFO - Accuracy: 0.45
+2024-10-31 16:23:21,831 - INFO - Recall: 0.00
+2024-10-31 16:23:21,831 - INFO - Matrix:
+[[222 267]
+ [  0   0]]
+2024-10-31 16:23:21,900 - INFO - 
+Confusion matrix for guilt-tripping:
+2024-10-31 16:23:21,900 - INFO - Accuracy: 0.54
+2024-10-31 16:23:21,900 - INFO - Recall: 0.00
+2024-10-31 16:23:21,900 - INFO - Matrix:
+[[263 225]
+ [  0   0]]
+2024-10-31 16:23:21,971 - INFO - 
+Confusion matrix for emotional blackmail:
+2024-10-31 16:23:21,971 - INFO - Accuracy: 0.67
+2024-10-31 16:23:21,971 - INFO - Recall: 0.00
+2024-10-31 16:23:21,971 - INFO - Matrix:
+[[328 160]
+ [  0   0]]
+2024-10-31 16:23:22,043 - INFO - 
+Confusion matrix for general:
+2024-10-31 16:23:22,043 - INFO - Accuracy: 0.41
+2024-10-31 16:23:22,043 - INFO - Recall: 0.00
+2024-10-31 16:23:22,043 - INFO - Matrix:
+[[203 291]
+ [  0   0]]
+2024-10-31 16:23:22,117 - INFO - 
+Confusion matrix for fear enhancement:
+2024-10-31 16:23:22,117 - INFO - Accuracy: 0.52
+2024-10-31 16:23:22,117 - INFO - Recall: 0.00
+2024-10-31 16:23:22,117 - INFO - Matrix:
+[[256 232]
+ [  0   0]]
+2024-10-31 16:23:22,193 - INFO - 
+Confusion matrix for negging:
+2024-10-31 16:23:22,193 - INFO - Accuracy: 0.57
+2024-10-31 16:23:22,193 - INFO - Recall: 0.00
+2024-10-31 16:23:22,193 - INFO - Matrix:
+[[279 212]
+ [  0   0]]
+2024-10-31 16:23:23,370 - INFO - All confusion matrices have been saved to 'manipulation_confusion_matrices.png'
+2024-10-31 16:23:23,370 - INFO - Generating variance distribution plot
+2024-10-31 16:23:23,442 - INFO - Data processing pipeline completed successfully
+2024-10-31 16:31:09,876 - INFO - Starting data processing pipeline
+2024-10-31 16:31:09,927 - INFO - Response processing results:
+2024-10-31 16:31:09,927 - INFO - Initial responses: 1729
+2024-10-31 16:31:09,927 - INFO - Valid responses: 1474
+2024-10-31 16:31:09,927 - INFO - Removed responses: 255
+2024-10-31 16:31:09,927 - INFO - Removal rate: 14.75%
+2024-10-31 16:31:09,929 - INFO - Found 3 incomplete conversations
+2024-10-31 16:31:09,938 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 16:31:09,938 - INFO - Starting data analysis
+2024-10-31 16:31:10,004 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 16:31:10,005 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-10-31 16:31:10,223 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-10-31 16:31:10,223 - INFO - Generating confusion matrices for each manipulation type
+2024-10-31 16:34:54,568 - INFO - Starting data processing pipeline
+2024-10-31 16:34:54,613 - INFO - Response processing results:
+2024-10-31 16:34:54,613 - INFO - Initial responses: 1729
+2024-10-31 16:34:54,613 - INFO - Valid responses: 1474
+2024-10-31 16:34:54,613 - INFO - Removed responses: 255
+2024-10-31 16:34:54,613 - INFO - Removal rate: 14.75%
+2024-10-31 16:34:54,615 - INFO - Found 3 incomplete conversations
+2024-10-31 16:34:54,624 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-10-31 16:34:54,624 - INFO - Starting data analysis
+2024-10-31 16:34:54,692 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-10-31 16:34:54,692 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-10-31 16:34:54,907 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-10-31 16:34:54,907 - INFO - Generating confusion matrices for each manipulation type
+2024-10-31 16:34:55,040 - INFO - 
+Confusion matrix for Peer Pressure:
+2024-10-31 16:34:55,040 - INFO - Accuracy: 0.71
+2024-10-31 16:34:55,040 - INFO - Recall: 0.83
+2024-10-31 16:34:55,040 - INFO - Matrix:
+[[312 136]
+ [  7  35]]
+2024-10-31 16:34:55,105 - INFO - 
+Confusion matrix for Reciprocity Pressure:
+2024-10-31 16:34:55,105 - INFO - Accuracy: 0.70
+2024-10-31 16:34:55,105 - INFO - Recall: 0.60
+2024-10-31 16:34:55,105 - INFO - Matrix:
+[[319 128]
+ [ 17  25]]
+2024-10-31 16:34:55,171 - INFO - 
+Confusion matrix for Gaslighting:
+2024-10-31 16:34:55,171 - INFO - Accuracy: 0.50
+2024-10-31 16:34:55,171 - INFO - Recall: 0.78
+2024-10-31 16:34:55,171 - INFO - Matrix:
+[[213 236]
+ [  9  31]]
+2024-10-31 16:34:55,237 - INFO - 
+Confusion matrix for Guilt-Tripping:
+2024-10-31 16:34:55,237 - INFO - Accuracy: 0.60
+2024-10-31 16:34:55,237 - INFO - Recall: 0.86
+2024-10-31 16:34:55,237 - INFO - Matrix:
+[[257 188]
+ [  6  37]]
+2024-10-31 16:34:55,306 - INFO - 
+Confusion matrix for Emotional Blackmail:
+2024-10-31 16:34:55,306 - INFO - Accuracy: 0.69
+2024-10-31 16:34:55,306 - INFO - Recall: 0.62
+2024-10-31 16:34:55,307 - INFO - Matrix:
+[[313 135]
+ [ 15  25]]
+2024-10-31 16:34:55,376 - INFO - 
+Confusion matrix for Fear Enhancement:
+2024-10-31 16:34:55,376 - INFO - Accuracy: 0.60
+2024-10-31 16:34:55,376 - INFO - Recall: 0.90
+2024-10-31 16:34:55,376 - INFO - Matrix:
+[[251 188]
+ [  5  44]]
+2024-10-31 16:34:55,449 - INFO - 
+Confusion matrix for Negging:
+2024-10-31 16:34:55,449 - INFO - Accuracy: 0.65
+2024-10-31 16:34:55,449 - INFO - Recall: 0.93
+2024-10-31 16:34:55,449 - INFO - Matrix:
+[[276 170]
+ [  3  42]]
+2024-10-31 16:34:55,525 - INFO - 
+Confusion matrix for General:
+2024-10-31 16:34:55,525 - INFO - Accuracy: 0.41
+2024-10-31 16:34:55,525 - INFO - Recall: 0.00
+2024-10-31 16:34:55,525 - INFO - Matrix:
+[[203 291]
+ [  0   0]]
+2024-10-31 16:34:56,688 - INFO - All confusion matrices have been saved to 'manipulation_confusion_matrices.png'
+2024-10-31 16:34:56,688 - INFO - Generating variance distribution plot
+2024-10-31 16:34:56,759 - INFO - Data processing pipeline completed successfully
+2024-11-05 10:59:48,148 - INFO - Starting data processing pipeline
+2024-11-05 10:59:48,203 - INFO - Response processing results:
+2024-11-05 10:59:48,203 - INFO - Initial responses: 1729
+2024-11-05 10:59:48,203 - INFO - Valid responses: 1474
+2024-11-05 10:59:48,203 - INFO - Removed responses: 255
+2024-11-05 10:59:48,203 - INFO - Removal rate: 14.75%
+2024-11-05 10:59:48,205 - INFO - Found 3 incomplete conversations
+2024-11-05 10:59:48,220 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-05 10:59:48,221 - INFO - Starting data analysis
+2024-11-05 10:59:48,311 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-11-05 10:59:48,312 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-11-05 10:59:48,592 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-11-05 10:59:48,592 - INFO - Generating confusion matrices for each manipulation type
+2024-11-05 10:59:48,745 - INFO - 
+Confusion matrix for Peer Pressure:
+2024-11-05 10:59:48,745 - INFO - Accuracy: 0.71
+2024-11-05 10:59:48,746 - INFO - Recall: 0.83
+2024-11-05 10:59:48,746 - INFO - Matrix:
+[[312 136]
+ [  7  35]]
+2024-11-05 10:59:48,827 - INFO - 
+Confusion matrix for Reciprocity Pressure:
+2024-11-05 10:59:48,827 - INFO - Accuracy: 0.70
+2024-11-05 10:59:48,827 - INFO - Recall: 0.60
+2024-11-05 10:59:48,827 - INFO - Matrix:
+[[319 128]
+ [ 17  25]]
+2024-11-05 10:59:48,910 - INFO - 
+Confusion matrix for Gaslighting:
+2024-11-05 10:59:48,910 - INFO - Accuracy: 0.50
+2024-11-05 10:59:48,910 - INFO - Recall: 0.78
+2024-11-05 10:59:48,910 - INFO - Matrix:
+[[213 236]
+ [  9  31]]
+2024-11-05 10:59:48,995 - INFO - 
+Confusion matrix for Guilt-Tripping:
+2024-11-05 10:59:48,995 - INFO - Accuracy: 0.60
+2024-11-05 10:59:48,995 - INFO - Recall: 0.86
+2024-11-05 10:59:48,995 - INFO - Matrix:
+[[257 188]
+ [  6  37]]
+2024-11-05 10:59:49,083 - INFO - 
+Confusion matrix for Emotional Blackmail:
+2024-11-05 10:59:49,083 - INFO - Accuracy: 0.69
+2024-11-05 10:59:49,083 - INFO - Recall: 0.62
+2024-11-05 10:59:49,083 - INFO - Matrix:
+[[313 135]
+ [ 15  25]]
+2024-11-05 10:59:49,174 - INFO - 
+Confusion matrix for Fear Enhancement:
+2024-11-05 10:59:49,174 - INFO - Accuracy: 0.60
+2024-11-05 10:59:49,174 - INFO - Recall: 0.90
+2024-11-05 10:59:49,174 - INFO - Matrix:
+[[251 188]
+ [  5  44]]
+2024-11-05 10:59:49,271 - INFO - 
+Confusion matrix for Negging:
+2024-11-05 10:59:49,271 - INFO - Accuracy: 0.65
+2024-11-05 10:59:49,271 - INFO - Recall: 0.93
+2024-11-05 10:59:49,271 - INFO - Matrix:
+[[276 170]
+ [  3  42]]
+2024-11-05 10:59:50,697 - INFO - All confusion matrices have been saved to 'manipulation_confusion_matrices.png'
+2024-11-05 10:59:50,697 - INFO - Generating variance distribution plot
+2024-11-05 10:59:50,790 - INFO - Data processing pipeline completed successfully
+2024-11-05 11:40:47,284 - INFO - Starting data processing pipeline
+2024-11-05 11:40:47,342 - INFO - Response processing results:
+2024-11-05 11:40:47,342 - INFO - Initial responses: 1729
+2024-11-05 11:40:47,342 - INFO - Valid responses: 1474
+2024-11-05 11:40:47,343 - INFO - Removed responses: 255
+2024-11-05 11:40:47,343 - INFO - Removal rate: 14.75%
+2024-11-05 11:40:47,345 - INFO - Found 3 incomplete conversations
+2024-11-05 11:40:47,357 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-05 11:40:47,357 - INFO - Starting data analysis
+2024-11-05 11:40:47,444 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-11-05 11:40:47,444 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-11-05 11:40:47,703 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-11-05 11:40:47,703 - INFO - Generating confusion matrices for each manipulation type
+2024-11-05 11:41:10,903 - INFO - Starting data processing pipeline
+2024-11-05 11:41:10,957 - INFO - Response processing results:
+2024-11-05 11:41:10,957 - INFO - Initial responses: 1729
+2024-11-05 11:41:10,957 - INFO - Valid responses: 1474
+2024-11-05 11:41:10,957 - INFO - Removed responses: 255
+2024-11-05 11:41:10,957 - INFO - Removal rate: 14.75%
+2024-11-05 11:41:10,960 - INFO - Found 3 incomplete conversations
+2024-11-05 11:41:10,971 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-05 11:41:10,971 - INFO - Starting data analysis
+2024-11-05 11:41:11,059 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-11-05 11:41:11,059 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-11-05 11:41:11,289 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-11-05 11:41:11,289 - INFO - Generating confusion matrices for each manipulation type
+2024-11-05 11:41:11,774 - INFO - 
+Confusion matrix for Peer Pressure:
+2024-11-05 11:41:11,774 - INFO - Accuracy: 0.71
+2024-11-05 11:41:11,774 - INFO - Recall: 0.83
+2024-11-05 11:41:11,775 - INFO - Matrix:
+[[312 136]
+ [  7  35]]
+2024-11-05 11:41:12,012 - INFO - 
+Confusion matrix for Reciprocity Pressure:
+2024-11-05 11:41:12,012 - INFO - Accuracy: 0.70
+2024-11-05 11:41:12,012 - INFO - Recall: 0.60
+2024-11-05 11:41:12,013 - INFO - Matrix:
+[[319 128]
+ [ 17  25]]
+2024-11-05 11:41:12,247 - INFO - 
+Confusion matrix for Gaslighting:
+2024-11-05 11:41:12,247 - INFO - Accuracy: 0.50
+2024-11-05 11:41:12,247 - INFO - Recall: 0.78
+2024-11-05 11:41:12,247 - INFO - Matrix:
+[[213 236]
+ [  9  31]]
+2024-11-05 11:41:12,488 - INFO - 
+Confusion matrix for Guilt-Tripping:
+2024-11-05 11:41:12,488 - INFO - Accuracy: 0.60
+2024-11-05 11:41:12,488 - INFO - Recall: 0.86
+2024-11-05 11:41:12,488 - INFO - Matrix:
+[[257 188]
+ [  6  37]]
+2024-11-05 11:41:12,732 - INFO - 
+Confusion matrix for Emotional Blackmail:
+2024-11-05 11:41:12,732 - INFO - Accuracy: 0.69
+2024-11-05 11:41:12,732 - INFO - Recall: 0.62
+2024-11-05 11:41:12,732 - INFO - Matrix:
+[[313 135]
+ [ 15  25]]
+2024-11-05 11:41:12,990 - INFO - 
+Confusion matrix for Fear Enhancement:
+2024-11-05 11:41:12,991 - INFO - Accuracy: 0.60
+2024-11-05 11:41:12,991 - INFO - Recall: 0.90
+2024-11-05 11:41:12,991 - INFO - Matrix:
+[[251 188]
+ [  5  44]]
+2024-11-05 11:41:13,316 - INFO - 
+Confusion matrix for Negging:
+2024-11-05 11:41:13,316 - INFO - Accuracy: 0.65
+2024-11-05 11:41:13,316 - INFO - Recall: 0.93
+2024-11-05 11:41:13,316 - INFO - Matrix:
+[[276 170]
+ [  3  42]]
+2024-11-05 11:41:14,770 - INFO - All confusion matrices have been saved to 'manipulation_confusion_matrices.png'
+2024-11-05 11:41:14,770 - INFO - Generating variance distribution plot
+2024-11-05 11:41:14,861 - INFO - Data processing pipeline completed successfully
+2024-11-05 11:44:40,222 - INFO - Starting data processing pipeline
+2024-11-05 11:44:40,277 - INFO - Response processing results:
+2024-11-05 11:44:40,277 - INFO - Initial responses: 1729
+2024-11-05 11:44:40,277 - INFO - Valid responses: 1474
+2024-11-05 11:44:40,277 - INFO - Removed responses: 255
+2024-11-05 11:44:40,277 - INFO - Removal rate: 14.75%
+2024-11-05 11:44:40,280 - INFO - Found 3 incomplete conversations
+2024-11-05 11:44:40,291 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-05 11:44:40,291 - INFO - Starting data analysis
+2024-11-05 11:44:40,378 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-11-05 11:44:40,378 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-11-05 11:44:40,607 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-11-05 11:44:40,607 - INFO - Generating confusion matrices for each manipulation type
+2024-11-05 11:44:40,844 - INFO - 
+Confusion matrix for Peer Pressure (specific):
+2024-11-05 11:44:40,844 - INFO - Accuracy: 0.71
+2024-11-05 11:44:40,844 - INFO - Recall: 0.83
+2024-11-05 11:44:40,844 - INFO - Matrix:
+[[312 136]
+ [  7  35]]
+2024-11-05 11:44:40,987 - INFO - 
+Confusion matrix for Peer Pressure (general):
+2024-11-05 11:44:40,987 - INFO - Accuracy: 0.60
+2024-11-05 11:44:40,987 - INFO - Recall: 0.46
+2024-11-05 11:44:40,988 - INFO - Matrix:
+[[157  35]
+ [162 136]]
+2024-11-05 11:44:41,097 - INFO - 
+Confusion matrix for Peer Pressure (voted):
+2024-11-05 11:44:41,097 - INFO - Accuracy: 0.63
+2024-11-05 11:44:41,097 - INFO - Recall: 0.48
+2024-11-05 11:44:41,097 - INFO - Matrix:
+[[170  31]
+ [149 140]]
+2024-11-05 11:44:41,180 - INFO - 
+Confusion matrix for Reciprocity Pressure (specific):
+2024-11-05 11:44:41,180 - INFO - Accuracy: 0.70
+2024-11-05 11:44:41,180 - INFO - Recall: 0.60
+2024-11-05 11:44:41,180 - INFO - Matrix:
+[[319 128]
+ [ 17  25]]
+2024-11-05 11:44:41,259 - INFO - 
+Confusion matrix for Reciprocity Pressure (general):
+2024-11-05 11:44:41,260 - INFO - Accuracy: 0.54
+2024-11-05 11:44:41,260 - INFO - Recall: 0.38
+2024-11-05 11:44:41,260 - INFO - Matrix:
+[[151  41]
+ [185 112]]
+2024-11-05 11:44:41,339 - INFO - 
+Confusion matrix for Reciprocity Pressure (voted):
+2024-11-05 11:44:41,339 - INFO - Accuracy: 0.54
+2024-11-05 11:44:41,339 - INFO - Recall: 0.37
+2024-11-05 11:44:41,339 - INFO - Matrix:
+[[156  47]
+ [180 106]]
+2024-11-05 11:44:41,420 - INFO - 
+Confusion matrix for Gaslighting (specific):
+2024-11-05 11:44:41,420 - INFO - Accuracy: 0.50
+2024-11-05 11:44:41,420 - INFO - Recall: 0.78
+2024-11-05 11:44:41,421 - INFO - Matrix:
+[[213 236]
+ [  9  31]]
+2024-11-05 11:44:41,504 - INFO - 
+Confusion matrix for Gaslighting (general):
+2024-11-05 11:44:41,504 - INFO - Accuracy: 0.65
+2024-11-05 11:44:41,504 - INFO - Recall: 0.66
+2024-11-05 11:44:41,505 - INFO - Matrix:
+[[121  70]
+ [101 197]]
+2024-11-05 11:44:41,588 - INFO - 
+Confusion matrix for Gaslighting (voted):
+2024-11-05 11:44:41,588 - INFO - Accuracy: 0.76
+2024-11-05 11:44:41,588 - INFO - Recall: 0.76
+2024-11-05 11:44:41,588 - INFO - Matrix:
+[[153  49]
+ [ 69 218]]
+2024-11-05 11:44:41,673 - INFO - 
+Confusion matrix for Guilt-Tripping (specific):
+2024-11-05 11:44:41,673 - INFO - Accuracy: 0.60
+2024-11-05 11:44:41,673 - INFO - Recall: 0.86
+2024-11-05 11:44:41,673 - INFO - Matrix:
+[[257 188]
+ [  6  37]]
+2024-11-05 11:44:41,757 - INFO - 
+Confusion matrix for Guilt-Tripping (general):
+2024-11-05 11:44:41,758 - INFO - Accuracy: 0.65
+2024-11-05 11:44:41,758 - INFO - Recall: 0.59
+2024-11-05 11:44:41,758 - INFO - Matrix:
+[[142  48]
+ [121 177]]
+2024-11-05 11:44:41,843 - INFO - 
+Confusion matrix for Guilt-Tripping (voted):
+2024-11-05 11:44:41,844 - INFO - Accuracy: 0.69
+2024-11-05 11:44:41,844 - INFO - Recall: 0.63
+2024-11-05 11:44:41,844 - INFO - Matrix:
+[[157  46]
+ [106 179]]
+2024-11-05 11:44:41,934 - INFO - 
+Confusion matrix for Emotional Blackmail (specific):
+2024-11-05 11:44:41,934 - INFO - Accuracy: 0.69
+2024-11-05 11:44:41,934 - INFO - Recall: 0.62
+2024-11-05 11:44:41,934 - INFO - Matrix:
+[[313 135]
+ [ 15  25]]
+2024-11-05 11:44:42,021 - INFO - 
+Confusion matrix for Emotional Blackmail (general):
+2024-11-05 11:44:42,021 - INFO - Accuracy: 0.59
+2024-11-05 11:44:42,021 - INFO - Recall: 0.43
+2024-11-05 11:44:42,022 - INFO - Matrix:
+[[159  31]
+ [169 129]]
+2024-11-05 11:44:42,113 - INFO - 
+Confusion matrix for Emotional Blackmail (voted):
+2024-11-05 11:44:42,113 - INFO - Accuracy: 0.61
+2024-11-05 11:44:42,113 - INFO - Recall: 0.45
+2024-11-05 11:44:42,113 - INFO - Matrix:
+[[170  32]
+ [158 128]]
+2024-11-05 11:44:42,205 - INFO - 
+Confusion matrix for Fear Enhancement (specific):
+2024-11-05 11:44:42,205 - INFO - Accuracy: 0.60
+2024-11-05 11:44:42,205 - INFO - Recall: 0.90
+2024-11-05 11:44:42,205 - INFO - Matrix:
+[[251 188]
+ [  5  44]]
+2024-11-05 11:44:42,298 - INFO - 
+Confusion matrix for Fear Enhancement (general):
+2024-11-05 11:44:42,298 - INFO - Accuracy: 0.69
+2024-11-05 11:44:42,298 - INFO - Recall: 0.64
+2024-11-05 11:44:42,298 - INFO - Matrix:
+[[149  42]
+ [107 190]]
+2024-11-05 11:44:42,391 - INFO - 
+Confusion matrix for Fear Enhancement (voted):
+2024-11-05 11:44:42,391 - INFO - Accuracy: 0.70
+2024-11-05 11:44:42,391 - INFO - Recall: 0.65
+2024-11-05 11:44:42,391 - INFO - Matrix:
+[[156  46]
+ [100 186]]
+2024-11-05 11:44:42,486 - INFO - 
+Confusion matrix for Negging (specific):
+2024-11-05 11:44:42,486 - INFO - Accuracy: 0.65
+2024-11-05 11:44:42,486 - INFO - Recall: 0.93
+2024-11-05 11:44:42,486 - INFO - Matrix:
+[[276 170]
+ [  3  42]]
+2024-11-05 11:44:42,582 - INFO - 
+Confusion matrix for Negging (general):
+2024-11-05 11:44:42,582 - INFO - Accuracy: 0.65
+2024-11-05 11:44:42,582 - INFO - Recall: 0.57
+2024-11-05 11:44:42,582 - INFO - Matrix:
+[[149  42]
+ [130 170]]
+2024-11-05 11:44:42,722 - INFO - 
+Confusion matrix for Negging (voted):
+2024-11-05 11:44:42,722 - INFO - Accuracy: 0.72
+2024-11-05 11:44:42,722 - INFO - Recall: 0.63
+2024-11-05 11:44:42,722 - INFO - Matrix:
+[[171  31]
+ [108 181]]
+2024-11-05 11:44:44,219 - INFO - Saved confusion matrices to manipulation_confusion_matrices_specific.png
+2024-11-05 11:44:45,723 - INFO - Saved confusion matrices to manipulation_confusion_matrices_general.png
+2024-11-05 11:44:47,245 - INFO - Saved confusion matrices to manipulation_confusion_matrices_voted.png
+2024-11-05 11:44:47,245 - INFO - Generating variance distribution plot
+2024-11-05 11:44:47,338 - INFO - Data processing pipeline completed successfully
+2024-11-05 11:45:36,290 - INFO - Starting data processing pipeline
+2024-11-05 11:45:36,342 - INFO - Response processing results:
+2024-11-05 11:45:36,342 - INFO - Initial responses: 1729
+2024-11-05 11:45:36,342 - INFO - Valid responses: 1474
+2024-11-05 11:45:36,342 - INFO - Removed responses: 255
+2024-11-05 11:45:36,342 - INFO - Removal rate: 14.75%
+2024-11-05 11:45:36,345 - INFO - Found 3 incomplete conversations
+2024-11-05 11:45:36,355 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-05 11:45:36,355 - INFO - Starting data analysis
+2024-11-05 11:45:36,443 - INFO - Classification metrics - Accuracy: 0.76, Recall: 0.78
+2024-11-05 11:45:36,444 - INFO - Variance statistics - Mean: 1.72, Median: 1.30, Variance of variance: 2.46
+2024-11-05 11:45:36,677 - INFO - Confusion matrix saved: 
+[[138  55]
+ [ 65 236]]
+2024-11-05 11:45:36,677 - INFO - Generating confusion matrices for each manipulation type
+2024-11-05 11:45:36,935 - INFO - 
+Confusion matrix for Peer Pressure (specific):
+2024-11-05 11:45:36,935 - INFO - Accuracy: 0.71
+2024-11-05 11:45:36,935 - INFO - Recall: 0.83
+2024-11-05 11:45:36,935 - INFO - Matrix:
+[[312 136]
+ [  7  35]]
+2024-11-05 11:45:37,083 - INFO - 
+Confusion matrix for Peer Pressure (general):
+2024-11-05 11:45:37,083 - INFO - Accuracy: 0.60
+2024-11-05 11:45:37,083 - INFO - Recall: 0.46
+2024-11-05 11:45:37,083 - INFO - Matrix:
+[[157  35]
+ [162 136]]
+2024-11-05 11:45:37,200 - INFO - 
+Confusion matrix for Peer Pressure (voted):
+2024-11-05 11:45:37,200 - INFO - Accuracy: 0.63
+2024-11-05 11:45:37,200 - INFO - Recall: 0.48
+2024-11-05 11:45:37,200 - INFO - Matrix:
+[[170  31]
+ [149 140]]
+2024-11-05 11:45:37,285 - INFO - 
+Confusion matrix for Reciprocity Pressure (specific):
+2024-11-05 11:45:37,285 - INFO - Accuracy: 0.70
+2024-11-05 11:45:37,285 - INFO - Recall: 0.60
+2024-11-05 11:45:37,285 - INFO - Matrix:
+[[319 128]
+ [ 17  25]]
+2024-11-05 11:45:37,370 - INFO - 
+Confusion matrix for Reciprocity Pressure (general):
+2024-11-05 11:45:37,370 - INFO - Accuracy: 0.54
+2024-11-05 11:45:37,370 - INFO - Recall: 0.38
+2024-11-05 11:45:37,370 - INFO - Matrix:
+[[151  41]
+ [185 112]]
+2024-11-05 11:45:37,454 - INFO - 
+Confusion matrix for Reciprocity Pressure (voted):
+2024-11-05 11:45:37,454 - INFO - Accuracy: 0.54
+2024-11-05 11:45:37,454 - INFO - Recall: 0.37
+2024-11-05 11:45:37,454 - INFO - Matrix:
+[[156  47]
+ [180 106]]
+2024-11-05 11:45:37,539 - INFO - 
+Confusion matrix for Gaslighting (specific):
+2024-11-05 11:45:37,539 - INFO - Accuracy: 0.50
+2024-11-05 11:45:37,539 - INFO - Recall: 0.78
+2024-11-05 11:45:37,539 - INFO - Matrix:
+[[213 236]
+ [  9  31]]
+2024-11-05 11:45:37,628 - INFO - 
+Confusion matrix for Gaslighting (general):
+2024-11-05 11:45:37,628 - INFO - Accuracy: 0.65
+2024-11-05 11:45:37,628 - INFO - Recall: 0.66
+2024-11-05 11:45:37,628 - INFO - Matrix:
+[[121  70]
+ [101 197]]
+2024-11-05 11:45:37,713 - INFO - 
+Confusion matrix for Gaslighting (voted):
+2024-11-05 11:45:37,713 - INFO - Accuracy: 0.76
+2024-11-05 11:45:37,713 - INFO - Recall: 0.76
+2024-11-05 11:45:37,713 - INFO - Matrix:
+[[153  49]
+ [ 69 218]]
+2024-11-05 11:45:37,801 - INFO - 
+Confusion matrix for Guilt-Tripping (specific):
+2024-11-05 11:45:37,802 - INFO - Accuracy: 0.60
+2024-11-05 11:45:37,802 - INFO - Recall: 0.86
+2024-11-05 11:45:37,802 - INFO - Matrix:
+[[257 188]
+ [  6  37]]
+2024-11-05 11:45:37,893 - INFO - 
+Confusion matrix for Guilt-Tripping (general):
+2024-11-05 11:45:37,893 - INFO - Accuracy: 0.65
+2024-11-05 11:45:37,893 - INFO - Recall: 0.59
+2024-11-05 11:45:37,894 - INFO - Matrix:
+[[142  48]
+ [121 177]]
+2024-11-05 11:45:37,983 - INFO - 
+Confusion matrix for Guilt-Tripping (voted):
+2024-11-05 11:45:37,983 - INFO - Accuracy: 0.69
+2024-11-05 11:45:37,983 - INFO - Recall: 0.63
+2024-11-05 11:45:37,983 - INFO - Matrix:
+[[157  46]
+ [106 179]]
+2024-11-05 11:45:38,075 - INFO - 
+Confusion matrix for Emotional Blackmail (specific):
+2024-11-05 11:45:38,075 - INFO - Accuracy: 0.69
+2024-11-05 11:45:38,075 - INFO - Recall: 0.62
+2024-11-05 11:45:38,075 - INFO - Matrix:
+[[313 135]
+ [ 15  25]]
+2024-11-05 11:45:38,167 - INFO - 
+Confusion matrix for Emotional Blackmail (general):
+2024-11-05 11:45:38,167 - INFO - Accuracy: 0.59
+2024-11-05 11:45:38,167 - INFO - Recall: 0.43
+2024-11-05 11:45:38,167 - INFO - Matrix:
+[[159  31]
+ [169 129]]
+2024-11-05 11:45:38,258 - INFO - 
+Confusion matrix for Emotional Blackmail (voted):
+2024-11-05 11:45:38,258 - INFO - Accuracy: 0.61
+2024-11-05 11:45:38,258 - INFO - Recall: 0.45
+2024-11-05 11:45:38,258 - INFO - Matrix:
+[[170  32]
+ [158 128]]
+2024-11-05 11:45:38,351 - INFO - 
+Confusion matrix for Fear Enhancement (specific):
+2024-11-05 11:45:38,351 - INFO - Accuracy: 0.60
+2024-11-05 11:45:38,351 - INFO - Recall: 0.90
+2024-11-05 11:45:38,352 - INFO - Matrix:
+[[251 188]
+ [  5  44]]
+2024-11-05 11:45:38,445 - INFO - 
+Confusion matrix for Fear Enhancement (general):
+2024-11-05 11:45:38,445 - INFO - Accuracy: 0.69
+2024-11-05 11:45:38,445 - INFO - Recall: 0.64
+2024-11-05 11:45:38,445 - INFO - Matrix:
+[[149  42]
+ [107 190]]
+2024-11-05 11:45:38,538 - INFO - 
+Confusion matrix for Fear Enhancement (voted):
+2024-11-05 11:45:38,538 - INFO - Accuracy: 0.70
+2024-11-05 11:45:38,539 - INFO - Recall: 0.65
+2024-11-05 11:45:38,539 - INFO - Matrix:
+[[156  46]
+ [100 186]]
+2024-11-05 11:45:38,635 - INFO - 
+Confusion matrix for Negging (specific):
+2024-11-05 11:45:38,635 - INFO - Accuracy: 0.65
+2024-11-05 11:45:38,635 - INFO - Recall: 0.93
+2024-11-05 11:45:38,635 - INFO - Matrix:
+[[276 170]
+ [  3  42]]
+2024-11-05 11:45:38,730 - INFO - 
+Confusion matrix for Negging (general):
+2024-11-05 11:45:38,730 - INFO - Accuracy: 0.65
+2024-11-05 11:45:38,730 - INFO - Recall: 0.57
+2024-11-05 11:45:38,731 - INFO - Matrix:
+[[149  42]
+ [130 170]]
+2024-11-05 11:45:38,872 - INFO - 
+Confusion matrix for Negging (voted):
+2024-11-05 11:45:38,872 - INFO - Accuracy: 0.72
+2024-11-05 11:45:38,872 - INFO - Recall: 0.63
+2024-11-05 11:45:38,873 - INFO - Matrix:
+[[171  31]
+ [108 181]]
+2024-11-05 11:45:40,383 - INFO - Saved confusion matrices to manipulation_confusion_matrices_specific.png
+2024-11-05 11:45:41,863 - INFO - Saved confusion matrices to manipulation_confusion_matrices_general.png
+2024-11-05 11:45:43,358 - INFO - Saved confusion matrices to manipulation_confusion_matrices_voted.png
+2024-11-05 11:45:43,359 - INFO - Generating variance distribution plot
+2024-11-05 11:45:43,454 - INFO - Data processing pipeline completed successfully
