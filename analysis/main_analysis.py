@@ -57,6 +57,258 @@ def handle_data_files(logger: logging.Logger, download_flag: bool = False) -> Di
     
     return data
 
+
+import numpy as np
+from typing import List, Dict, Union, Tuple
+import krippendorff
+from sklearn.metrics import cohen_kappa_score
+import pandas as pd
+
+def calculate_krippendorff_alpha(
+    data: pd.DataFrame,
+    manipulation_cols: List[str],
+    logger: logging.Logger
+) -> Dict[str, float]:
+    """
+    Calculate Krippendorff's alpha for each manipulation type.
+    
+    Args:
+        data: DataFrame containing manipulation ratings
+        manipulation_cols: List of manipulation type columns
+        logger: Logger instance for tracking execution
+    
+    Returns:
+        Dictionary mapping manipulation types to their alpha scores
+    """
+    alpha_scores = {}
+    
+    for col in manipulation_cols:
+        try:
+            # Get all ratings for this manipulation type
+            ratings = data[col].dropna()
+            
+            # Convert list ratings to reliability data matrix
+            reliability_data = []
+            
+            # Only process if we have any valid ratings
+            if len(ratings) > 0:
+                # Get maximum number of annotators for any conversation
+                max_annotators = max(len(r) for r in ratings if isinstance(r, list) and r)
+                
+                if max_annotators > 1:  # Need at least 2 annotators
+                    # Create reliability matrix
+                    for ratings_list in ratings:
+                        if isinstance(ratings_list, list) and ratings_list:
+                            # Pad with missing values (None) if needed
+                            padded_ratings = ratings_list + [None] * (max_annotators - len(ratings_list))
+                            reliability_data.append(padded_ratings)
+                    
+                    # Only calculate if we have data
+                    if reliability_data:
+                        # Transpose so each row is an annotator
+                        reliability_data = list(map(list, zip(*reliability_data)))
+                        
+                        # Calculate Krippendorff's alpha
+                        alpha = krippendorff.alpha(
+                            reliability_data=reliability_data,
+                            level_of_measurement='interval'
+                        )
+                        alpha_scores[col] = alpha
+                        
+                        logger.info(f"Krippendorff's alpha for {col}: {alpha:.3f}")
+                        
+                        # Log interpretation
+                        if alpha < 0:
+                            logger.warning(f"{col}: Poor agreement (less than chance)")
+                        elif alpha < 0.2:
+                            logger.warning(f"{col}: Slight agreement")
+                        elif alpha < 0.4:
+                            logger.info(f"{col}: Fair agreement")
+                        elif alpha < 0.6:
+                            logger.info(f"{col}: Moderate agreement")
+                        elif alpha < 0.8:
+                            logger.info(f"{col}: Substantial agreement")
+                        else:
+                            logger.info(f"{col}: Almost perfect agreement")
+                    else:
+                        logger.warning(f"No valid reliability data for {col}")
+                        alpha_scores[col] = None
+                else:
+                    logger.warning(f"Not enough annotators for {col}")
+                    alpha_scores[col] = None
+            else:
+                logger.warning(f"No ratings found for {col}")
+                alpha_scores[col] = None
+                
+        except Exception as e:
+            logger.error(f"Error calculating Krippendorff's alpha for {col}: {str(e)}")
+            alpha_scores[col] = None
+            
+    return alpha_scores
+
+def calculate_pairwise_agreement(
+    data: pd.DataFrame,
+    manipulation_cols: List[str],
+    logger: logging.Logger
+) -> Dict[str, List[float]]:
+    """
+    Calculate pairwise Cohen's Kappa between all pairs of annotators.
+    
+    Args:
+        data: DataFrame containing manipulation ratings
+        manipulation_cols: List of manipulation type columns
+        logger: Logger instance for tracking execution
+    
+    Returns:
+        Dictionary mapping manipulation types to lists of pairwise kappa scores
+    """
+    kappa_scores = {}
+    
+    for col in manipulation_cols:
+        # Get all ratings for this manipulation type
+        ratings = data[col].dropna()
+        
+        # Convert to categorical (-1, 0, 1) based on whether score is below, at, or above neutral (4)
+        def to_categorical(x):
+            if not isinstance(x, list) or not x:
+                return None
+            return [
+                -1 if score < 4 else (1 if score > 4 else 0)
+                for score in x
+            ]
+        
+        # Calculate pairwise kappa for each pair of annotators
+        col_kappas = []
+        
+        try:
+            # Convert ratings to categorical
+            categorical_ratings = [to_categorical(r) for r in ratings if isinstance(r, list) and r]
+            
+            # Only proceed if we have valid ratings
+            if categorical_ratings:
+                # Calculate kappa for each pair of annotators
+                for ratings_list in categorical_ratings:
+                    if len(ratings_list) >= 2:  # Need at least 2 annotators
+                        n_annotators = len(ratings_list)
+                        for i in range(n_annotators):
+                            for j in range(i + 1, n_annotators):
+                                try:
+                                    # Use specified labels to avoid warning
+                                    kappa = cohen_kappa_score(
+                                        [ratings_list[i]], 
+                                        [ratings_list[j]],
+                                        labels=[-1, 0, 1]
+                                    )
+                                    if not np.isnan(kappa):
+                                        col_kappas.append(kappa)
+                                except Exception as e:
+                                    logger.debug(f"Error calculating individual kappa for {col}: {str(e)}")
+                                    continue
+            
+            if col_kappas:
+                kappa_scores[col] = col_kappas
+                mean_kappa = np.mean(col_kappas)
+                std_kappa = np.std(col_kappas)
+                
+                logger.info(f"Pairwise agreement for {col}:")
+                logger.info(f"  Mean Cohen's Kappa: {mean_kappa:.3f}")
+                logger.info(f"  Std Dev: {std_kappa:.3f}")
+                logger.info(f"  Number of pairs: {len(col_kappas)}")
+            else:
+                logger.warning(f"No valid kappa scores calculated for {col}")
+                kappa_scores[col] = []
+                
+        except Exception as e:
+            logger.error(f"Error calculating pairwise agreement for {col}: {str(e)}")
+            kappa_scores[col] = []
+            
+    return kappa_scores
+
+def analyze_annotator_agreement(analytics_df: pd.DataFrame, logger: logging.Logger) -> Tuple[Dict, Dict]:
+    """
+    Analyze inter-annotator agreement using multiple metrics.
+    
+    Args:
+        analytics_df: DataFrame containing the analysis data
+        logger: Logger instance for tracking execution
+        
+    Returns:
+        Tuple of (krippendorff_scores, pairwise_scores)
+    """
+    manipulation_cols = [
+        'peer pressure', 'reciprocity pressure', 'gaslighting',
+        'guilt-tripping', 'emotional blackmail', 'general',
+        'fear enhancement', 'negging'
+    ]
+    
+    logger.info("Starting inter-annotator agreement analysis")
+    
+    # Calculate Krippendorff's alpha
+    krippendorff_scores = calculate_krippendorff_alpha(
+        analytics_df,
+        manipulation_cols,
+        logger
+    )
+    
+    # Calculate pairwise agreement
+    pairwise_scores = calculate_pairwise_agreement(
+        analytics_df,
+        manipulation_cols,
+        logger
+    )
+    
+    # Create visualization of agreement scores
+    plt.figure(figsize=(12, 6))
+    
+    # Filter out None values and prepare data for plotting
+    valid_scores = {col: score for col, score in krippendorff_scores.items() 
+                   if score is not None and not np.isnan(score)}
+    
+    if valid_scores:  # Only create plot if we have valid scores
+        x = np.arange(len(valid_scores))
+        scores = list(valid_scores.values())
+        labels = [col.replace('_', ' ').title() for col in valid_scores.keys()]
+        
+        plt.bar(x, scores, width=0.35, label="Krippendorff's Alpha")
+        plt.axhline(y=0.667, color='r', linestyle='--', label='Recommended minimum (0.667)')
+        
+        plt.xlabel('Manipulation Type')
+        plt.ylabel('Agreement Score')
+        plt.title('Inter-Annotator Agreement Scores by Manipulation Type')
+        plt.xticks(x, labels, rotation=45)
+        plt.legend()
+        plt.tight_layout()
+        
+        try:
+            plt.savefig('annotator_agreement.png')
+        except Exception as e:
+            logger.error(f"Error saving plot: {str(e)}")
+    else:
+        logger.warning("No valid Krippendorff's alpha scores to plot")
+    
+    plt.close()
+    
+    # Log overall results
+    logger.info("\nOverall Inter-annotator Agreement Summary:")
+    for col in manipulation_cols:
+        logger.info(f"\n{col.title()}:")
+        k_alpha = krippendorff_scores.get(col)
+        if k_alpha is not None and not np.isnan(k_alpha):
+            logger.info(f"  Krippendorff's Alpha: {k_alpha:.3f}")
+        else:
+            logger.info("  Krippendorff's Alpha: Not available")
+            
+        if col in pairwise_scores and pairwise_scores[col]:
+            mean_kappa = np.nanmean(pairwise_scores[col])
+            if not np.isnan(mean_kappa):
+                logger.info(f"  Mean Pairwise Cohen's Kappa: {mean_kappa:.3f}")
+            else:
+                logger.info("  Mean Pairwise Cohen's Kappa: Not available")
+    
+    logger.info("Inter-annotator agreement analysis complete")
+    
+    return krippendorff_scores, pairwise_scores
+
 def calculate_statistics(row: pd.Series, manipulation_cols: List[str]) -> Tuple[float, float]:
     """Calculate variance and mean score for a row of manipulation scores."""
     scores = []
@@ -69,24 +321,462 @@ def calculate_statistics(row: pd.Series, manipulation_cols: List[str]) -> Tuple[
         
     return np.var(scores), np.mean(scores)
 
-def create_correlation_matrix(df: pd.DataFrame, manipulation_cols: List[str], logger: logging.Logger) -> Dict[str, pd.DataFrame]:
-    """Create correlation matrices using different methods."""
-    logger.info("Calculating correlation matrices")
-    correlation_df = pd.DataFrame()
+
+def analyze_correlations(series1, series2, series1_name="Series 1", series2_name="Series 2"):
+    """
+    Calculate different types of correlations between two pandas Series.
     
-    for col in manipulation_cols:
-        correlation_df[col] = df[col].apply(
-            lambda x: np.mean(x) if isinstance(x, list) and x else np.nan
-        )
+    Parameters:
+    series1 (pd.Series): First series of data
+    series2 (pd.Series): Second series of data
+    series1_name (str): Name of first series for output
+    series2_name (str): Name of second series for output
     
-    correlation_methods = ['pearson', 'spearman', 'kendall']
+    Returns:
+    dict: Dictionary containing different correlation metrics
+    """
+    # Remove any rows where either series has NaN values
+    clean_data = pd.DataFrame({
+        series1_name: series1,
+        series2_name: series2
+    }).dropna()
+    
+    series1_clean = clean_data[series1_name]
+    series2_clean = clean_data[series2_name]
+    
+    # Calculate different correlation coefficients
     correlations = {
-        method: correlation_df.corr(method=method) 
-        for method in correlation_methods
+        'pearson': {
+            'coefficient': series1_clean.corr(series2_clean, method='pearson'),
+            'pvalue': stats.pearsonr(series1_clean, series2_clean)[1]
+        },
+        'spearman': {
+            'coefficient': series1_clean.corr(series2_clean, method='spearman'),
+            'pvalue': stats.spearmanr(series1_clean, series2_clean)[1]
+        },
+        'kendall': {
+            'coefficient': series1_clean.corr(series2_clean, method='kendall'),
+            'pvalue': stats.kendalltau(series1_clean, series2_clean)[1]
+        }
     }
     
-    logger.info(f"Calculated correlations using methods: {', '.join(correlation_methods)}")
+    # Calculate additional relationship metrics
+    correlations['additional_metrics'] = {
+        'covariance': series1_clean.cov(series2_clean),
+        'r_squared': correlations['pearson']['coefficient'] ** 2,
+        'sample_size': len(clean_data),
+        'removed_rows': len(series1) - len(clean_data)
+    }
+
     return correlations
+
+def analyze_all_correlations(analytics_df: pd.DataFrame, mean_manipulation_columns: List[str], logger: logging.Logger) -> None:
+    """
+    Analyze correlations between all combinations of manipulation columns and save results to PDF.
+    """
+    from itertools import combinations
+    import matplotlib.pyplot as plt
+    from matplotlib.backends.backend_pdf import PdfPages
+    
+    # Create PDF
+    with PdfPages('manipulation_correlations.pdf') as pdf:
+        # Add title page
+        plt.figure(figsize=(11, 8.5))
+        plt.axis('off')
+        plt.text(0.5, 0.5, 'Manipulation Correlation Analysis Report',
+                horizontalalignment='center',
+                verticalalignment='center',
+                fontsize=24)
+        plt.text(0.5, 0.4, f'Generated on {pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")}',
+                horizontalalignment='center',
+                verticalalignment='center',
+                fontsize=12)
+        pdf.savefig()
+        plt.close()
+        
+        # Initialize correlation and p-value matrices with zeros
+        correlation_matrix = pd.DataFrame(0.0, 
+                                        index=mean_manipulation_columns, 
+                                        columns=mean_manipulation_columns,
+                                        dtype=float)
+        pvalue_matrix = pd.DataFrame(1.0,  # Initialize with 1.0 for non-significant
+                                   index=mean_manipulation_columns, 
+                                   columns=mean_manipulation_columns,
+                                   dtype=float)
+        
+        # Store detailed correlation results
+        detailed_results = []
+        
+        # Analyze all combinations
+        for (col1, col2) in combinations(mean_manipulation_columns, 2):
+            # Get readable names
+            name1 = col1.replace('_mean', '').title()
+            name2 = col2.replace('_mean', '').title()
+            
+            # Calculate correlations
+            correlations = analyze_correlations(
+                analytics_df[col1],
+                analytics_df[col2],
+                series1_name=name1,
+                series2_name=name2
+            )
+            
+            # Store in matrices - ensure float type
+            coef = float(correlations['pearson']['coefficient'])
+            pval = float(correlations['pearson']['pvalue'])
+            
+            correlation_matrix.loc[col1, col2] = coef
+            correlation_matrix.loc[col2, col1] = coef
+            pvalue_matrix.loc[col1, col2] = pval
+            pvalue_matrix.loc[col2, col1] = pval
+            
+            # Create scatter plot
+            plt.figure(figsize=(10, 6))
+            plt.scatter(analytics_df[col1], analytics_df[col2], alpha=0.5)
+            plt.xlabel(name1)
+            plt.ylabel(name2)
+            
+            # Add correlation information
+            info_text = (
+                f"Pearson: {coef:.3f} (p={pval:.3e})\n"
+                f"Spearman: {correlations['spearman']['coefficient']:.3f} (p={correlations['spearman']['pvalue']:.3e})\n"
+                f"Kendall: {correlations['kendall']['coefficient']:.3f} (p={correlations['kendall']['pvalue']:.3e})\n"
+                f"R²: {correlations['additional_metrics']['r_squared']:.3f}\n"
+                f"Sample size: {correlations['additional_metrics']['sample_size']}"
+            )
+            plt.title(f"Correlation between {name1} and {name2}")
+            plt.text(0.05, 0.95, info_text,
+                    transform=plt.gca().transAxes,
+                    verticalalignment='top',
+                    bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+            
+            # Add to PDF
+            pdf.savefig()
+            plt.close()
+            
+            # Store detailed results
+            detailed_results.append({
+                'pair': f"{name1} vs {name2}",
+                'correlations': correlations
+            })
+            
+            logger.info(f"Processed correlation between {name1} and {name2}")
+        
+        # Fill diagonal of correlation matrix
+        np.fill_diagonal(correlation_matrix.values, 1.0)
+        np.fill_diagonal(pvalue_matrix.values, 0.0)
+        
+        # Ensure matrices are float type
+        correlation_matrix = correlation_matrix.astype(float)
+        pvalue_matrix = pvalue_matrix.astype(float)
+        
+        def format_correlation_with_significance(coef, pval):
+            """Format correlation coefficient with significance stars and bold"""
+            formatted = f"{coef:.3f}"
+            if pval < 0.001:
+                formatted += "***"
+            elif pval < 0.01:
+                formatted += "**"
+            elif pval < 0.05:
+                formatted += "*"
+            return formatted
+        
+        # Create figure for correlation matrix
+        plt.figure(figsize=(12, 10))
+        
+        # Create the base heatmap
+        im = plt.imshow(correlation_matrix.values, cmap='RdYlBu_r', aspect='auto', vmin=-1, vmax=1)
+        plt.colorbar(im)
+        
+        # Add text annotations with significance stars
+        for i in range(len(correlation_matrix)):
+            for j in range(len(correlation_matrix.columns)):
+                coef = correlation_matrix.iloc[i, j]
+                pval = pvalue_matrix.iloc[i, j]
+                text = format_correlation_with_significance(coef, pval)
+                
+                # Choose text color based on background color
+                color = 'white' if abs(coef) > 0.5 else 'black'
+                
+                plt.text(j, i, text, ha='center', va='center', color=color)
+        
+        # Add labels and title
+        plt.xticks(range(len(correlation_matrix.columns)), 
+                  [col.replace('_mean', '').title() for col in correlation_matrix.columns], 
+                  rotation=45, ha='right')
+        plt.yticks(range(len(correlation_matrix.index)), 
+                  [col.replace('_mean', '').title() for col in correlation_matrix.index])
+        
+        plt.title('Correlation Matrix with Significance Levels\n* p<0.05, ** p<0.01, *** p<0.001')
+        plt.tight_layout()
+        
+        # Add to PDF
+        pdf.savefig(bbox_inches='tight')
+        plt.close()
+        
+        # Add summary page
+        plt.figure(figsize=(11, 8.5))
+        plt.axis('off')
+        
+        summary_text = "Summary of Notable Correlations:\n\n"
+        
+        # Find strongest positive and negative correlations
+        correlations_list = []
+        for (col1, col2) in combinations(mean_manipulation_columns, 2):
+            name1 = col1.replace('_mean', '').title()
+            name2 = col2.replace('_mean', '').title()
+            corr = correlation_matrix.loc[col1, col2]
+            pval = pvalue_matrix.loc[col1, col2]
+            correlations_list.append((name1, name2, corr, pval))
+        
+        # Sort by absolute correlation
+        correlations_list.sort(key=lambda x: abs(x[2]), reverse=True)
+        
+        # Add top 5 strongest correlations to summary with significance
+        summary_text += "Top 5 Strongest Correlations:\n"
+        for name1, name2, corr, pval in correlations_list[:5]:
+            formatted_corr = format_correlation_with_significance(corr, pval)
+            summary_text += f"• {name1} - {name2}: {formatted_corr}\n"
+        
+        plt.text(0.1, 0.9, summary_text,
+                fontsize=12,
+                verticalalignment='top',
+                fontfamily='monospace')
+        
+        pdf.savefig()
+        plt.close()
+    
+    logger.info(f"Correlation analysis complete. Results saved to 'manipulation_correlations.pdf'")
+    return correlation_matrix, detailed_results
+
+def analyze_categorical_correlations(series1, series2, series1_name="Series 1", series2_name="Series 2"):
+    """
+    Calculate correlations between categorical versions of the data.
+    
+    Parameters:
+    series1 (pd.Series): First series of data
+    series2 (pd.Series): Second series of data
+    series1_name (str): Name of first series for output
+    series2_name (str): Name of second series for output
+    
+    Returns:
+    dict: Dictionary containing different correlation metrics
+    """
+    # Convert to categorical (-1, 0, 1)
+    def to_categorical(x):
+        if pd.isna(x):
+            return np.nan
+        if x < 4:
+            return -1
+        elif x > 4:
+            return 1
+        return 0
+    
+    # Create categorical versions
+    cat_series1 = series1.apply(to_categorical)
+    cat_series2 = series2.apply(to_categorical)
+    
+    # Remove any rows where either series has NaN values
+    clean_data = pd.DataFrame({
+        series1_name: cat_series1,
+        series2_name: cat_series2
+    }).dropna()
+    
+    if len(clean_data) == 0:
+        return {
+            'categorical_correlations': {
+                'cramers_v': np.nan,
+                'pvalue': np.nan
+            },
+            'contingency_table': None,
+            'sample_size': 0
+        }
+    
+    # Create contingency table
+    contingency_table = pd.crosstab(clean_data[series1_name], clean_data[series2_name])
+    
+    # Calculate Chi-square test
+    chi2, pvalue = stats.chi2_contingency(contingency_table)[:2]
+    
+    # Calculate Cramer's V
+    n = contingency_table.sum().sum()
+    min_dim = min(contingency_table.shape) - 1
+    cramers_v = np.sqrt(chi2 / (n * min_dim)) if n * min_dim != 0 else 0
+    
+    return {
+        'categorical_correlations': {
+            'cramers_v': cramers_v,
+            'pvalue': pvalue
+        },
+        'contingency_table': contingency_table,
+        'sample_size': len(clean_data)
+    }
+
+def analyze_all_categorical_correlations(analytics_df: pd.DataFrame, mean_manipulation_columns: List[str], logger: logging.Logger) -> None:
+    """
+    Analyze categorical correlations between all combinations of manipulation columns and save results to PDF.
+    """
+    from itertools import combinations
+    import matplotlib.pyplot as plt
+    from matplotlib.backends.backend_pdf import PdfPages
+    
+    # Create PDF
+    with PdfPages('manipulation_categorical_correlations.pdf') as pdf:
+        # Add title page
+        plt.figure(figsize=(11, 8.5))
+        plt.axis('off')
+        plt.text(0.5, 0.5, 'Categorical Manipulation Correlation Analysis Report',
+                horizontalalignment='center',
+                verticalalignment='center',
+                fontsize=24)
+        plt.text(0.5, 0.4, f'Generated on {pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")}',
+                horizontalalignment='center',
+                verticalalignment='center',
+                fontsize=12)
+        pdf.savefig()
+        plt.close()
+        
+        # Initialize correlation and p-value matrices
+        correlation_matrix = pd.DataFrame(0.0, 
+                                        index=mean_manipulation_columns, 
+                                        columns=mean_manipulation_columns,
+                                        dtype=float)
+        pvalue_matrix = pd.DataFrame(1.0,
+                                   index=mean_manipulation_columns, 
+                                   columns=mean_manipulation_columns,
+                                   dtype=float)
+        
+        # Store detailed results
+        detailed_results = []
+        
+        # Analyze all combinations
+        for (col1, col2) in combinations(mean_manipulation_columns, 2):
+            # Get readable names
+            name1 = col1.replace('_mean', '').title()
+            name2 = col2.replace('_mean', '').title()
+            
+            # Calculate categorical correlations
+            cat_correlations = analyze_categorical_correlations(
+                analytics_df[col1],
+                analytics_df[col2],
+                series1_name=name1,
+                series2_name=name2
+            )
+            
+            # Store in matrices
+            coef = float(cat_correlations['categorical_correlations']['cramers_v'])
+            pval = float(cat_correlations['categorical_correlations']['pvalue'])
+            
+            correlation_matrix.loc[col1, col2] = coef
+            correlation_matrix.loc[col2, col1] = coef
+            pvalue_matrix.loc[col1, col2] = pval
+            pvalue_matrix.loc[col2, col1] = pval
+            
+            # Create contingency table visualization
+            if cat_correlations['contingency_table'] is not None:
+                plt.figure(figsize=(10, 6))
+                sns.heatmap(
+                    cat_correlations['contingency_table'],
+                    annot=True,
+                    fmt='d',
+                    cmap='YlOrRd'
+                )
+                plt.title(f"Contingency Table: {name1} vs {name2}\nCramer's V={coef:.3f} (p={pval:.3e})")
+                plt.xlabel(name2)
+                plt.ylabel(name1)
+                
+                pdf.savefig()
+                plt.close()
+            
+            # Store detailed results
+            detailed_results.append({
+                'pair': f"{name1} vs {name2}",
+                'categorical_correlations': cat_correlations
+            })
+            
+            logger.info(f"Processed categorical correlation between {name1} and {name2}")
+        
+        # Fill diagonal
+        np.fill_diagonal(correlation_matrix.values, 1.0)
+        np.fill_diagonal(pvalue_matrix.values, 0.0)
+        
+        def format_correlation_with_significance(coef, pval):
+            """Format correlation coefficient with significance stars"""
+            formatted = f"{coef:.3f}"
+            if pval < 0.001:
+                formatted += "***"
+            elif pval < 0.01:
+                formatted += "**"
+            elif pval < 0.05:
+                formatted += "*"
+            return formatted
+        
+        # Create figure for correlation matrix
+        plt.figure(figsize=(12, 10))
+        
+        # Create heatmap
+        im = plt.imshow(correlation_matrix.values, cmap='RdYlBu_r', aspect='auto', vmin=0, vmax=1)
+        plt.colorbar(im)
+        
+        # Add text annotations
+        for i in range(len(correlation_matrix)):
+            for j in range(len(correlation_matrix.columns)):
+                coef = correlation_matrix.iloc[i, j]
+                pval = pvalue_matrix.iloc[i, j]
+                text = format_correlation_with_significance(coef, pval)
+                
+                # Choose text color
+                color = 'white' if coef > 0.5 else 'black'
+                
+                plt.text(j, i, text, ha='center', va='center', color=color)
+        
+        # Add labels
+        plt.xticks(range(len(correlation_matrix.columns)), 
+                  [col.replace('_mean', '').title() for col in correlation_matrix.columns], 
+                  rotation=45, ha='right')
+        plt.yticks(range(len(correlation_matrix.index)), 
+                  [col.replace('_mean', '').title() for col in correlation_matrix.index])
+        
+        plt.title("Categorical Correlation Matrix (Cramer's V)\nwith Significance Levels\n* p<0.05, ** p<0.01, *** p<0.001")
+        plt.tight_layout()
+        
+        pdf.savefig(bbox_inches='tight')
+        plt.close()
+        
+        # Add summary page
+        plt.figure(figsize=(11, 8.5))
+        plt.axis('off')
+        
+        summary_text = "Summary of Notable Categorical Correlations:\n\n"
+        
+        # Find strongest correlations
+        correlations_list = []
+        for (col1, col2) in combinations(mean_manipulation_columns, 2):
+            name1 = col1.replace('_mean', '').title()
+            name2 = col2.replace('_mean', '').title()
+            corr = correlation_matrix.loc[col1, col2]
+            pval = pvalue_matrix.loc[col1, col2]
+            correlations_list.append((name1, name2, corr, pval))
+        
+        # Sort by correlation strength
+        correlations_list.sort(key=lambda x: x[2], reverse=True)
+        
+        # Add top 5 strongest correlations
+        summary_text += "Top 5 Strongest Correlations:\n"
+        for name1, name2, corr, pval in correlations_list[:5]:
+            formatted_corr = format_correlation_with_significance(corr, pval)
+            summary_text += f"• {name1} - {name2}: {formatted_corr}\n"
+        
+        plt.text(0.1, 0.9, summary_text,
+                fontsize=12,
+                verticalalignment='top',
+                fontfamily='monospace')
+        
+        pdf.savefig()
+        plt.close()
+    
+    logger.info(f"Categorical correlation analysis complete. Results saved to 'manipulation_categorical_correlations.pdf'")
+    return correlation_matrix, detailed_results
 
 def plot_confusion_matrix(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
     """
@@ -248,25 +938,18 @@ def analyze_data(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
         'guilt-tripping', 'emotional blackmail', 'general', 
         'fear enhancement', 'negging'
     ]
-    
 
     logger.info("Starting data analysis")
     
-    manipulation_cols = [
-        'peer pressure', 'reciprocity pressure', 'gaslighting',
-        'guilt-tripping', 'emotional blackmail', 'general',
-        'fear enhancement', 'negging'
-    ]
-
     # Calculate mean for each column
     for col in manipulation_cols:
         mean_col_name = f'{col}_mean'
-        analytics_df[mean_col_name] = analytics_df[col].apply(lambda x: np.mean(x))
+        analytics_df[mean_col_name] = analytics_df[col].apply(lambda x: np.mean(x) if isinstance(x, list) and x else np.nan)
 
     # Calculate variance for each column
     for col in manipulation_cols:
         var_col_name = f'{col}_variance'
-        analytics_df[var_col_name] = analytics_df[col].apply(lambda x: np.var(x))
+        analytics_df[var_col_name] = analytics_df[col].apply(lambda x: np.var(x) if isinstance(x, list) and x else np.nan)
 
     # Binary classification
     analytics_df['is_manipulative_score'] = analytics_df['general_mean'] > 4
@@ -288,7 +971,7 @@ def analyze_data(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
                f"Median: {analytics_df['general_variance'].median():.2f}, "
                f"Variance of variance: {analytics_df['general_variance'].var():.2f}")
     
-    # plot a confusion matrix for general  manipulation
+    # Plot confusion matrix for general manipulation
     plot_confusion_matrix(analytics_df, logger)
 
     logger.info("Generating confusion matrices for each manipulation type")
@@ -304,6 +987,71 @@ def analyze_data(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
     plt.savefig('variance_distribution.png')
     plt.close()
     
+    mean_manipulation_columns = [f'{col}_mean' for col in manipulation_cols]
+    
+    # Generate correlation analysis
+    correlation_matrix, detailed_results = analyze_all_correlations(
+        analytics_df,
+        mean_manipulation_columns,
+        logger
+    )
+    
+    # Add categorical correlation analysis
+    categorical_correlation_matrix, categorical_detailed_results = analyze_all_categorical_correlations(
+        analytics_df,
+        mean_manipulation_columns,
+        logger
+    )
+    
+    logger.info("Continuous correlation matrix:")
+    logger.info(correlation_matrix)
+    logger.info("\nCategorical correlation matrix:")
+    logger.info(categorical_correlation_matrix)
+    
+    # # Add inter-annotator agreement analysis
+    # logger.info("Starting inter-annotator agreement analysis")
+    # krippendorff_scores, pairwise_scores = analyze_annotator_agreement(analytics_df, logger)
+    
+    # # Log overall agreement results
+    # logger.info("\nOverall Inter-annotator Agreement Summary:")
+    # for col in manipulation_cols:
+    #     logger.info(f"\n{col.title()}:")
+        
+    #     # Log Krippendorff's alpha
+    #     k_alpha = krippendorff_scores.get(col)
+    #     if k_alpha is not None and not np.isnan(k_alpha):
+    #         logger.info(f"  Krippendorff's Alpha: {k_alpha:.3f}")
+    #     else:
+    #         logger.info("  Krippendorff's Alpha: Not available")
+        
+    #     # Log mean pairwise kappa
+    #     if col in pairwise_scores and pairwise_scores[col]:
+    #         mean_kappa = np.mean(pairwise_scores[col])
+    #         if not np.isnan(mean_kappa):
+    #             logger.info(f"  Mean Pairwise Cohen's Kappa: {mean_kappa:.3f}")
+    #         else:
+    #             logger.info("  Mean Pairwise Cohen's Kappa: Not available")
+    #     else:
+    #         logger.info("  Mean Pairwise Cohen's Kappa: Not available")
+            
+    #     # Log interpretation
+    #     if k_alpha is not None and not np.isnan(k_alpha):
+    #         if k_alpha < 0:
+    #             logger.warning(f"  Interpretation: Poor agreement (less than chance)")
+    #         elif k_alpha < 0.2:
+    #             logger.warning(f"  Interpretation: Slight agreement")
+    #         elif k_alpha < 0.4:
+    #             logger.info(f"  Interpretation: Fair agreement")
+    #         elif k_alpha < 0.6:
+    #             logger.info(f"  Interpretation: Moderate agreement")
+    #         elif k_alpha < 0.8:
+    #             logger.info(f"  Interpretation: Substantial agreement")
+    #         else:
+    #             logger.info(f"  Interpretation: Almost perfect agreement")
+    
+    logger.info("Data analysis pipeline completed successfully")
+    return None
+
     # # Correlation analysis
     # correlations = create_correlation_matrix(analytics_df, manipulation_cols, logger)
     
@@ -387,6 +1135,8 @@ answers_df.drop('answers', axis=1, inplace=True)
 # Merge DataFrames
 analytics_df = conversations_df.join(answers_df, lsuffix='_conv', rsuffix='_trans')
 logger.info(f"Created merged DataFrame with shape: {analytics_df.shape}")
+
+import pdb; pdb.set_trace()
 
 # Perform analysis
 _ = analyze_data(analytics_df, logger)
