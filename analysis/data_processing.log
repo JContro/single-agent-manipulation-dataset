@@ -5671,3 +5671,898 @@ negging_mean                         0.230342                   0.120989        
 2024-11-12 11:35:25,154 - INFO - Valid responses: 1679
 2024-11-12 11:35:25,154 - INFO - Removed responses: 256
 2024-11-12 11:35:25,154 - INFO - Removal rate: 13.23%
+2024-11-12 11:41:36,656 - INFO - Starting reliability analysis pipeline
+2024-11-12 11:41:36,685 - INFO - Response cleaning results:
+2024-11-12 11:41:36,685 - INFO - Initial responses: 1935
+2024-11-12 11:41:36,685 - INFO - Valid responses: 1679
+2024-11-12 11:41:36,685 - INFO - Removed responses: 256
+2024-11-12 11:41:36,685 - INFO - Removal rate: 13.23%
+2024-11-12 11:41:36,685 - INFO - Preparing annotation data for reliability analysis
+2024-11-12 11:41:36,686 - INFO - Found 239 unique raters
+2024-11-12 11:41:36,687 - INFO - Found 536 unique conversations
+2024-11-12 11:41:36,687 - INFO - Creating reliability matrix
+2024-11-12 11:41:36,690 - INFO - Created matrix with shape (239, 536)
+2024-11-12 11:41:36,690 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 11:41:36,693 - INFO - Krippendorff's alpha: 0.447
+2024-11-12 11:41:36,693 - INFO - Reliability level: Weak agreement
+2024-11-12 11:41:36,693 - INFO - Transforming scores to trinary scale
+2024-11-12 11:41:36,693 - INFO - Transformed values present: [-1.  0.  1.]
+2024-11-12 11:41:36,693 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 11:41:36,695 - INFO - Krippendorff's alpha: 0.387
+2024-11-12 11:41:36,695 - INFO - Reliability level: Weak agreement
+2024-11-12 11:41:36,695 - INFO - Reliability analysis completed
+2024-11-12 13:32:20,873 - INFO - Starting reliability analysis pipeline
+2024-11-12 13:32:20,909 - INFO - Response cleaning results:
+2024-11-12 13:32:20,909 - INFO - Initial responses: 1935
+2024-11-12 13:32:20,909 - INFO - Valid responses: 1679
+2024-11-12 13:32:20,909 - INFO - Removed responses: 256
+2024-11-12 13:32:20,909 - INFO - Removal rate: 13.23%
+2024-11-12 13:32:20,909 - INFO - Preparing annotation data for reliability analysis
+2024-11-12 13:32:20,910 - INFO - Found 239 unique raters
+2024-11-12 13:32:20,911 - INFO - Found 536 unique conversations
+2024-11-12 13:32:20,911 - INFO - Creating reliability matrix
+2024-11-12 13:32:20,913 - INFO - Created matrix with shape (239, 536)
+2024-11-12 13:32:20,913 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 13:32:20,916 - INFO - Krippendorff's alpha: 0.447
+2024-11-12 13:32:20,916 - INFO - Reliability level: Weak agreement
+2024-11-12 13:32:20,916 - INFO - Transforming scores to trinary scale
+2024-11-12 13:32:20,916 - INFO - Transformed values present: [-1.  0.  1.]
+2024-11-12 13:32:20,917 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 13:32:20,918 - INFO - Krippendorff's alpha: 0.387
+2024-11-12 13:32:20,918 - INFO - Reliability level: Weak agreement
+2024-11-12 13:32:20,918 - INFO - Analyzing rater subgroups with minimum 10 ratings
+2024-11-12 13:32:20,919 - INFO - Found 49 raters with 10+ ratings
+2024-11-12 13:32:20,920 - INFO - Average ratings per frequent rater: 21.7
+2024-11-12 13:32:20,920 - INFO - Creating reliability matrix
+2024-11-12 13:32:20,921 - INFO - Created matrix with shape (49, 502)
+2024-11-12 13:32:20,921 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 13:32:20,921 - INFO - Krippendorff's alpha: 0.530
+2024-11-12 13:32:20,921 - INFO - Reliability level: Weak agreement
+2024-11-12 13:32:20,922 - INFO - Analyzing pairwise agreement between raters
+2024-11-12 13:32:21,129 - INFO - Analyzed 2055 rating pairs
+2024-11-12 13:32:21,129 - INFO - Average agreement rate: 26.08%
+2024-11-12 13:32:21,129 - INFO - Average score difference: 1.49
+2024-11-12 13:32:21,129 - INFO - Analyzing score distribution
+2024-11-12 13:32:21,137 - INFO - 
+Overall score distribution:
+2024-11-12 13:32:21,137 - INFO - Score 1: 8.9%
+2024-11-12 13:32:21,137 - INFO - Score 2: 15.8%
+2024-11-12 13:32:21,137 - INFO - Score 3: 8.9%
+2024-11-12 13:32:21,137 - INFO - Score 4: 9.6%
+2024-11-12 13:32:21,137 - INFO - Score 5: 18.9%
+2024-11-12 13:32:21,137 - INFO - Score 6: 23.8%
+2024-11-12 13:32:21,137 - INFO - Score 7: 14.1%
+2024-11-12 13:32:21,137 - INFO - 
+Rater statistics:
+2024-11-12 13:32:21,137 - INFO - Mean score range: 1.00 - 7.00
+2024-11-12 13:32:21,137 - INFO - Standard deviation range: 0.00 - 3.03
+2024-11-12 13:32:21,506 - INFO - Reliability analysis completed
+2024-11-12 13:39:10,711 - INFO - Starting data processing pipeline
+2024-11-12 13:39:10,764 - INFO - Response processing results:
+2024-11-12 13:39:10,764 - INFO - Initial responses: 1935
+2024-11-12 13:39:10,764 - INFO - Valid responses: 1679
+2024-11-12 13:39:10,764 - INFO - Removed responses: 256
+2024-11-12 13:39:10,764 - INFO - Removal rate: 13.23%
+2024-11-12 13:39:10,766 - INFO - Found 5 incomplete conversations
+2024-11-12 13:39:10,776 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-12 13:39:13,408 - INFO - Starting data analysis
+2024-11-12 13:39:13,484 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-11-12 13:39:13,485 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-11-12 13:39:13,708 - INFO - Confusion matrix saved: 
+[[149  66]
+ [ 68 253]]
+2024-11-12 13:39:13,708 - INFO - Generating confusion matrices for each manipulation type
+2024-11-12 13:39:13,900 - INFO - 
+Confusion matrix for Peer Pressure (specific):
+2024-11-12 13:39:13,900 - INFO - Accuracy: 0.71
+2024-11-12 13:39:13,900 - INFO - Recall: 0.84
+2024-11-12 13:39:13,900 - INFO - Matrix:
+[[335 147]
+ [  7  38]]
+2024-11-12 13:39:14,018 - INFO - 
+Confusion matrix for Peer Pressure (general):
+2024-11-12 13:39:14,018 - INFO - Accuracy: 0.61
+2024-11-12 13:39:14,018 - INFO - Recall: 0.47
+2024-11-12 13:39:14,018 - INFO - Matrix:
+[[173  38]
+ [169 147]]
+2024-11-12 13:39:14,121 - INFO - 
+Confusion matrix for Peer Pressure (voted):
+2024-11-12 13:39:14,121 - INFO - Accuracy: 0.64
+2024-11-12 13:39:14,121 - INFO - Recall: 0.49
+2024-11-12 13:39:14,122 - INFO - Matrix:
+[[184  31]
+ [158 154]]
+2024-11-12 13:39:14,188 - INFO - 
+Confusion matrix for Reciprocity Pressure (specific):
+2024-11-12 13:39:14,188 - INFO - Accuracy: 0.72
+2024-11-12 13:39:14,188 - INFO - Recall: 0.60
+2024-11-12 13:39:14,188 - INFO - Matrix:
+[[356 130]
+ [ 18  27]]
+2024-11-12 13:39:14,253 - INFO - 
+Confusion matrix for Reciprocity Pressure (general):
+2024-11-12 13:39:14,253 - INFO - Accuracy: 0.53
+2024-11-12 13:39:14,253 - INFO - Recall: 0.35
+2024-11-12 13:39:14,253 - INFO - Matrix:
+[[168  44]
+ [206 113]]
+2024-11-12 13:39:14,315 - INFO - 
+Confusion matrix for Reciprocity Pressure (voted):
+2024-11-12 13:39:14,315 - INFO - Accuracy: 0.53
+2024-11-12 13:39:14,315 - INFO - Recall: 0.35
+2024-11-12 13:39:14,316 - INFO - Matrix:
+[[170  46]
+ [204 111]]
+2024-11-12 13:39:14,380 - INFO - 
+Confusion matrix for Gaslighting (specific):
+2024-11-12 13:39:14,380 - INFO - Accuracy: 0.51
+2024-11-12 13:39:14,380 - INFO - Recall: 0.77
+2024-11-12 13:39:14,380 - INFO - Matrix:
+[[238 252]
+ [ 10  33]]
+2024-11-12 13:39:14,446 - INFO - 
+Confusion matrix for Gaslighting (general):
+2024-11-12 13:39:14,446 - INFO - Accuracy: 0.65
+2024-11-12 13:39:14,446 - INFO - Recall: 0.65
+2024-11-12 13:39:14,446 - INFO - Matrix:
+[[136  77]
+ [112 208]]
+2024-11-12 13:39:14,513 - INFO - 
+Confusion matrix for Gaslighting (voted):
+2024-11-12 13:39:14,514 - INFO - Accuracy: 0.74
+2024-11-12 13:39:14,514 - INFO - Recall: 0.73
+2024-11-12 13:39:14,514 - INFO - Matrix:
+[[163  53]
+ [ 85 232]]
+2024-11-12 13:39:14,579 - INFO - 
+Confusion matrix for Guilt-Tripping (specific):
+2024-11-12 13:39:14,579 - INFO - Accuracy: 0.61
+2024-11-12 13:39:14,579 - INFO - Recall: 0.91
+2024-11-12 13:39:14,579 - INFO - Matrix:
+[[282 202]
+ [  4  41]]
+2024-11-12 13:39:14,647 - INFO - 
+Confusion matrix for Guilt-Tripping (general):
+2024-11-12 13:39:14,647 - INFO - Accuracy: 0.67
+2024-11-12 13:39:14,647 - INFO - Recall: 0.61
+2024-11-12 13:39:14,647 - INFO - Matrix:
+[[161  51]
+ [125 192]]
+2024-11-12 13:39:14,715 - INFO - 
+Confusion matrix for Guilt-Tripping (voted):
+2024-11-12 13:39:14,715 - INFO - Accuracy: 0.70
+2024-11-12 13:39:14,715 - INFO - Recall: 0.63
+2024-11-12 13:39:14,715 - INFO - Matrix:
+[[172  45]
+ [114 198]]
+2024-11-12 13:39:14,787 - INFO - 
+Confusion matrix for Emotional Blackmail (specific):
+2024-11-12 13:39:14,787 - INFO - Accuracy: 0.70
+2024-11-12 13:39:14,787 - INFO - Recall: 0.62
+2024-11-12 13:39:14,787 - INFO - Matrix:
+[[343 143]
+ [ 16  26]]
+2024-11-12 13:39:14,861 - INFO - 
+Confusion matrix for Emotional Blackmail (general):
+2024-11-12 13:39:14,861 - INFO - Accuracy: 0.60
+2024-11-12 13:39:14,861 - INFO - Recall: 0.44
+2024-11-12 13:39:14,861 - INFO - Matrix:
+[[181  31]
+ [178 138]]
+2024-11-12 13:39:14,931 - INFO - 
+Confusion matrix for Emotional Blackmail (voted):
+2024-11-12 13:39:14,931 - INFO - Accuracy: 0.61
+2024-11-12 13:39:14,932 - INFO - Recall: 0.44
+2024-11-12 13:39:14,932 - INFO - Matrix:
+[[183  31]
+ [176 138]]
+2024-11-12 13:39:15,004 - INFO - 
+Confusion matrix for Fear Enhancement (specific):
+2024-11-12 13:39:15,004 - INFO - Accuracy: 0.59
+2024-11-12 13:39:15,004 - INFO - Recall: 0.92
+2024-11-12 13:39:15,004 - INFO - Matrix:
+[[268 212]
+ [  4  48]]
+2024-11-12 13:39:15,079 - INFO - 
+Confusion matrix for Fear Enhancement (general):
+2024-11-12 13:39:15,080 - INFO - Accuracy: 0.70
+2024-11-12 13:39:15,080 - INFO - Recall: 0.66
+2024-11-12 13:39:15,080 - INFO - Matrix:
+[[163  51]
+ [109 209]]
+2024-11-12 13:39:15,156 - INFO - 
+Confusion matrix for Fear Enhancement (voted):
+2024-11-12 13:39:15,156 - INFO - Accuracy: 0.71
+2024-11-12 13:39:15,156 - INFO - Recall: 0.67
+2024-11-12 13:39:15,156 - INFO - Matrix:
+[[168  48]
+ [104 212]]
+2024-11-12 13:39:15,233 - INFO - 
+Confusion matrix for Negging (specific):
+2024-11-12 13:39:15,233 - INFO - Accuracy: 0.66
+2024-11-12 13:39:15,233 - INFO - Recall: 0.92
+2024-11-12 13:39:15,233 - INFO - Matrix:
+[[306 177]
+ [  4  45]]
+2024-11-12 13:39:15,347 - INFO - 
+Confusion matrix for Negging (general):
+2024-11-12 13:39:15,348 - INFO - Accuracy: 0.65
+2024-11-12 13:39:15,348 - INFO - Recall: 0.56
+2024-11-12 13:39:15,348 - INFO - Matrix:
+[[168  43]
+ [142 179]]
+2024-11-12 13:39:15,428 - INFO - 
+Confusion matrix for Negging (voted):
+2024-11-12 13:39:15,428 - INFO - Accuracy: 0.70
+2024-11-12 13:39:15,428 - INFO - Recall: 0.60
+2024-11-12 13:39:15,428 - INFO - Matrix:
+[[182  33]
+ [128 189]]
+2024-11-12 13:39:16,610 - INFO - Saved confusion matrices to manipulation_confusion_matrices_specific.png
+2024-11-12 13:39:17,769 - INFO - Saved confusion matrices to manipulation_confusion_matrices_general.png
+2024-11-12 13:39:18,952 - INFO - Saved confusion matrices to manipulation_confusion_matrices_voted.png
+2024-11-12 13:39:18,952 - INFO - Generating variance distribution plot
+2024-11-12 13:39:19,174 - INFO - Processed correlation between Peer Pressure and Reciprocity Pressure
+2024-11-12 13:39:19,214 - INFO - Processed correlation between Peer Pressure and Gaslighting
+2024-11-12 13:39:19,258 - INFO - Processed correlation between Peer Pressure and Guilt-Tripping
+2024-11-12 13:39:19,302 - INFO - Processed correlation between Peer Pressure and Emotional Blackmail
+2024-11-12 13:39:19,343 - INFO - Processed correlation between Peer Pressure and General
+2024-11-12 13:39:19,385 - INFO - Processed correlation between Peer Pressure and Fear Enhancement
+2024-11-12 13:39:19,434 - INFO - Processed correlation between Peer Pressure and Negging
+2024-11-12 13:39:19,475 - INFO - Processed correlation between Reciprocity Pressure and Gaslighting
+2024-11-12 13:39:19,515 - INFO - Processed correlation between Reciprocity Pressure and Guilt-Tripping
+2024-11-12 13:39:19,554 - INFO - Processed correlation between Reciprocity Pressure and Emotional Blackmail
+2024-11-12 13:39:19,595 - INFO - Processed correlation between Reciprocity Pressure and General
+2024-11-12 13:39:19,636 - INFO - Processed correlation between Reciprocity Pressure and Fear Enhancement
+2024-11-12 13:39:19,675 - INFO - Processed correlation between Reciprocity Pressure and Negging
+2024-11-12 13:39:19,718 - INFO - Processed correlation between Gaslighting and Guilt-Tripping
+2024-11-12 13:39:19,763 - INFO - Processed correlation between Gaslighting and Emotional Blackmail
+2024-11-12 13:39:19,804 - INFO - Processed correlation between Gaslighting and General
+2024-11-12 13:39:19,844 - INFO - Processed correlation between Gaslighting and Fear Enhancement
+2024-11-12 13:39:19,958 - INFO - Processed correlation between Gaslighting and Negging
+2024-11-12 13:39:19,999 - INFO - Processed correlation between Guilt-Tripping and Emotional Blackmail
+2024-11-12 13:39:20,039 - INFO - Processed correlation between Guilt-Tripping and General
+2024-11-12 13:39:20,079 - INFO - Processed correlation between Guilt-Tripping and Fear Enhancement
+2024-11-12 13:39:20,123 - INFO - Processed correlation between Guilt-Tripping and Negging
+2024-11-12 13:39:20,171 - INFO - Processed correlation between Emotional Blackmail and General
+2024-11-12 13:39:20,212 - INFO - Processed correlation between Emotional Blackmail and Fear Enhancement
+2024-11-12 13:39:20,251 - INFO - Processed correlation between Emotional Blackmail and Negging
+2024-11-12 13:39:20,293 - INFO - Processed correlation between General and Fear Enhancement
+2024-11-12 13:39:20,333 - INFO - Processed correlation between General and Negging
+2024-11-12 13:39:20,376 - INFO - Processed correlation between Fear Enhancement and Negging
+2024-11-12 13:39:20,610 - INFO - Correlation analysis complete. Results saved to 'manipulation_correlations.pdf'
+2024-11-12 13:39:20,682 - INFO - Processed categorical correlation between Peer Pressure and Reciprocity Pressure
+2024-11-12 13:39:20,737 - INFO - Processed categorical correlation between Peer Pressure and Gaslighting
+2024-11-12 13:39:20,835 - INFO - Processed categorical correlation between Peer Pressure and Guilt-Tripping
+2024-11-12 13:39:20,892 - INFO - Processed categorical correlation between Peer Pressure and Emotional Blackmail
+2024-11-12 13:39:20,943 - INFO - Processed categorical correlation between Peer Pressure and General
+2024-11-12 13:39:20,995 - INFO - Processed categorical correlation between Peer Pressure and Fear Enhancement
+2024-11-12 13:39:21,046 - INFO - Processed categorical correlation between Peer Pressure and Negging
+2024-11-12 13:39:21,099 - INFO - Processed categorical correlation between Reciprocity Pressure and Gaslighting
+2024-11-12 13:39:21,152 - INFO - Processed categorical correlation between Reciprocity Pressure and Guilt-Tripping
+2024-11-12 13:39:21,204 - INFO - Processed categorical correlation between Reciprocity Pressure and Emotional Blackmail
+2024-11-12 13:39:21,254 - INFO - Processed categorical correlation between Reciprocity Pressure and General
+2024-11-12 13:39:21,312 - INFO - Processed categorical correlation between Reciprocity Pressure and Fear Enhancement
+2024-11-12 13:39:21,362 - INFO - Processed categorical correlation between Reciprocity Pressure and Negging
+2024-11-12 13:39:21,411 - INFO - Processed categorical correlation between Gaslighting and Guilt-Tripping
+2024-11-12 13:39:21,463 - INFO - Processed categorical correlation between Gaslighting and Emotional Blackmail
+2024-11-12 13:39:21,559 - INFO - Processed categorical correlation between Gaslighting and General
+2024-11-12 13:39:21,612 - INFO - Processed categorical correlation between Gaslighting and Fear Enhancement
+2024-11-12 13:39:21,662 - INFO - Processed categorical correlation between Gaslighting and Negging
+2024-11-12 13:39:21,712 - INFO - Processed categorical correlation between Guilt-Tripping and Emotional Blackmail
+2024-11-12 13:39:21,764 - INFO - Processed categorical correlation between Guilt-Tripping and General
+2024-11-12 13:39:21,817 - INFO - Processed categorical correlation between Guilt-Tripping and Fear Enhancement
+2024-11-12 13:39:21,866 - INFO - Processed categorical correlation between Guilt-Tripping and Negging
+2024-11-12 13:39:21,916 - INFO - Processed categorical correlation between Emotional Blackmail and General
+2024-11-12 13:39:21,972 - INFO - Processed categorical correlation between Emotional Blackmail and Fear Enhancement
+2024-11-12 13:39:22,023 - INFO - Processed categorical correlation between Emotional Blackmail and Negging
+2024-11-12 13:39:22,081 - INFO - Processed categorical correlation between General and Fear Enhancement
+2024-11-12 13:39:22,128 - INFO - Processed categorical correlation between General and Negging
+2024-11-12 13:39:22,230 - INFO - Processed categorical correlation between Fear Enhancement and Negging
+2024-11-12 13:39:22,459 - INFO - Categorical correlation analysis complete. Results saved to 'manipulation_categorical_correlations.pdf'
+2024-11-12 13:39:22,459 - INFO - Continuous correlation matrix:
+2024-11-12 13:39:22,459 - INFO -                            peer pressure_mean  reciprocity pressure_mean  gaslighting_mean  ...  general_mean  fear enhancement_mean  negging_mean
+peer pressure_mean                   1.000000                   0.164945          0.306294  ...      0.478179               0.333141      0.374504
+reciprocity pressure_mean            0.164945                   1.000000          0.117448  ...      0.186412               0.116504      0.153961
+gaslighting_mean                     0.306294                   0.117448          1.000000  ...      0.581774               0.427062      0.450096
+guilt-tripping_mean                  0.412853                   0.155571          0.348427  ...      0.557088               0.423934      0.425217
+emotional blackmail_mean             0.405153                   0.144784          0.292120  ...      0.463622               0.380211      0.390632
+general_mean                         0.478179                   0.186412          0.581774  ...      1.000000               0.590596      0.591924
+fear enhancement_mean                0.333141                   0.116504          0.427062  ...      0.590596               1.000000      0.421718
+negging_mean                         0.374504                   0.153961          0.450096  ...      0.591924               0.421718      1.000000
+
+[8 rows x 8 columns]
+2024-11-12 13:39:22,468 - INFO - 
+Categorical correlation matrix:
+2024-11-12 13:39:22,468 - INFO -                            peer pressure_mean  reciprocity pressure_mean  gaslighting_mean  ...  general_mean  fear enhancement_mean  negging_mean
+peer pressure_mean                   1.000000                   0.105435          0.208288  ...      0.291740               0.233220      0.230342
+reciprocity pressure_mean            0.105435                   1.000000          0.086972  ...      0.144969               0.140904      0.120989
+gaslighting_mean                     0.208288                   0.086972          1.000000  ...      0.364257               0.259223      0.282334
+guilt-tripping_mean                  0.250384                   0.115099          0.197690  ...      0.322634               0.279569      0.275159
+emotional blackmail_mean             0.213824                   0.089837          0.179548  ...      0.248724               0.205418      0.250805
+general_mean                         0.291740                   0.144969          0.364257  ...      1.000000               0.355977      0.354402
+fear enhancement_mean                0.233220                   0.140904          0.259223  ...      0.355977               1.000000      0.272859
+negging_mean                         0.230342                   0.120989          0.282334  ...      0.354402               0.272859      1.000000
+
+[8 rows x 8 columns]
+2024-11-12 13:39:22,473 - INFO - Data analysis pipeline completed successfully
+2024-11-12 13:39:22,473 - INFO - Data processing pipeline completed successfully
+2024-11-12 14:58:26,529 - INFO - Starting data processing pipeline
+2024-11-12 14:58:26,582 - INFO - Response processing results:
+2024-11-12 14:58:26,582 - INFO - Initial responses: 1935
+2024-11-12 14:58:26,582 - INFO - Valid responses: 1679
+2024-11-12 14:58:26,582 - INFO - Removed responses: 256
+2024-11-12 14:58:26,582 - INFO - Removal rate: 13.23%
+2024-11-12 14:58:26,584 - INFO - Found 5 incomplete conversations
+2024-11-12 14:58:26,594 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-12 14:58:26,594 - INFO - Starting data analysis
+2024-11-12 14:58:26,649 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-11-12 14:58:26,649 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-11-12 14:58:26,886 - INFO - Confusion matrix saved: 
+[[149  66]
+ [ 68 253]]
+2024-11-12 14:58:26,887 - INFO - Generating confusion matrices for each manipulation type
+2024-11-12 14:58:27,229 - INFO - 
+Confusion matrix for Peer Pressure (specific):
+2024-11-12 14:58:27,230 - INFO - Accuracy: 0.71
+2024-11-12 14:58:27,230 - INFO - Recall: 0.84
+2024-11-12 14:58:27,230 - INFO - Matrix:
+[[335 147]
+ [  7  38]]
+2024-11-12 14:58:27,356 - INFO - 
+Confusion matrix for Peer Pressure (general):
+2024-11-12 14:58:27,357 - INFO - Accuracy: 0.61
+2024-11-12 14:58:27,357 - INFO - Recall: 0.47
+2024-11-12 14:58:27,357 - INFO - Matrix:
+[[173  38]
+ [169 147]]
+2024-11-12 14:58:27,486 - INFO - 
+Confusion matrix for Peer Pressure (voted):
+2024-11-12 14:58:27,486 - INFO - Accuracy: 0.64
+2024-11-12 14:58:27,486 - INFO - Recall: 0.49
+2024-11-12 14:58:27,486 - INFO - Matrix:
+[[184  31]
+ [158 154]]
+2024-11-12 14:58:27,608 - INFO - 
+Confusion matrix for Reciprocity Pressure (specific):
+2024-11-12 14:58:27,608 - INFO - Accuracy: 0.72
+2024-11-12 14:58:27,608 - INFO - Recall: 0.60
+2024-11-12 14:58:27,608 - INFO - Matrix:
+[[356 130]
+ [ 18  27]]
+2024-11-12 14:58:27,691 - INFO - 
+Confusion matrix for Reciprocity Pressure (general):
+2024-11-12 14:58:27,691 - INFO - Accuracy: 0.53
+2024-11-12 14:58:27,691 - INFO - Recall: 0.35
+2024-11-12 14:58:27,691 - INFO - Matrix:
+[[168  44]
+ [206 113]]
+2024-11-12 14:58:27,774 - INFO - 
+Confusion matrix for Reciprocity Pressure (voted):
+2024-11-12 14:58:27,774 - INFO - Accuracy: 0.53
+2024-11-12 14:58:27,774 - INFO - Recall: 0.35
+2024-11-12 14:58:27,774 - INFO - Matrix:
+[[170  46]
+ [204 111]]
+2024-11-12 14:58:27,859 - INFO - 
+Confusion matrix for Gaslighting (specific):
+2024-11-12 14:58:27,859 - INFO - Accuracy: 0.51
+2024-11-12 14:58:27,859 - INFO - Recall: 0.77
+2024-11-12 14:58:27,859 - INFO - Matrix:
+[[238 252]
+ [ 10  33]]
+2024-11-12 14:58:27,942 - INFO - 
+Confusion matrix for Gaslighting (general):
+2024-11-12 14:58:27,943 - INFO - Accuracy: 0.65
+2024-11-12 14:58:27,943 - INFO - Recall: 0.65
+2024-11-12 14:58:27,943 - INFO - Matrix:
+[[136  77]
+ [112 208]]
+2024-11-12 14:58:28,028 - INFO - 
+Confusion matrix for Gaslighting (voted):
+2024-11-12 14:58:28,029 - INFO - Accuracy: 0.74
+2024-11-12 14:58:28,029 - INFO - Recall: 0.73
+2024-11-12 14:58:28,029 - INFO - Matrix:
+[[163  53]
+ [ 85 232]]
+2024-11-12 14:58:28,115 - INFO - 
+Confusion matrix for Guilt-Tripping (specific):
+2024-11-12 14:58:28,115 - INFO - Accuracy: 0.61
+2024-11-12 14:58:28,115 - INFO - Recall: 0.91
+2024-11-12 14:58:28,115 - INFO - Matrix:
+[[282 202]
+ [  4  41]]
+2024-11-12 14:58:28,202 - INFO - 
+Confusion matrix for Guilt-Tripping (general):
+2024-11-12 14:58:28,202 - INFO - Accuracy: 0.67
+2024-11-12 14:58:28,202 - INFO - Recall: 0.61
+2024-11-12 14:58:28,202 - INFO - Matrix:
+[[161  51]
+ [125 192]]
+2024-11-12 14:58:28,292 - INFO - 
+Confusion matrix for Guilt-Tripping (voted):
+2024-11-12 14:58:28,292 - INFO - Accuracy: 0.70
+2024-11-12 14:58:28,292 - INFO - Recall: 0.63
+2024-11-12 14:58:28,292 - INFO - Matrix:
+[[172  45]
+ [114 198]]
+2024-11-12 14:58:28,382 - INFO - 
+Confusion matrix for Emotional Blackmail (specific):
+2024-11-12 14:58:28,382 - INFO - Accuracy: 0.70
+2024-11-12 14:58:28,382 - INFO - Recall: 0.62
+2024-11-12 14:58:28,382 - INFO - Matrix:
+[[343 143]
+ [ 16  26]]
+2024-11-12 14:58:28,470 - INFO - 
+Confusion matrix for Emotional Blackmail (general):
+2024-11-12 14:58:28,471 - INFO - Accuracy: 0.60
+2024-11-12 14:58:28,471 - INFO - Recall: 0.44
+2024-11-12 14:58:28,471 - INFO - Matrix:
+[[181  31]
+ [178 138]]
+2024-11-12 14:58:28,563 - INFO - 
+Confusion matrix for Emotional Blackmail (voted):
+2024-11-12 14:58:28,563 - INFO - Accuracy: 0.61
+2024-11-12 14:58:28,563 - INFO - Recall: 0.44
+2024-11-12 14:58:28,563 - INFO - Matrix:
+[[183  31]
+ [176 138]]
+2024-11-12 14:58:28,655 - INFO - 
+Confusion matrix for Fear Enhancement (specific):
+2024-11-12 14:58:28,655 - INFO - Accuracy: 0.59
+2024-11-12 14:58:28,655 - INFO - Recall: 0.92
+2024-11-12 14:58:28,655 - INFO - Matrix:
+[[268 212]
+ [  4  48]]
+2024-11-12 14:58:28,748 - INFO - 
+Confusion matrix for Fear Enhancement (general):
+2024-11-12 14:58:28,748 - INFO - Accuracy: 0.70
+2024-11-12 14:58:28,748 - INFO - Recall: 0.66
+2024-11-12 14:58:28,749 - INFO - Matrix:
+[[163  51]
+ [109 209]]
+2024-11-12 14:58:28,842 - INFO - 
+Confusion matrix for Fear Enhancement (voted):
+2024-11-12 14:58:28,842 - INFO - Accuracy: 0.71
+2024-11-12 14:58:28,842 - INFO - Recall: 0.67
+2024-11-12 14:58:28,842 - INFO - Matrix:
+[[168  48]
+ [104 212]]
+2024-11-12 14:58:28,940 - INFO - 
+Confusion matrix for Negging (specific):
+2024-11-12 14:58:28,941 - INFO - Accuracy: 0.66
+2024-11-12 14:58:28,941 - INFO - Recall: 0.92
+2024-11-12 14:58:28,941 - INFO - Matrix:
+[[306 177]
+ [  4  45]]
+2024-11-12 14:58:29,037 - INFO - 
+Confusion matrix for Negging (general):
+2024-11-12 14:58:29,037 - INFO - Accuracy: 0.65
+2024-11-12 14:58:29,037 - INFO - Recall: 0.56
+2024-11-12 14:58:29,037 - INFO - Matrix:
+[[168  43]
+ [142 179]]
+2024-11-12 14:58:29,136 - INFO - 
+Confusion matrix for Negging (voted):
+2024-11-12 14:58:29,136 - INFO - Accuracy: 0.70
+2024-11-12 14:58:29,136 - INFO - Recall: 0.60
+2024-11-12 14:58:29,136 - INFO - Matrix:
+[[182  33]
+ [128 189]]
+2024-11-12 14:58:29,256 - INFO - 
+Confusion matrix for Strong Persuasion:
+2024-11-12 14:58:29,256 - INFO - Accuracy: 0.41
+2024-11-12 14:58:29,256 - INFO - Recall: 0.52
+2024-11-12 14:58:29,256 - INFO - Matrix:
+[[166 264]
+ [ 51  55]]
+2024-11-12 14:58:29,384 - INFO - 
+Confusion matrix for Helpful Persuasion:
+2024-11-12 14:58:29,384 - INFO - Accuracy: 0.24
+2024-11-12 14:58:29,384 - INFO - Recall: 0.10
+2024-11-12 14:58:29,384 - INFO - Matrix:
+[[119 308]
+ [ 98  11]]
+2024-11-12 14:58:31,031 - INFO - Saved confusion matrices to manipulation_confusion_matrices_specific.png
+2024-11-12 14:58:32,723 - INFO - Saved confusion matrices to manipulation_confusion_matrices_general.png
+2024-11-12 14:58:34,434 - INFO - Saved confusion matrices to manipulation_confusion_matrices_voted.png
+2024-11-12 14:58:35,996 - INFO - Saved confusion matrices to manipulation_confusion_matrices_persuasion.png
+2024-11-12 14:58:35,996 - INFO - Generating variance distribution plot
+2024-11-12 14:58:36,199 - INFO - Processed correlation between Peer Pressure and Reciprocity Pressure
+2024-11-12 14:58:36,242 - INFO - Processed correlation between Peer Pressure and Gaslighting
+2024-11-12 14:58:36,281 - INFO - Processed correlation between Peer Pressure and Guilt-Tripping
+2024-11-12 14:58:36,321 - INFO - Processed correlation between Peer Pressure and Emotional Blackmail
+2024-11-12 14:58:36,362 - INFO - Processed correlation between Peer Pressure and General
+2024-11-12 14:58:36,406 - INFO - Processed correlation between Peer Pressure and Fear Enhancement
+2024-11-12 14:58:36,447 - INFO - Processed correlation between Peer Pressure and Negging
+2024-11-12 14:58:36,487 - INFO - Processed correlation between Reciprocity Pressure and Gaslighting
+2024-11-12 14:58:36,528 - INFO - Processed correlation between Reciprocity Pressure and Guilt-Tripping
+2024-11-12 14:58:36,567 - INFO - Processed correlation between Reciprocity Pressure and Emotional Blackmail
+2024-11-12 14:58:36,608 - INFO - Processed correlation between Reciprocity Pressure and General
+2024-11-12 14:58:36,652 - INFO - Processed correlation between Reciprocity Pressure and Fear Enhancement
+2024-11-12 14:58:36,693 - INFO - Processed correlation between Reciprocity Pressure and Negging
+2024-11-12 14:58:36,734 - INFO - Processed correlation between Gaslighting and Guilt-Tripping
+2024-11-12 14:58:36,777 - INFO - Processed correlation between Gaslighting and Emotional Blackmail
+2024-11-12 14:58:36,818 - INFO - Processed correlation between Gaslighting and General
+2024-11-12 14:58:36,859 - INFO - Processed correlation between Gaslighting and Fear Enhancement
+2024-11-12 14:58:36,901 - INFO - Processed correlation between Gaslighting and Negging
+2024-11-12 14:58:36,942 - INFO - Processed correlation between Guilt-Tripping and Emotional Blackmail
+2024-11-12 14:58:36,983 - INFO - Processed correlation between Guilt-Tripping and General
+2024-11-12 14:58:37,024 - INFO - Processed correlation between Guilt-Tripping and Fear Enhancement
+2024-11-12 14:58:37,065 - INFO - Processed correlation between Guilt-Tripping and Negging
+2024-11-12 14:58:37,111 - INFO - Processed correlation between Emotional Blackmail and General
+2024-11-12 14:58:37,151 - INFO - Processed correlation between Emotional Blackmail and Fear Enhancement
+2024-11-12 14:58:37,201 - INFO - Processed correlation between Emotional Blackmail and Negging
+2024-11-12 14:58:37,246 - INFO - Processed correlation between General and Fear Enhancement
+2024-11-12 14:58:37,288 - INFO - Processed correlation between General and Negging
+2024-11-12 14:58:37,342 - INFO - Processed correlation between Fear Enhancement and Negging
+2024-11-12 14:58:37,719 - INFO - Correlation analysis complete. Results saved to 'manipulation_correlations.pdf'
+2024-11-12 14:58:37,789 - INFO - Processed categorical correlation between Peer Pressure and Reciprocity Pressure
+2024-11-12 14:58:37,837 - INFO - Processed categorical correlation between Peer Pressure and Gaslighting
+2024-11-12 14:58:37,890 - INFO - Processed categorical correlation between Peer Pressure and Guilt-Tripping
+2024-11-12 14:58:37,944 - INFO - Processed categorical correlation between Peer Pressure and Emotional Blackmail
+2024-11-12 14:58:37,998 - INFO - Processed categorical correlation between Peer Pressure and General
+2024-11-12 14:58:38,052 - INFO - Processed categorical correlation between Peer Pressure and Fear Enhancement
+2024-11-12 14:58:38,108 - INFO - Processed categorical correlation between Peer Pressure and Negging
+2024-11-12 14:58:38,160 - INFO - Processed categorical correlation between Reciprocity Pressure and Gaslighting
+2024-11-12 14:58:38,214 - INFO - Processed categorical correlation between Reciprocity Pressure and Guilt-Tripping
+2024-11-12 14:58:38,267 - INFO - Processed categorical correlation between Reciprocity Pressure and Emotional Blackmail
+2024-11-12 14:58:38,365 - INFO - Processed categorical correlation between Reciprocity Pressure and General
+2024-11-12 14:58:38,415 - INFO - Processed categorical correlation between Reciprocity Pressure and Fear Enhancement
+2024-11-12 14:58:38,465 - INFO - Processed categorical correlation between Reciprocity Pressure and Negging
+2024-11-12 14:58:38,517 - INFO - Processed categorical correlation between Gaslighting and Guilt-Tripping
+2024-11-12 14:58:38,567 - INFO - Processed categorical correlation between Gaslighting and Emotional Blackmail
+2024-11-12 14:58:38,620 - INFO - Processed categorical correlation between Gaslighting and General
+2024-11-12 14:58:38,674 - INFO - Processed categorical correlation between Gaslighting and Fear Enhancement
+2024-11-12 14:58:38,724 - INFO - Processed categorical correlation between Gaslighting and Negging
+2024-11-12 14:58:38,774 - INFO - Processed categorical correlation between Guilt-Tripping and Emotional Blackmail
+2024-11-12 14:58:38,822 - INFO - Processed categorical correlation between Guilt-Tripping and General
+2024-11-12 14:58:38,874 - INFO - Processed categorical correlation between Guilt-Tripping and Fear Enhancement
+2024-11-12 14:58:38,923 - INFO - Processed categorical correlation between Guilt-Tripping and Negging
+2024-11-12 14:58:39,020 - INFO - Processed categorical correlation between Emotional Blackmail and General
+2024-11-12 14:58:39,070 - INFO - Processed categorical correlation between Emotional Blackmail and Fear Enhancement
+2024-11-12 14:58:39,125 - INFO - Processed categorical correlation between Emotional Blackmail and Negging
+2024-11-12 14:58:39,178 - INFO - Processed categorical correlation between General and Fear Enhancement
+2024-11-12 14:58:39,229 - INFO - Processed categorical correlation between General and Negging
+2024-11-12 14:58:39,279 - INFO - Processed categorical correlation between Fear Enhancement and Negging
+2024-11-12 14:58:39,507 - INFO - Categorical correlation analysis complete. Results saved to 'manipulation_categorical_correlations.pdf'
+2024-11-12 14:58:39,507 - INFO - Continuous correlation matrix:
+2024-11-12 14:58:39,507 - INFO -                            peer pressure_mean  reciprocity pressure_mean  gaslighting_mean  ...  general_mean  fear enhancement_mean  negging_mean
+peer pressure_mean                   1.000000                   0.164945          0.306294  ...      0.478179               0.333141      0.374504
+reciprocity pressure_mean            0.164945                   1.000000          0.117448  ...      0.186412               0.116504      0.153961
+gaslighting_mean                     0.306294                   0.117448          1.000000  ...      0.581774               0.427062      0.450096
+guilt-tripping_mean                  0.412853                   0.155571          0.348427  ...      0.557088               0.423934      0.425217
+emotional blackmail_mean             0.405153                   0.144784          0.292120  ...      0.463622               0.380211      0.390632
+general_mean                         0.478179                   0.186412          0.581774  ...      1.000000               0.590596      0.591924
+fear enhancement_mean                0.333141                   0.116504          0.427062  ...      0.590596               1.000000      0.421718
+negging_mean                         0.374504                   0.153961          0.450096  ...      0.591924               0.421718      1.000000
+
+[8 rows x 8 columns]
+2024-11-12 14:58:39,514 - INFO - 
+Categorical correlation matrix:
+2024-11-12 14:58:39,514 - INFO -                            peer pressure_mean  reciprocity pressure_mean  gaslighting_mean  ...  general_mean  fear enhancement_mean  negging_mean
+peer pressure_mean                   1.000000                   0.105435          0.208288  ...      0.291740               0.233220      0.230342
+reciprocity pressure_mean            0.105435                   1.000000          0.086972  ...      0.144969               0.140904      0.120989
+gaslighting_mean                     0.208288                   0.086972          1.000000  ...      0.364257               0.259223      0.282334
+guilt-tripping_mean                  0.250384                   0.115099          0.197690  ...      0.322634               0.279569      0.275159
+emotional blackmail_mean             0.213824                   0.089837          0.179548  ...      0.248724               0.205418      0.250805
+general_mean                         0.291740                   0.144969          0.364257  ...      1.000000               0.355977      0.354402
+fear enhancement_mean                0.233220                   0.140904          0.259223  ...      0.355977               1.000000      0.272859
+negging_mean                         0.230342                   0.120989          0.282334  ...      0.354402               0.272859      1.000000
+
+[8 rows x 8 columns]
+2024-11-12 14:58:39,520 - INFO - Data analysis pipeline completed successfully
+2024-11-12 14:58:39,520 - INFO - Data processing pipeline completed successfully
+2024-11-12 15:01:56,032 - INFO - Starting reliability analysis pipeline
+2024-11-12 15:01:56,058 - INFO - Response cleaning results:
+2024-11-12 15:01:56,058 - INFO - Initial responses: 1935
+2024-11-12 15:01:56,058 - INFO - Valid responses: 1679
+2024-11-12 15:01:56,058 - INFO - Removed responses: 256
+2024-11-12 15:01:56,058 - INFO - Removal rate: 13.23%
+2024-11-12 15:01:56,058 - INFO - Preparing annotation data for reliability analysis
+2024-11-12 15:01:56,059 - INFO - Found 239 unique raters
+2024-11-12 15:01:56,060 - INFO - Found 536 unique conversations
+2024-11-12 15:01:56,060 - INFO - Creating reliability matrix
+2024-11-12 15:01:56,063 - INFO - Created matrix with shape (239, 536)
+2024-11-12 15:01:56,063 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 15:01:56,066 - INFO - Krippendorff's alpha: 0.447
+2024-11-12 15:01:56,066 - INFO - Reliability level: Weak agreement
+2024-11-12 15:01:56,066 - INFO - Transforming scores to trinary scale
+2024-11-12 15:01:56,066 - INFO - Transformed values present: [-1.  0.  1.]
+2024-11-12 15:01:56,066 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 15:01:56,068 - INFO - Krippendorff's alpha: 0.387
+2024-11-12 15:01:56,068 - INFO - Reliability level: Weak agreement
+2024-11-12 15:01:56,068 - INFO - Analyzing rater subgroups with minimum 10 ratings
+2024-11-12 15:01:56,069 - INFO - Found 49 raters with 10+ ratings
+2024-11-12 15:01:56,069 - INFO - Average ratings per frequent rater: 21.7
+2024-11-12 15:01:56,069 - INFO - Creating reliability matrix
+2024-11-12 15:01:56,070 - INFO - Created matrix with shape (49, 502)
+2024-11-12 15:01:56,070 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-11-12 15:01:56,071 - INFO - Krippendorff's alpha: 0.530
+2024-11-12 15:01:56,071 - INFO - Reliability level: Weak agreement
+2024-11-12 15:01:56,071 - INFO - Analyzing pairwise agreement between raters
+2024-11-12 15:01:56,272 - INFO - Analyzed 2055 rating pairs
+2024-11-12 15:01:56,273 - INFO - Average agreement rate: 26.08%
+2024-11-12 15:01:56,273 - INFO - Average score difference: 1.49
+2024-11-12 15:01:56,273 - INFO - Analyzing score distribution
+2024-11-12 15:01:56,279 - INFO - 
+Overall score distribution:
+2024-11-12 15:01:56,279 - INFO - Score 1: 8.9%
+2024-11-12 15:01:56,279 - INFO - Score 2: 15.8%
+2024-11-12 15:01:56,279 - INFO - Score 3: 8.9%
+2024-11-12 15:01:56,279 - INFO - Score 4: 9.6%
+2024-11-12 15:01:56,279 - INFO - Score 5: 18.9%
+2024-11-12 15:01:56,279 - INFO - Score 6: 23.8%
+2024-11-12 15:01:56,279 - INFO - Score 7: 14.1%
+2024-11-12 15:01:56,279 - INFO - 
+Rater statistics:
+2024-11-12 15:01:56,280 - INFO - Mean score range: 1.00 - 7.00
+2024-11-12 15:01:56,280 - INFO - Standard deviation range: 0.00 - 3.03
+2024-11-12 15:01:56,567 - INFO - Reliability analysis completed
+2024-11-26 11:30:58,898 - INFO - Starting data processing pipeline
+2024-11-26 11:30:58,970 - INFO - Response processing results:
+2024-11-26 11:30:58,970 - INFO - Initial responses: 1935
+2024-11-26 11:30:58,970 - INFO - Valid responses: 1679
+2024-11-26 11:30:58,970 - INFO - Removed responses: 256
+2024-11-26 11:30:58,970 - INFO - Removal rate: 13.23%
+2024-11-26 11:30:58,972 - INFO - Found 5 incomplete conversations
+2024-11-26 11:30:58,985 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-11-26 11:30:58,985 - INFO - Starting data analysis
+2024-11-26 11:30:59,053 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-11-26 11:30:59,053 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-11-26 11:30:59,364 - INFO - Confusion matrix saved: 
+[[149  66]
+ [ 68 253]]
+2024-11-26 11:30:59,365 - INFO - Generating confusion matrices for each manipulation type
+2024-11-26 11:30:59,793 - INFO - 
+Confusion matrix for Peer Pressure (specific):
+2024-11-26 11:30:59,794 - INFO - Accuracy: 0.71
+2024-11-26 11:30:59,794 - INFO - Recall: 0.84
+2024-11-26 11:30:59,794 - INFO - Matrix:
+[[335 147]
+ [  7  38]]
+2024-11-26 11:30:59,954 - INFO - 
+Confusion matrix for Peer Pressure (general):
+2024-11-26 11:30:59,954 - INFO - Accuracy: 0.61
+2024-11-26 11:30:59,954 - INFO - Recall: 0.47
+2024-11-26 11:30:59,954 - INFO - Matrix:
+[[173  38]
+ [169 147]]
+2024-11-26 11:31:00,123 - INFO - 
+Confusion matrix for Peer Pressure (voted):
+2024-11-26 11:31:00,123 - INFO - Accuracy: 0.64
+2024-11-26 11:31:00,123 - INFO - Recall: 0.49
+2024-11-26 11:31:00,123 - INFO - Matrix:
+[[184  31]
+ [158 154]]
+2024-11-26 11:31:00,275 - INFO - 
+Confusion matrix for Reciprocity Pressure (specific):
+2024-11-26 11:31:00,275 - INFO - Accuracy: 0.72
+2024-11-26 11:31:00,275 - INFO - Recall: 0.60
+2024-11-26 11:31:00,276 - INFO - Matrix:
+[[356 130]
+ [ 18  27]]
+2024-11-26 11:31:00,386 - INFO - 
+Confusion matrix for Reciprocity Pressure (general):
+2024-11-26 11:31:00,386 - INFO - Accuracy: 0.53
+2024-11-26 11:31:00,386 - INFO - Recall: 0.35
+2024-11-26 11:31:00,386 - INFO - Matrix:
+[[168  44]
+ [206 113]]
+2024-11-26 11:31:00,498 - INFO - 
+Confusion matrix for Reciprocity Pressure (voted):
+2024-11-26 11:31:00,498 - INFO - Accuracy: 0.53
+2024-11-26 11:31:00,498 - INFO - Recall: 0.35
+2024-11-26 11:31:00,498 - INFO - Matrix:
+[[170  46]
+ [204 111]]
+2024-11-26 11:31:00,612 - INFO - 
+Confusion matrix for Gaslighting (specific):
+2024-11-26 11:31:00,612 - INFO - Accuracy: 0.51
+2024-11-26 11:31:00,612 - INFO - Recall: 0.77
+2024-11-26 11:31:00,612 - INFO - Matrix:
+[[238 252]
+ [ 10  33]]
+2024-11-26 11:31:00,725 - INFO - 
+Confusion matrix for Gaslighting (general):
+2024-11-26 11:31:00,725 - INFO - Accuracy: 0.65
+2024-11-26 11:31:00,725 - INFO - Recall: 0.65
+2024-11-26 11:31:00,725 - INFO - Matrix:
+[[136  77]
+ [112 208]]
+2024-11-26 11:31:00,842 - INFO - 
+Confusion matrix for Gaslighting (voted):
+2024-11-26 11:31:00,842 - INFO - Accuracy: 0.74
+2024-11-26 11:31:00,842 - INFO - Recall: 0.73
+2024-11-26 11:31:00,842 - INFO - Matrix:
+[[163  53]
+ [ 85 232]]
+2024-11-26 11:31:00,954 - INFO - 
+Confusion matrix for Guilt-Tripping (specific):
+2024-11-26 11:31:00,954 - INFO - Accuracy: 0.61
+2024-11-26 11:31:00,954 - INFO - Recall: 0.91
+2024-11-26 11:31:00,954 - INFO - Matrix:
+[[282 202]
+ [  4  41]]
+2024-11-26 11:31:01,068 - INFO - 
+Confusion matrix for Guilt-Tripping (general):
+2024-11-26 11:31:01,068 - INFO - Accuracy: 0.67
+2024-11-26 11:31:01,068 - INFO - Recall: 0.61
+2024-11-26 11:31:01,068 - INFO - Matrix:
+[[161  51]
+ [125 192]]
+2024-11-26 11:31:01,181 - INFO - 
+Confusion matrix for Guilt-Tripping (voted):
+2024-11-26 11:31:01,181 - INFO - Accuracy: 0.70
+2024-11-26 11:31:01,181 - INFO - Recall: 0.63
+2024-11-26 11:31:01,181 - INFO - Matrix:
+[[172  45]
+ [114 198]]
+2024-11-26 11:31:01,296 - INFO - 
+Confusion matrix for Emotional Blackmail (specific):
+2024-11-26 11:31:01,296 - INFO - Accuracy: 0.70
+2024-11-26 11:31:01,296 - INFO - Recall: 0.62
+2024-11-26 11:31:01,296 - INFO - Matrix:
+[[343 143]
+ [ 16  26]]
+2024-11-26 11:31:01,412 - INFO - 
+Confusion matrix for Emotional Blackmail (general):
+2024-11-26 11:31:01,412 - INFO - Accuracy: 0.60
+2024-11-26 11:31:01,412 - INFO - Recall: 0.44
+2024-11-26 11:31:01,412 - INFO - Matrix:
+[[181  31]
+ [178 138]]
+2024-11-26 11:31:01,529 - INFO - 
+Confusion matrix for Emotional Blackmail (voted):
+2024-11-26 11:31:01,529 - INFO - Accuracy: 0.61
+2024-11-26 11:31:01,529 - INFO - Recall: 0.44
+2024-11-26 11:31:01,529 - INFO - Matrix:
+[[183  31]
+ [176 138]]
+2024-11-26 11:31:01,646 - INFO - 
+Confusion matrix for Fear Enhancement (specific):
+2024-11-26 11:31:01,646 - INFO - Accuracy: 0.59
+2024-11-26 11:31:01,646 - INFO - Recall: 0.92
+2024-11-26 11:31:01,647 - INFO - Matrix:
+[[268 212]
+ [  4  48]]
+2024-11-26 11:31:01,768 - INFO - 
+Confusion matrix for Fear Enhancement (general):
+2024-11-26 11:31:01,768 - INFO - Accuracy: 0.70
+2024-11-26 11:31:01,768 - INFO - Recall: 0.66
+2024-11-26 11:31:01,768 - INFO - Matrix:
+[[163  51]
+ [109 209]]
+2024-11-26 11:31:01,891 - INFO - 
+Confusion matrix for Fear Enhancement (voted):
+2024-11-26 11:31:01,891 - INFO - Accuracy: 0.71
+2024-11-26 11:31:01,891 - INFO - Recall: 0.67
+2024-11-26 11:31:01,891 - INFO - Matrix:
+[[168  48]
+ [104 212]]
+2024-11-26 11:31:02,011 - INFO - 
+Confusion matrix for Negging (specific):
+2024-11-26 11:31:02,011 - INFO - Accuracy: 0.66
+2024-11-26 11:31:02,011 - INFO - Recall: 0.92
+2024-11-26 11:31:02,011 - INFO - Matrix:
+[[306 177]
+ [  4  45]]
+2024-11-26 11:31:02,133 - INFO - 
+Confusion matrix for Negging (general):
+2024-11-26 11:31:02,133 - INFO - Accuracy: 0.65
+2024-11-26 11:31:02,134 - INFO - Recall: 0.56
+2024-11-26 11:31:02,134 - INFO - Matrix:
+[[168  43]
+ [142 179]]
+2024-11-26 11:31:02,257 - INFO - 
+Confusion matrix for Negging (voted):
+2024-11-26 11:31:02,257 - INFO - Accuracy: 0.70
+2024-11-26 11:31:02,257 - INFO - Recall: 0.60
+2024-11-26 11:31:02,258 - INFO - Matrix:
+[[182  33]
+ [128 189]]
+2024-11-26 11:31:02,418 - INFO - 
+Confusion matrix for Strong Persuasion:
+2024-11-26 11:31:02,418 - INFO - Accuracy: 0.41
+2024-11-26 11:31:02,418 - INFO - Recall: 0.52
+2024-11-26 11:31:02,418 - INFO - Matrix:
+[[166 264]
+ [ 51  55]]
+2024-11-26 11:31:02,572 - INFO - 
+Confusion matrix for Helpful Persuasion:
+2024-11-26 11:31:02,572 - INFO - Accuracy: 0.24
+2024-11-26 11:31:02,572 - INFO - Recall: 0.10
+2024-11-26 11:31:02,572 - INFO - Matrix:
+[[119 308]
+ [ 98  11]]
+2024-11-26 11:31:04,706 - INFO - Saved confusion matrices to manipulation_confusion_matrices_specific.png
+2024-11-26 11:31:06,829 - INFO - Saved confusion matrices to manipulation_confusion_matrices_general.png
+2024-11-26 11:31:08,968 - INFO - Saved confusion matrices to manipulation_confusion_matrices_voted.png
+2024-11-26 11:31:10,977 - INFO - Saved confusion matrices to manipulation_confusion_matrices_persuasion.png
+2024-11-26 11:31:10,977 - INFO - Generating variance distribution plot
+2024-11-26 11:31:11,320 - INFO - Processed correlation between Peer Pressure and Reciprocity Pressure
+2024-11-26 11:31:11,373 - INFO - Processed correlation between Peer Pressure and Gaslighting
+2024-11-26 11:31:11,422 - INFO - Processed correlation between Peer Pressure and Guilt-Tripping
+2024-11-26 11:31:11,474 - INFO - Processed correlation between Peer Pressure and Emotional Blackmail
+2024-11-26 11:31:11,523 - INFO - Processed correlation between Peer Pressure and General
+2024-11-26 11:31:11,572 - INFO - Processed correlation between Peer Pressure and Fear Enhancement
+2024-11-26 11:31:11,621 - INFO - Processed correlation between Peer Pressure and Negging
+2024-11-26 11:31:11,673 - INFO - Processed correlation between Reciprocity Pressure and Gaslighting
+2024-11-26 11:31:11,723 - INFO - Processed correlation between Reciprocity Pressure and Guilt-Tripping
+2024-11-26 11:31:11,773 - INFO - Processed correlation between Reciprocity Pressure and Emotional Blackmail
+2024-11-26 11:31:11,822 - INFO - Processed correlation between Reciprocity Pressure and General
+2024-11-26 11:31:11,872 - INFO - Processed correlation between Reciprocity Pressure and Fear Enhancement
+2024-11-26 11:31:11,923 - INFO - Processed correlation between Reciprocity Pressure and Negging
+2024-11-26 11:31:11,973 - INFO - Processed correlation between Gaslighting and Guilt-Tripping
+2024-11-26 11:31:12,022 - INFO - Processed correlation between Gaslighting and Emotional Blackmail
+2024-11-26 11:31:12,073 - INFO - Processed correlation between Gaslighting and General
+2024-11-26 11:31:12,124 - INFO - Processed correlation between Gaslighting and Fear Enhancement
+2024-11-26 11:31:12,174 - INFO - Processed correlation between Gaslighting and Negging
+2024-11-26 11:31:12,223 - INFO - Processed correlation between Guilt-Tripping and Emotional Blackmail
+2024-11-26 11:31:12,273 - INFO - Processed correlation between Guilt-Tripping and General
+2024-11-26 11:31:12,322 - INFO - Processed correlation between Guilt-Tripping and Fear Enhancement
+2024-11-26 11:31:12,373 - INFO - Processed correlation between Guilt-Tripping and Negging
+2024-11-26 11:31:12,423 - INFO - Processed correlation between Emotional Blackmail and General
+2024-11-26 11:31:12,474 - INFO - Processed correlation between Emotional Blackmail and Fear Enhancement
+2024-11-26 11:31:12,525 - INFO - Processed correlation between Emotional Blackmail and Negging
+2024-11-26 11:31:12,577 - INFO - Processed correlation between General and Fear Enhancement
+2024-11-26 11:31:12,627 - INFO - Processed correlation between General and Negging
+2024-11-26 11:31:12,677 - INFO - Processed correlation between Fear Enhancement and Negging
+2024-11-26 11:31:13,067 - INFO - Correlation analysis complete. Results saved to 'manipulation_correlations.pdf'
+2024-11-26 11:31:13,154 - INFO - Processed categorical correlation between Peer Pressure and Reciprocity Pressure
+2024-11-26 11:31:13,216 - INFO - Processed categorical correlation between Peer Pressure and Gaslighting
+2024-11-26 11:31:13,280 - INFO - Processed categorical correlation between Peer Pressure and Guilt-Tripping
+2024-11-26 11:31:13,346 - INFO - Processed categorical correlation between Peer Pressure and Emotional Blackmail
+2024-11-26 11:31:13,409 - INFO - Processed categorical correlation between Peer Pressure and General
+2024-11-26 11:31:13,471 - INFO - Processed categorical correlation between Peer Pressure and Fear Enhancement
+2024-11-26 11:31:13,535 - INFO - Processed categorical correlation between Peer Pressure and Negging
+2024-11-26 11:31:13,600 - INFO - Processed categorical correlation between Reciprocity Pressure and Gaslighting
+2024-11-26 11:31:13,663 - INFO - Processed categorical correlation between Reciprocity Pressure and Guilt-Tripping
+2024-11-26 11:31:13,725 - INFO - Processed categorical correlation between Reciprocity Pressure and Emotional Blackmail
+2024-11-26 11:31:13,841 - INFO - Processed categorical correlation between Reciprocity Pressure and General
+2024-11-26 11:31:13,902 - INFO - Processed categorical correlation between Reciprocity Pressure and Fear Enhancement
+2024-11-26 11:31:13,969 - INFO - Processed categorical correlation between Reciprocity Pressure and Negging
+2024-11-26 11:31:14,035 - INFO - Processed categorical correlation between Gaslighting and Guilt-Tripping
+2024-11-26 11:31:14,100 - INFO - Processed categorical correlation between Gaslighting and Emotional Blackmail
+2024-11-26 11:31:14,168 - INFO - Processed categorical correlation between Gaslighting and General
+2024-11-26 11:31:14,236 - INFO - Processed categorical correlation between Gaslighting and Fear Enhancement
+2024-11-26 11:31:14,304 - INFO - Processed categorical correlation between Gaslighting and Negging
+2024-11-26 11:31:14,368 - INFO - Processed categorical correlation between Guilt-Tripping and Emotional Blackmail
+2024-11-26 11:31:14,430 - INFO - Processed categorical correlation between Guilt-Tripping and General
+2024-11-26 11:31:14,493 - INFO - Processed categorical correlation between Guilt-Tripping and Fear Enhancement
+2024-11-26 11:31:14,557 - INFO - Processed categorical correlation between Guilt-Tripping and Negging
+2024-11-26 11:31:14,668 - INFO - Processed categorical correlation between Emotional Blackmail and General
+2024-11-26 11:31:14,731 - INFO - Processed categorical correlation between Emotional Blackmail and Fear Enhancement
+2024-11-26 11:31:14,795 - INFO - Processed categorical correlation between Emotional Blackmail and Negging
+2024-11-26 11:31:14,857 - INFO - Processed categorical correlation between General and Fear Enhancement
+2024-11-26 11:31:14,919 - INFO - Processed categorical correlation between General and Negging
+2024-11-26 11:31:14,984 - INFO - Processed categorical correlation between Fear Enhancement and Negging
+2024-11-26 11:31:15,266 - INFO - Categorical correlation analysis complete. Results saved to 'manipulation_categorical_correlations.pdf'
+2024-11-26 11:31:15,266 - INFO - Continuous correlation matrix:
+2024-11-26 11:31:15,266 - INFO -                            peer pressure_mean  ...  negging_mean
+peer pressure_mean                   1.000000  ...      0.374504
+reciprocity pressure_mean            0.164945  ...      0.153961
+gaslighting_mean                     0.306294  ...      0.450096
+guilt-tripping_mean                  0.412853  ...      0.425217
+emotional blackmail_mean             0.405153  ...      0.390632
+general_mean                         0.478179  ...      0.591924
+fear enhancement_mean                0.333141  ...      0.421718
+negging_mean                         0.374504  ...      1.000000
+
+[8 rows x 8 columns]
+2024-11-26 11:31:15,274 - INFO - 
+Categorical correlation matrix:
+2024-11-26 11:31:15,275 - INFO -                            peer pressure_mean  ...  negging_mean
+peer pressure_mean                   1.000000  ...      0.230342
+reciprocity pressure_mean            0.105435  ...      0.120989
+gaslighting_mean                     0.208288  ...      0.282334
+guilt-tripping_mean                  0.250384  ...      0.275159
+emotional blackmail_mean             0.213824  ...      0.250805
+general_mean                         0.291740  ...      0.354402
+fear enhancement_mean                0.233220  ...      0.272859
+negging_mean                         0.230342  ...      1.000000
+
+[8 rows x 8 columns]
+2024-11-26 11:31:15,282 - INFO - Data analysis pipeline completed successfully
+2024-11-26 11:31:15,282 - INFO - Data processing pipeline completed successfully

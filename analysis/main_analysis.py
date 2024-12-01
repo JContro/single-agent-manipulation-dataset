@@ -57,258 +57,6 @@ def handle_data_files(logger: logging.Logger, download_flag: bool = False) -> Di
     
     return data
 
-
-import numpy as np
-from typing import List, Dict, Union, Tuple
-import krippendorff
-from sklearn.metrics import cohen_kappa_score
-import pandas as pd
-
-def calculate_krippendorff_alpha(
-    data: pd.DataFrame,
-    manipulation_cols: List[str],
-    logger: logging.Logger
-) -> Dict[str, float]:
-    """
-    Calculate Krippendorff's alpha for each manipulation type.
-    
-    Args:
-        data: DataFrame containing manipulation ratings
-        manipulation_cols: List of manipulation type columns
-        logger: Logger instance for tracking execution
-    
-    Returns:
-        Dictionary mapping manipulation types to their alpha scores
-    """
-    alpha_scores = {}
-    
-    for col in manipulation_cols:
-        try:
-            # Get all ratings for this manipulation type
-            ratings = data[col].dropna()
-            
-            # Convert list ratings to reliability data matrix
-            reliability_data = []
-            
-            # Only process if we have any valid ratings
-            if len(ratings) > 0:
-                # Get maximum number of annotators for any conversation
-                max_annotators = max(len(r) for r in ratings if isinstance(r, list) and r)
-                
-                if max_annotators > 1:  # Need at least 2 annotators
-                    # Create reliability matrix
-                    for ratings_list in ratings:
-                        if isinstance(ratings_list, list) and ratings_list:
-                            # Pad with missing values (None) if needed
-                            padded_ratings = ratings_list + [None] * (max_annotators - len(ratings_list))
-                            reliability_data.append(padded_ratings)
-                    
-                    # Only calculate if we have data
-                    if reliability_data:
-                        # Transpose so each row is an annotator
-                        reliability_data = list(map(list, zip(*reliability_data)))
-                        
-                        # Calculate Krippendorff's alpha
-                        alpha = krippendorff.alpha(
-                            reliability_data=reliability_data,
-                            level_of_measurement='interval'
-                        )
-                        alpha_scores[col] = alpha
-                        
-                        logger.info(f"Krippendorff's alpha for {col}: {alpha:.3f}")
-                        
-                        # Log interpretation
-                        if alpha < 0:
-                            logger.warning(f"{col}: Poor agreement (less than chance)")
-                        elif alpha < 0.2:
-                            logger.warning(f"{col}: Slight agreement")
-                        elif alpha < 0.4:
-                            logger.info(f"{col}: Fair agreement")
-                        elif alpha < 0.6:
-                            logger.info(f"{col}: Moderate agreement")
-                        elif alpha < 0.8:
-                            logger.info(f"{col}: Substantial agreement")
-                        else:
-                            logger.info(f"{col}: Almost perfect agreement")
-                    else:
-                        logger.warning(f"No valid reliability data for {col}")
-                        alpha_scores[col] = None
-                else:
-                    logger.warning(f"Not enough annotators for {col}")
-                    alpha_scores[col] = None
-            else:
-                logger.warning(f"No ratings found for {col}")
-                alpha_scores[col] = None
-                
-        except Exception as e:
-            logger.error(f"Error calculating Krippendorff's alpha for {col}: {str(e)}")
-            alpha_scores[col] = None
-            
-    return alpha_scores
-
-def calculate_pairwise_agreement(
-    data: pd.DataFrame,
-    manipulation_cols: List[str],
-    logger: logging.Logger
-) -> Dict[str, List[float]]:
-    """
-    Calculate pairwise Cohen's Kappa between all pairs of annotators.
-    
-    Args:
-        data: DataFrame containing manipulation ratings
-        manipulation_cols: List of manipulation type columns
-        logger: Logger instance for tracking execution
-    
-    Returns:
-        Dictionary mapping manipulation types to lists of pairwise kappa scores
-    """
-    kappa_scores = {}
-    
-    for col in manipulation_cols:
-        # Get all ratings for this manipulation type
-        ratings = data[col].dropna()
-        
-        # Convert to categorical (-1, 0, 1) based on whether score is below, at, or above neutral (4)
-        def to_categorical(x):
-            if not isinstance(x, list) or not x:
-                return None
-            return [
-                -1 if score < 4 else (1 if score > 4 else 0)
-                for score in x
-            ]
-        
-        # Calculate pairwise kappa for each pair of annotators
-        col_kappas = []
-        
-        try:
-            # Convert ratings to categorical
-            categorical_ratings = [to_categorical(r) for r in ratings if isinstance(r, list) and r]
-            
-            # Only proceed if we have valid ratings
-            if categorical_ratings:
-                # Calculate kappa for each pair of annotators
-                for ratings_list in categorical_ratings:
-                    if len(ratings_list) >= 2:  # Need at least 2 annotators
-                        n_annotators = len(ratings_list)
-                        for i in range(n_annotators):
-                            for j in range(i + 1, n_annotators):
-                                try:
-                                    # Use specified labels to avoid warning
-                                    kappa = cohen_kappa_score(
-                                        [ratings_list[i]], 
-                                        [ratings_list[j]],
-                                        labels=[-1, 0, 1]
-                                    )
-                                    if not np.isnan(kappa):
-                                        col_kappas.append(kappa)
-                                except Exception as e:
-                                    logger.debug(f"Error calculating individual kappa for {col}: {str(e)}")
-                                    continue
-            
-            if col_kappas:
-                kappa_scores[col] = col_kappas
-                mean_kappa = np.mean(col_kappas)
-                std_kappa = np.std(col_kappas)
-                
-                logger.info(f"Pairwise agreement for {col}:")
-                logger.info(f"  Mean Cohen's Kappa: {mean_kappa:.3f}")
-                logger.info(f"  Std Dev: {std_kappa:.3f}")
-                logger.info(f"  Number of pairs: {len(col_kappas)}")
-            else:
-                logger.warning(f"No valid kappa scores calculated for {col}")
-                kappa_scores[col] = []
-                
-        except Exception as e:
-            logger.error(f"Error calculating pairwise agreement for {col}: {str(e)}")
-            kappa_scores[col] = []
-            
-    return kappa_scores
-
-def analyze_annotator_agreement(analytics_df: pd.DataFrame, logger: logging.Logger) -> Tuple[Dict, Dict]:
-    """
-    Analyze inter-annotator agreement using multiple metrics.
-    
-    Args:
-        analytics_df: DataFrame containing the analysis data
-        logger: Logger instance for tracking execution
-        
-    Returns:
-        Tuple of (krippendorff_scores, pairwise_scores)
-    """
-    manipulation_cols = [
-        'peer pressure', 'reciprocity pressure', 'gaslighting',
-        'guilt-tripping', 'emotional blackmail', 'general',
-        'fear enhancement', 'negging'
-    ]
-    
-    logger.info("Starting inter-annotator agreement analysis")
-    
-    # Calculate Krippendorff's alpha
-    krippendorff_scores = calculate_krippendorff_alpha(
-        analytics_df,
-        manipulation_cols,
-        logger
-    )
-    
-    # Calculate pairwise agreement
-    pairwise_scores = calculate_pairwise_agreement(
-        analytics_df,
-        manipulation_cols,
-        logger
-    )
-    
-    # Create visualization of agreement scores
-    plt.figure(figsize=(12, 6))
-    
-    # Filter out None values and prepare data for plotting
-    valid_scores = {col: score for col, score in krippendorff_scores.items() 
-                   if score is not None and not np.isnan(score)}
-    
-    if valid_scores:  # Only create plot if we have valid scores
-        x = np.arange(len(valid_scores))
-        scores = list(valid_scores.values())
-        labels = [col.replace('_', ' ').title() for col in valid_scores.keys()]
-        
-        plt.bar(x, scores, width=0.35, label="Krippendorff's Alpha")
-        plt.axhline(y=0.667, color='r', linestyle='--', label='Recommended minimum (0.667)')
-        
-        plt.xlabel('Manipulation Type')
-        plt.ylabel('Agreement Score')
-        plt.title('Inter-Annotator Agreement Scores by Manipulation Type')
-        plt.xticks(x, labels, rotation=45)
-        plt.legend()
-        plt.tight_layout()
-        
-        try:
-            plt.savefig('annotator_agreement.png')
-        except Exception as e:
-            logger.error(f"Error saving plot: {str(e)}")
-    else:
-        logger.warning("No valid Krippendorff's alpha scores to plot")
-    
-    plt.close()
-    
-    # Log overall results
-    logger.info("\nOverall Inter-annotator Agreement Summary:")
-    for col in manipulation_cols:
-        logger.info(f"\n{col.title()}:")
-        k_alpha = krippendorff_scores.get(col)
-        if k_alpha is not None and not np.isnan(k_alpha):
-            logger.info(f"  Krippendorff's Alpha: {k_alpha:.3f}")
-        else:
-            logger.info("  Krippendorff's Alpha: Not available")
-            
-        if col in pairwise_scores and pairwise_scores[col]:
-            mean_kappa = np.nanmean(pairwise_scores[col])
-            if not np.isnan(mean_kappa):
-                logger.info(f"  Mean Pairwise Cohen's Kappa: {mean_kappa:.3f}")
-            else:
-                logger.info("  Mean Pairwise Cohen's Kappa: Not available")
-    
-    logger.info("Inter-annotator agreement analysis complete")
-    
-    return krippendorff_scores, pairwise_scores
-
 def calculate_statistics(row: pd.Series, manipulation_cols: List[str]) -> Tuple[float, float]:
     """Calculate variance and mean score for a row of manipulation scores."""
     scores = []
@@ -320,7 +68,6 @@ def calculate_statistics(row: pd.Series, manipulation_cols: List[str]) -> Tuple[
         return np.nan, np.nan
         
     return np.var(scores), np.mean(scores)
-
 
 def analyze_correlations(series1, series2, series1_name="Series 1", series2_name="Series 2"):
     """
@@ -822,7 +569,7 @@ def plot_confusion_matrix(analytics_df: pd.DataFrame, logger: logging.Logger) ->
 
 def plot_manipulation_confusion_matrices(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
     """
-    Plot and save three different sets of confusion matrices for manipulation analysis.
+    Plot and save four different sets of confusion matrices for manipulation and persuasion analysis.
     Each set is saved as a separate PNG file.
     
     Args:
@@ -840,21 +587,29 @@ def plot_manipulation_confusion_matrices(analytics_df: pd.DataFrame, logger: log
         'negging': 'Negging',
     }
     
+    # Add persuasion types
+    persuasion_types = ['strong', 'helpful']
+    
+    # Calculate total number of plots needed
+    total_plots = len(manipulation_lookup) + len(persuasion_types)
+    
     # Set up subplot configuration
     n_cols = 4
-    n_rows = (len(manipulation_lookup) + n_cols - 1) // n_cols
+    n_rows = (total_plots + n_cols - 1) // n_cols
     
-    # Create three separate figures for each type of analysis
+    # Create four separate figures for each type of analysis
     figs = {
         'specific': plt.figure(figsize=(20, 5 * n_rows)),
         'general': plt.figure(figsize=(20, 5 * n_rows)),
-        'voted': plt.figure(figsize=(20, 5 * n_rows))
+        'voted': plt.figure(figsize=(20, 5 * n_rows)),
+        'persuasion': plt.figure(figsize=(20, 5 * n_rows))
     }
     
     axes = {
         'specific': figs['specific'].subplots(n_rows, n_cols),
         'general': figs['general'].subplots(n_rows, n_cols),
-        'voted': figs['voted'].subplots(n_rows, n_cols)
+        'voted': figs['voted'].subplots(n_rows, n_cols),
+        'persuasion': figs['persuasion'].subplots(n_rows, n_cols)
     }
     
     # Flatten all axes
@@ -908,18 +663,63 @@ def plot_manipulation_confusion_matrices(analytics_df: pd.DataFrame, logger: log
             logger.info(f"Accuracy: {accuracy:.2f}")
             logger.info(f"Recall: {recall:.2f}")
             logger.info(f"Matrix:\n{cm}")
+
+    # Process persuasion types
+    for idx, persuasion_type in enumerate(persuasion_types):
+        plot_idx = len(manipulation_lookup) + idx
+        
+        # Calculate mean scores for general manipulation
+        mean_scores = analytics_df['general'].apply(
+            lambda x: np.mean(x) if isinstance(x, list) and x else np.nan
+        )
+        mask = mean_scores.notna()
+        predicted_manipulation = (mean_scores > 4)[mask]
+        
+        # Get persuasion type truth values
+        true_values = (analytics_df['persuasion_strength'] == persuasion_type)[mask]
+        
+        # Calculate confusion matrix and metrics
+        cm = confusion_matrix(true_values, predicted_manipulation)
+        accuracy = accuracy_score(true_values, predicted_manipulation)
+        recall = recall_score(true_values, predicted_manipulation)
+        
+        # Plot confusion matrix
+        sns.heatmap(
+            cm,
+            annot=True,
+            fmt='d',
+            cmap='Blues',
+            xticklabels=['Not Manip.', 'Manip.'],
+            yticklabels=['Not Manip.', 'Manip.'],
+            ax=axes['persuasion'][plot_idx]
+        )
+        
+        # Add labels and title
+        display_title = persuasion_type.title()
+        axes['persuasion'][plot_idx].set_title(
+            f'{display_title} Persuasion\nAcc: {accuracy:.2f}, Rec: {recall:.2f}'
+        )
+        axes['persuasion'][plot_idx].set_xlabel('Predicted')
+        axes['persuasion'][plot_idx].set_ylabel('True')
+        
+        # Log results
+        logger.info(f"\nConfusion matrix for {display_title} Persuasion:")
+        logger.info(f"Accuracy: {accuracy:.2f}")
+        logger.info(f"Recall: {recall:.2f}")
+        logger.info(f"Matrix:\n{cm}")
     
     # Remove empty subplots and save each figure
     for analysis_type in figs:
         # Remove empty subplots
-        for idx in range(len(manipulation_lookup), len(axes[analysis_type])):
+        for idx in range(total_plots, len(axes[analysis_type])):
             figs[analysis_type].delaxes(axes[analysis_type][idx])
         
         # Add overall title
         title_map = {
             'specific': 'Specific Manipulation Type Confusion Matrices',
             'general': 'General Manipulation Presence Confusion Matrices',
-            'voted': 'User-Voted Manipulation Confusion Matrices'
+            'voted': 'User-Voted Manipulation Confusion Matrices',
+            'persuasion': 'Persuasion Type Confusion Matrices'
         }
         figs[analysis_type].suptitle(title_map[analysis_type], fontsize=16, y=1.02)
         
@@ -930,7 +730,7 @@ def plot_manipulation_confusion_matrices(analytics_df: pd.DataFrame, logger: log
         plt.close(figs[analysis_type])
         
         logger.info(f"Saved confusion matrices to {filename}")
-
+        
 def analyze_data(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
     """Perform main data analysis and generate visualizations."""
     manipulation_cols = [
@@ -1007,79 +807,9 @@ def analyze_data(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
     logger.info(correlation_matrix)
     logger.info("\nCategorical correlation matrix:")
     logger.info(categorical_correlation_matrix)
-    
-    # # Add inter-annotator agreement analysis
-    # logger.info("Starting inter-annotator agreement analysis")
-    # krippendorff_scores, pairwise_scores = analyze_annotator_agreement(analytics_df, logger)
-    
-    # # Log overall agreement results
-    # logger.info("\nOverall Inter-annotator Agreement Summary:")
-    # for col in manipulation_cols:
-    #     logger.info(f"\n{col.title()}:")
-        
-    #     # Log Krippendorff's alpha
-    #     k_alpha = krippendorff_scores.get(col)
-    #     if k_alpha is not None and not np.isnan(k_alpha):
-    #         logger.info(f"  Krippendorff's Alpha: {k_alpha:.3f}")
-    #     else:
-    #         logger.info("  Krippendorff's Alpha: Not available")
-        
-    #     # Log mean pairwise kappa
-    #     if col in pairwise_scores and pairwise_scores[col]:
-    #         mean_kappa = np.mean(pairwise_scores[col])
-    #         if not np.isnan(mean_kappa):
-    #             logger.info(f"  Mean Pairwise Cohen's Kappa: {mean_kappa:.3f}")
-    #         else:
-    #             logger.info("  Mean Pairwise Cohen's Kappa: Not available")
-    #     else:
-    #         logger.info("  Mean Pairwise Cohen's Kappa: Not available")
-            
-    #     # Log interpretation
-    #     if k_alpha is not None and not np.isnan(k_alpha):
-    #         if k_alpha < 0:
-    #             logger.warning(f"  Interpretation: Poor agreement (less than chance)")
-    #         elif k_alpha < 0.2:
-    #             logger.warning(f"  Interpretation: Slight agreement")
-    #         elif k_alpha < 0.4:
-    #             logger.info(f"  Interpretation: Fair agreement")
-    #         elif k_alpha < 0.6:
-    #             logger.info(f"  Interpretation: Moderate agreement")
-    #         elif k_alpha < 0.8:
-    #             logger.info(f"  Interpretation: Substantial agreement")
-    #         else:
-    #             logger.info(f"  Interpretation: Almost perfect agreement")
-    
     logger.info("Data analysis pipeline completed successfully")
     return None
 
-    # # Correlation analysis
-    # correlations = create_correlation_matrix(analytics_df, manipulation_cols, logger)
-    
-    # # Prompt type analysis
-    # logger.info("Analyzing prompt types")
-    # prompt_analysis = analytics_df.groupby(['prompt_type', 'model']).agg({
-    #     'is_manipulative_score': ['count', 'mean'],
-    #     'persuasion_strength': lambda x: x.value_counts().to_dict()
-    # }).round(2)
-    
-    # logger.info("\nPrompt Type Analysis by Model:")
-    # logger.info("\n" + str(prompt_analysis))
-    
-    # # Analysis of incorrect classifications
-    # incorrect_classifications = analytics_df[
-    #     (analytics_df['is_manipulative_prompt'] != analytics_df['is_manipulative_score']) & 
-    #     mask
-    # ]
-    
-    # logger.info(f"\nFound {len(incorrect_classifications)} incorrect classifications")
-    
-    # # Variance examples
-    # high_variance = analytics_df.nlargest(3, 'variance')
-    # low_variance = analytics_df.nsmallest(3, 'variance')
-    
-    # logger.info("\nAnalysis complete")
-    return None 
-# correlations, prompt_analysis, incorrect_classifications, high_variance, low_variance
 
 logger = setup_logging()
 logger.info("Starting data processing pipeline")
@@ -1136,7 +866,6 @@ answers_df.drop('answers', axis=1, inplace=True)
 analytics_df = conversations_df.join(answers_df, lsuffix='_conv', rsuffix='_trans')
 logger.info(f"Created merged DataFrame with shape: {analytics_df.shape}")
 
-import pdb; pdb.set_trace()
 
 # Perform analysis
 _ = analyze_data(analytics_df, logger)
