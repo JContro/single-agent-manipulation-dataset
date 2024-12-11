@@ -10,6 +10,9 @@ from typing import Dict, List, Union, Tuple
 from sklearn.metrics import accuracy_score, recall_score, confusion_matrix
 import scipy.stats as stats
 
+
+    
+
 def setup_logging() -> logging.Logger:
     """Configure and return logger with consistent formatting."""
     logging.basicConfig(
@@ -731,6 +734,142 @@ def plot_manipulation_confusion_matrices(analytics_df: pd.DataFrame, logger: log
         
         logger.info(f"Saved confusion matrices to {filename}")
         
+def count_high_manipulation_scores(dataframe, logger):
+    """
+    Counts instances where manipulation scores are above threshold (4) for each manipulation type.
+    
+    Args:
+        dataframe: pandas DataFrame containing manipulation scores
+        logger: logging object for error tracking
+    
+    Returns:
+        dict: Counts of low scores for each manipulation category
+    """
+    manipulation_score_columns = [
+        'peer pressure_mean',
+        'reciprocity pressure_mean',
+        'gaslighting_mean',
+        'guilt-tripping_mean',
+        'emotional blackmail_mean',
+        'general_mean',
+        'fear enhancement_mean',
+        'negging_mean'
+    ]
+    high_score_counts = {}
+    for score_column in manipulation_score_columns:
+        high_score_counts[score_column] = (dataframe[score_column] > 4).sum()
+    
+    high_score_counts['len'] = len(dataframe)
+    return high_score_counts
+
+def analyze_manipulation_by_category(full_dataset, logger):
+    """
+    Analyzes manipulation scores grouped by manipulation type and persuasion strength.
+    
+    Args:
+        full_dataset: pandas DataFrame containing all manipulation and persuasion data
+        logger: logging object for error tracking
+    
+    Returns:
+        dict: Nested dictionary containing score analysis by category
+    """
+    category_analysis = {}
+    
+    # Analyze by manipulation type
+    for manipulation_type in set(full_dataset['manipulation_type']):
+        if manipulation_type is not None:  # Skip None values
+            manipulation_subset = full_dataset[full_dataset['manipulation_type'] == manipulation_type]
+            category_analysis[manipulation_type] = count_high_manipulation_scores(manipulation_subset, logger)
+    
+    # Analyze by persuasion strength
+    for persuasion_level in set(full_dataset['persuasion_strength']):
+        if persuasion_level is not None:  # Skip None values
+            persuasion_subset = full_dataset[full_dataset['persuasion_strength'] == persuasion_level]
+            category_analysis[persuasion_level] = count_high_manipulation_scores(persuasion_subset, logger)
+    
+    return category_analysis
+
+def create_manipulation_tactics_heatmap(data, figsize=(12, 8), cmap='YlOrRd', 
+                                      title='Normalized Manipulation Tactics Analysis',
+                                      save_path=None, dpi=300):
+    """
+    Create a heatmap visualization of manipulation tactics data and optionally save to file.
+    
+    Parameters:
+    -----------
+    data : dict
+        Nested dictionary containing manipulation tactics data
+    figsize : tuple, optional
+        Figure size as (width, height), default is (12, 8)
+    cmap : str, optional
+        Colormap to use for the heatmap, default is 'YlOrRd'
+    title : str, optional
+        Title for the heatmap, default is 'Normalized Manipulation Tactics Analysis'
+    save_path : str, optional
+        If provided, saves the plot to this path (e.g., 'heatmap.png', 'plot.pdf')
+    dpi : int, optional
+        Resolution for saved figure, default is 300
+    
+    Returns:
+    --------
+    fig : matplotlib.figure.Figure
+        The created figure object
+    ax : matplotlib.axes.Axes
+        The created axes object
+    """
+   
+    # Define categories and metrics
+    categories = ['Emotional Blackmail', 'Fear Enhancement', 'Gaslighting', 'Guilt-Tripping', 
+                 'Negging', 'Peer Pressure', 'Reciprocity Pressure', 'helpful', 'strong']
+    
+    metrics = ['emotional blackmail_mean', 'fear enhancement_mean', 'gaslighting_mean', 
+              'general_mean', 'guilt-tripping_mean', 'negging_mean', 'peer pressure_mean', 
+              'reciprocity pressure_mean']
+    
+    # Create the normalized data matrix
+    data_matrix = []
+    for cat in categories:
+        row = []
+        for metric in metrics:
+            # Divide by len to normalize
+            value = data[cat][metric] / data[cat]['len']
+            row.append(value)
+        data_matrix.append(row)
+    
+    # Convert to numpy array for plotting
+    data_array = np.array(data_matrix)
+    
+    # Create the plot
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Create the heatmap
+    sns.heatmap(data_array, 
+                xticklabels=[m.replace('_mean', '') for m in metrics], 
+                yticklabels=categories,
+                annot=True,  # Show values in cells
+                fmt='.2f',   # Format as 2 decimal places
+                cmap=cmap,
+                ax=ax)
+    
+    # Set title and labels
+    ax.set_title(title, pad=20)
+    ax.set_xlabel('Metrics')
+    ax.set_ylabel('Categories')
+    
+    # Rotate x-axis labels for better readability
+    plt.xticks(rotation=45, ha='right')
+    
+    # Adjust layout to prevent label cutoff
+    plt.tight_layout()
+    
+    # Save the plot if a save path is provided
+    if save_path:
+        plt.savefig(save_path, dpi=dpi, bbox_inches='tight')
+        print(f"Plot saved to: {save_path}")
+    
+    return fig, ax
+
+
 def analyze_data(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
     """Perform main data analysis and generate visualizations."""
     manipulation_cols = [
@@ -771,44 +910,67 @@ def analyze_data(analytics_df: pd.DataFrame, logger: logging.Logger) -> None:
                f"Median: {analytics_df['general_variance'].median():.2f}, "
                f"Variance of variance: {analytics_df['general_variance'].var():.2f}")
     
-    # Plot confusion matrix for general manipulation
-    plot_confusion_matrix(analytics_df, logger)
+    # # Plot confusion matrix for general manipulation
+    # plot_confusion_matrix(analytics_df, logger)
 
-    logger.info("Generating confusion matrices for each manipulation type")
-    plot_manipulation_confusion_matrices(analytics_df, logger)
+    # logger.info("Generating confusion matrices for each manipulation type")
+    # plot_manipulation_confusion_matrices(analytics_df, logger)
 
-    # Generate plots
-    logger.info("Generating variance distribution plot")
-    plt.figure(figsize=(10, 6))
-    sns.histplot(analytics_df['general_variance'].dropna(), bins=15)
-    plt.title('Distribution of General Manipulation Response Variance')
-    plt.xlabel('Variance')
-    plt.ylabel('Count')
-    plt.savefig('variance_distribution.png')
-    plt.close()
+    # # Generate plots
+    # logger.info("Generating variance distribution plot")
+    # plt.figure(figsize=(10, 6))
+    # sns.histplot(analytics_df['general_variance'].dropna(), bins=15)
+    # plt.title('Distribution of General Manipulation Response Variance')
+    # plt.xlabel('Variance')
+    # plt.ylabel('Count')
+    # plt.savefig('variance_distribution.png')
+    # plt.close()
     
-    mean_manipulation_columns = [f'{col}_mean' for col in manipulation_cols]
+    # mean_manipulation_columns = [f'{col}_mean' for col in manipulation_cols]
     
-    # Generate correlation analysis
-    correlation_matrix, detailed_results = analyze_all_correlations(
-        analytics_df,
-        mean_manipulation_columns,
-        logger
+    # # Generate correlation analysis
+    # correlation_matrix, detailed_results = analyze_all_correlations(
+    #     analytics_df,
+    #     mean_manipulation_columns,
+    #     logger
+    # )
+    
+    # # Add categorical correlation analysis
+    # categorical_correlation_matrix, categorical_detailed_results = analyze_all_categorical_correlations(
+    #     analytics_df,
+    #     mean_manipulation_columns,
+    #     logger
+    # )
+    
+    # logger.info("Continuous correlation matrix:")
+    # logger.info(correlation_matrix)
+    # logger.info("\nCategorical correlation matrix:")
+    # logger.info(categorical_correlation_matrix)
+    # logger.info("Data analysis pipeline completed successfully")
+
+    data = analyze_manipulation_by_category(analytics_df, logger=logger)
+
+    fig, ax = create_manipulation_tactics_heatmap(
+        data,
+        save_path='manipulation_tactics_main_result.png',
+        dpi=300
     )
-    
-    # Add categorical correlation analysis
-    categorical_correlation_matrix, categorical_detailed_results = analyze_all_categorical_correlations(
-        analytics_df,
-        mean_manipulation_columns,
-        logger
-    )
-    
-    logger.info("Continuous correlation matrix:")
-    logger.info(correlation_matrix)
-    logger.info("\nCategorical correlation matrix:")
-    logger.info(categorical_correlation_matrix)
-    logger.info("Data analysis pipeline completed successfully")
+
+    analytics_df.to_json('analytics_data.json', orient='records', lines=True)
     return None
+
+
+"""
+comments: 
+for all the columns of manipulation types, I have the scores, but for the persuasion ones, I don't. 
+
+So I will have the Y axis (the given manipulation and persuasion types as )
+
+--- 
+get the set of manipulation types 
+
+
+"""
 
 
 logger = setup_logging()
@@ -867,44 +1029,11 @@ analytics_df = conversations_df.join(answers_df, lsuffix='_conv', rsuffix='_tran
 logger.info(f"Created merged DataFrame with shape: {analytics_df.shape}")
 
 
+
 # Perform analysis
 _ = analyze_data(analytics_df, logger)
 
+
+
 logger.info("Data processing pipeline completed successfully")
 
-
-notes = """
-Notes:
-Only check the conversations that have had at least 3 responses 
-
-- remove the junk responses -DONE
-
-- how strong is manipulation score vs it is actually manipulation
-    so check if a conversation is prompted manipulative and see what the average score is. 4 being neutral 
-        binary output? 
-            accuracy and recall on getting the prompt or not 
-            check some answers that are incorrect - see if there is something to learn 
-        see what the variance is of the responses 
-            mean and median variance 
-            see some examples of high and low variance answers 
-            what is the variance of the variance? 
-                plot the distribution of variance
-
-- correlation confusion matrix 
-    see correlation between the different categories 
-        look up different types of correlation
-
-- for each category of prompt
-    - how many are categorised as manipulative or not
-    - by model too 
-    - check persuasion and helpfulness 
-        - look at examples where this is not the case
-
-- check the comments what they are saying
-- calculate who is owed money 
-    - remove shit responses 
-        5£ per 20 before 27 october
-        5£ per 10 after 27 october 
-
-
-    """

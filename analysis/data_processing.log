@@ -6566,3 +6566,123 @@ negging_mean                         0.230342  ...      1.000000
 [8 rows x 8 columns]
 2024-11-26 11:31:15,282 - INFO - Data analysis pipeline completed successfully
 2024-11-26 11:31:15,282 - INFO - Data processing pipeline completed successfully
+2024-12-01 16:35:43,671 - INFO - Starting data processing pipeline
+2024-12-01 16:35:43,742 - INFO - Response processing results:
+2024-12-01 16:35:43,742 - INFO - Initial responses: 1935
+2024-12-01 16:35:43,742 - INFO - Valid responses: 1679
+2024-12-01 16:35:43,742 - INFO - Removed responses: 256
+2024-12-01 16:35:43,742 - INFO - Removal rate: 13.23%
+2024-12-01 16:35:43,745 - INFO - Found 5 incomplete conversations
+2024-12-01 16:35:43,757 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 16:37:40,931 - INFO - Starting data processing pipeline
+2024-12-01 16:37:40,992 - INFO - Response processing results:
+2024-12-01 16:37:40,992 - INFO - Initial responses: 1935
+2024-12-01 16:37:40,992 - INFO - Valid responses: 1679
+2024-12-01 16:37:40,992 - INFO - Removed responses: 256
+2024-12-01 16:37:40,993 - INFO - Removal rate: 13.23%
+2024-12-01 16:37:40,995 - INFO - Found 5 incomplete conversations
+2024-12-01 16:37:41,007 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 16:37:41,007 - INFO - Starting data analysis
+2024-12-01 16:37:41,074 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-01 16:37:41,075 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-01 16:37:41,075 - INFO - Data processing pipeline completed successfully
+2024-12-01 16:38:21,430 - INFO - Starting data processing pipeline
+2024-12-01 16:38:21,492 - INFO - Response processing results:
+2024-12-01 16:38:21,492 - INFO - Initial responses: 1935
+2024-12-01 16:38:21,492 - INFO - Valid responses: 1679
+2024-12-01 16:38:21,492 - INFO - Removed responses: 256
+2024-12-01 16:38:21,492 - INFO - Removal rate: 13.23%
+2024-12-01 16:38:21,495 - INFO - Found 5 incomplete conversations
+2024-12-01 16:38:21,513 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 16:38:21,513 - INFO - Starting data analysis
+2024-12-01 16:38:21,583 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-01 16:38:21,584 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-01 20:50:57,262 - INFO - Starting data processing pipeline
+2024-12-01 20:50:57,310 - INFO - Response processing results:
+2024-12-01 20:50:57,310 - INFO - Initial responses: 1935
+2024-12-01 20:50:57,311 - INFO - Valid responses: 1679
+2024-12-01 20:50:57,311 - INFO - Removed responses: 256
+2024-12-01 20:50:57,311 - INFO - Removal rate: 13.23%
+2024-12-01 20:50:57,313 - INFO - Found 5 incomplete conversations
+2024-12-01 20:50:57,324 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 20:50:57,324 - INFO - Starting data analysis
+2024-12-01 20:50:57,381 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-01 20:50:57,381 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-01 20:52:23,516 - INFO - Starting data processing pipeline
+2024-12-01 20:52:23,561 - INFO - Response processing results:
+2024-12-01 20:52:23,561 - INFO - Initial responses: 1935
+2024-12-01 20:52:23,561 - INFO - Valid responses: 1679
+2024-12-01 20:52:23,562 - INFO - Removed responses: 256
+2024-12-01 20:52:23,562 - INFO - Removal rate: 13.23%
+2024-12-01 20:52:23,564 - INFO - Found 5 incomplete conversations
+2024-12-01 20:52:23,573 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 20:52:23,573 - INFO - Starting data analysis
+2024-12-01 20:52:23,626 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-01 20:52:23,626 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-01 20:53:03,037 - INFO - Starting data processing pipeline
+2024-12-01 20:53:03,083 - INFO - Response processing results:
+2024-12-01 20:53:03,083 - INFO - Initial responses: 1935
+2024-12-01 20:53:03,083 - INFO - Valid responses: 1679
+2024-12-01 20:53:03,083 - INFO - Removed responses: 256
+2024-12-01 20:53:03,083 - INFO - Removal rate: 13.23%
+2024-12-01 20:53:03,085 - INFO - Found 5 incomplete conversations
+2024-12-01 20:53:03,095 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 20:53:03,095 - INFO - Starting data analysis
+2024-12-01 20:53:03,147 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-01 20:53:03,148 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-01 20:59:34,288 - INFO - Starting data processing pipeline
+2024-12-01 20:59:34,336 - INFO - Response processing results:
+2024-12-01 20:59:34,336 - INFO - Initial responses: 1935
+2024-12-01 20:59:34,336 - INFO - Valid responses: 1679
+2024-12-01 20:59:34,336 - INFO - Removed responses: 256
+2024-12-01 20:59:34,336 - INFO - Removal rate: 13.23%
+2024-12-01 20:59:34,338 - INFO - Found 5 incomplete conversations
+2024-12-01 20:59:34,347 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 20:59:34,347 - INFO - Starting data analysis
+2024-12-01 20:59:34,399 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-01 20:59:34,399 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-01 20:59:35,151 - INFO - Data processing pipeline completed successfully
+2024-12-01 21:01:55,850 - INFO - Starting data processing pipeline
+2024-12-01 21:01:55,901 - INFO - Response processing results:
+2024-12-01 21:01:55,902 - INFO - Initial responses: 1935
+2024-12-01 21:01:55,902 - INFO - Valid responses: 1679
+2024-12-01 21:01:55,902 - INFO - Removed responses: 256
+2024-12-01 21:01:55,902 - INFO - Removal rate: 13.23%
+2024-12-01 21:01:55,904 - INFO - Found 5 incomplete conversations
+2024-12-01 21:01:55,917 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-01 21:01:55,917 - INFO - Starting data analysis
+2024-12-01 21:01:55,971 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-01 21:01:55,971 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-01 21:01:56,666 - INFO - Data processing pipeline completed successfully
+2024-12-02 15:08:14,282 - INFO - Starting data preparation pipeline
+2024-12-02 15:09:18,168 - INFO - Starting data preparation pipeline
+2024-12-02 15:09:18,199 - INFO - Response filtering results:
+2024-12-02 15:09:18,199 - INFO - Initial responses: 1935
+2024-12-02 15:09:18,199 - INFO - Valid responses: 0
+2024-12-02 15:09:18,199 - INFO - Removed responses: 1935
+2024-12-02 15:09:18,199 - INFO - Removal rate: 100.00%
+2024-12-02 15:09:18,199 - INFO - Found 0 incomplete conversations
+2024-12-02 16:05:20,116 - INFO - Starting data processing pipeline
+2024-12-02 16:05:20,184 - INFO - Response processing results:
+2024-12-02 16:05:20,184 - INFO - Initial responses: 1935
+2024-12-02 16:05:20,184 - INFO - Valid responses: 1679
+2024-12-02 16:05:20,184 - INFO - Removed responses: 256
+2024-12-02 16:05:20,184 - INFO - Removal rate: 13.23%
+2024-12-02 16:05:20,187 - INFO - Found 5 incomplete conversations
+2024-12-02 16:05:20,208 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-02 16:05:20,209 - INFO - Starting data analysis
+2024-12-02 16:05:20,280 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-02 16:05:20,281 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-02 16:05:21,336 - INFO - Data processing pipeline completed successfully
+2024-12-02 16:06:30,853 - INFO - Starting data processing pipeline
+2024-12-02 16:06:30,915 - INFO - Response processing results:
+2024-12-02 16:06:30,915 - INFO - Initial responses: 1935
+2024-12-02 16:06:30,915 - INFO - Valid responses: 1679
+2024-12-02 16:06:30,915 - INFO - Removed responses: 256
+2024-12-02 16:06:30,915 - INFO - Removal rate: 13.23%
+2024-12-02 16:06:30,918 - INFO - Found 5 incomplete conversations
+2024-12-02 16:06:30,936 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-02 16:06:30,936 - INFO - Starting data analysis
+2024-12-02 16:06:31,005 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2024-12-02 16:06:31,006 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2024-12-02 16:06:31,934 - INFO - Data processing pipeline completed successfully

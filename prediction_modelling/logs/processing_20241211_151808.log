@@ -1,0 +1,14 @@
+2024-12-11 15:18:08,397 - INFO - Response processing results:
+2024-12-11 15:18:08,398 - INFO - Initial responses: 1935
+2024-12-11 15:18:08,398 - INFO - Valid responses: 1679
+2024-12-11 15:18:08,398 - INFO - Removed responses: 256
+2024-12-11 15:18:08,398 - INFO - Removal rate: 13.23%
+2024-12-11 15:18:08,400 - INFO - Found 5 incomplete conversations
+2024-12-11 15:18:08,417 - INFO - Created merged DataFrame with shape: (746, 24)
+2024-12-11 15:18:08,422 - WARNING - Found 9 empty lists in column peer pressure
+2024-12-11 15:18:08,425 - WARNING - Found 5 empty lists in column reciprocity pressure
+2024-12-11 15:18:08,428 - WARNING - Found 3 empty lists in column gaslighting
+2024-12-11 15:18:08,430 - WARNING - Found 7 empty lists in column guilt-tripping
+2024-12-11 15:18:08,433 - WARNING - Found 8 empty lists in column emotional blackmail
+2024-12-11 15:18:08,438 - WARNING - Found 4 empty lists in column fear enhancement
+2024-12-11 15:18:08,441 - WARNING - Found 4 empty lists in column negging
