@@ -4,28 +4,34 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 
-# TODO: make use of the logger for this
-def plot_distributions(y_train, y_test, target_columns):
+def plot_distributions(y_train, y_test, stratify_columns, target_columns=None):
     """
     Plot the distribution of classes in train and test sets.
     
     Parameters:
     -----------
-    y_train : pandas.DataFrame or Series
+    y_train : pandas.DataFrame
         Training set targets
-    y_test : pandas.DataFrame or Series
+    y_test : pandas.DataFrame
         Test set targets
-    target_columns : list
-        List of target column names
+    stratify_columns : list
+        List of columns used for stratification
+    target_columns : list, optional
+        Additional target columns to plot distributions for
     """
-    n_targets = len(target_columns)
+    # Combine stratify and target columns for plotting
+    all_columns = stratify_columns.copy()
+    if target_columns:
+        all_columns.extend([col for col in target_columns if col not in stratify_columns])
+    
+    n_targets = len(all_columns)
     fig, axes = plt.subplots(n_targets, 2, figsize=(15, 5 * n_targets))
     
     # Handle single target case
     if n_targets == 1:
         axes = axes.reshape(1, -1)
     
-    for idx, col in enumerate(target_columns):
+    for idx, col in enumerate(all_columns):
         # Training set distribution
         train_dist = y_train[col].value_counts(normalize=True)
         test_dist = y_test[col].value_counts(normalize=True)
@@ -62,30 +68,29 @@ def plot_distributions(y_train, y_test, target_columns):
     plt.tight_layout()
     plt.show()
     
-    # If there are multiple targets, try to plot joint distribution heatmap
-    if len(target_columns) > 1:
+    # Plot joint distributions for stratification columns
+    if len(stratify_columns) > 1:
         try:
             # Training set joint distribution
-            joint_train = pd.crosstab(y_train[target_columns[0]], 
-                                    y_train[target_columns[1]], 
+            joint_train = pd.crosstab(y_train[stratify_columns[0]], 
+                                    y_train[stratify_columns[1]], 
                                     normalize='all')
             
             # Test set joint distribution
-            joint_test = pd.crosstab(y_test[target_columns[0]], 
-                                   y_test[target_columns[1]], 
+            joint_test = pd.crosstab(y_test[stratify_columns[0]], 
+                                   y_test[stratify_columns[1]], 
                                    normalize='all')
             
-            # Only plot if we have valid data
             if not (joint_train.empty or joint_test.empty):
                 plt.figure(figsize=(15, 6))
                 
                 plt.subplot(121)
                 sns.heatmap(joint_train, annot=True, fmt='.2%', cmap='YlOrRd')
-                plt.title(f'Joint Distribution in Training Set\n{target_columns[0]} vs {target_columns[1]}')
+                plt.title(f'Joint Distribution in Training Set\n{stratify_columns[0]} vs {stratify_columns[1]}')
                 
                 plt.subplot(122)
                 sns.heatmap(joint_test, annot=True, fmt='.2%', cmap='YlOrRd')
-                plt.title(f'Joint Distribution in Test Set\n{target_columns[0]} vs {target_columns[1]}')
+                plt.title(f'Joint Distribution in Test Set\n{stratify_columns[0]} vs {stratify_columns[1]}')
                 
                 plt.tight_layout()
                 plt.show()
@@ -94,17 +99,19 @@ def plot_distributions(y_train, y_test, target_columns):
         except Exception as e:
             print(f"\nWarning: Could not create joint distribution heatmap: {str(e)}")
 
-def perform_stratified_split(df, target_columns, test_size=0.2, random_state=42, plot=False):
+def perform_stratified_split(df, stratify_columns, target_columns=None, test_size=0.2, random_state=42, plot=True):
     """
-    Performs a stratified train-test split on a pandas DataFrame with multiple target columns.
-    Uses a combined hash of all target columns for stratification.
+    Performs a stratified train-test split on a pandas DataFrame, stratifying by specified columns
+    while preserving additional target columns.
     
     Parameters:
     -----------
     df : pandas.DataFrame
         The input DataFrame
-    target_columns : str or list
-        Name(s) of the target column(s) containing the classes
+    stratify_columns : list
+        Columns to use for stratification
+    target_columns : list, optional
+        Additional target columns to preserve (not used for stratification)
     test_size : float, default=0.2
         Proportion of the dataset to include in the test split (0.0 to 1.0)
     random_state : int, default=42
@@ -115,27 +122,27 @@ def perform_stratified_split(df, target_columns, test_size=0.2, random_state=42,
     Returns:
     --------
     X_train, X_test, y_train, y_test : numpy arrays or pandas DataFrames
-        The split data. y_train and y_test will be DataFrames if multiple targets
+        The split data. y_train and y_test will contain both stratification and target columns
     """
-    # Convert single target column to list for consistent processing
-    if isinstance(target_columns, str):
-        target_columns = [target_columns]
+    # Verify all columns exist in the DataFrame
+    all_target_cols = stratify_columns.copy()
+    if target_columns:
+        all_target_cols.extend([col for col in target_columns if col not in stratify_columns])
     
-    # Verify all target columns exist in the DataFrame
-    missing_cols = [col for col in target_columns if col not in df.columns]
+    missing_cols = [col for col in all_target_cols if col not in df.columns]
     if missing_cols:
-        raise ValueError(f"Target columns not found in DataFrame: {missing_cols}")
+        raise ValueError(f"Columns not found in DataFrame: {missing_cols}")
     
     # Separate features and targets
-    X = df.drop(target_columns, axis=1)
-    y = df[target_columns]
+    X = df.drop(all_target_cols, axis=1)
+    y = df[all_target_cols]
     
     # Check for empty DataFrame
     if len(df) == 0:
         raise ValueError("Input DataFrame is empty")
     
-    # Create a combined category for stratification
-    combined_targets = y.apply(lambda row: '_'.join(row.astype(str)), axis=1)
+    # Create a combined category for stratification using only stratify_columns
+    combined_strat = y[stratify_columns].apply(lambda row: '_'.join(row.astype(str)), axis=1)
     
     try:
         # Perform stratified split
@@ -144,7 +151,7 @@ def perform_stratified_split(df, target_columns, test_size=0.2, random_state=42,
             y,
             test_size=test_size,
             random_state=random_state,
-            stratify=combined_targets
+            stratify=combined_strat
         )
     except ValueError as e:
         if "The least populated class in y has only 1 member" in str(e):
@@ -156,37 +163,28 @@ def perform_stratified_split(df, target_columns, test_size=0.2, random_state=42,
         else:
             raise e
     
-    # Print distribution for each target column
-    print("\nClass distributions:")
-    for col in target_columns:
-        print(f"\nTarget: {col}")
+    # Print distribution for stratification columns
+    print("\nStratification column distributions:")
+    for col in stratify_columns:
+        print(f"\nColumn: {col}")
         print("Training set distribution:")
         print(y_train[col].value_counts(normalize=True))
         print("\nTest set distribution:")
         print(y_test[col].value_counts(normalize=True))
     
+    # Print distribution for additional target columns if any
+    if target_columns:
+        print("\nAdditional target column distributions:")
+        for col in target_columns:
+            if col not in stratify_columns:
+                print(f"\nColumn: {col}")
+                print("Training set distribution:")
+                print(y_train[col].value_counts(normalize=True))
+                print("\nTest set distribution:")
+                print(y_test[col].value_counts(normalize=True))
+    
     # Plot distributions if requested
     if plot:
-        plot_distributions(y_train, y_test, target_columns)
+        plot_distributions(y_train, y_test, stratify_columns, target_columns)
     
     return X_train, X_test, y_train, y_test
-
-# Example usage:
-"""
-# Create sample DataFrame with multiple target columns
-df = pd.DataFrame({
-    'feature1': np.random.randn(1000),
-    'feature2': np.random.randn(1000),
-    'target1': np.random.choice([0, 1], size=1000, p=[0.7, 0.3]),
-    'target2': np.random.choice([0, 1, 2], size=1000, p=[0.5, 0.3, 0.2])
-})
-
-# Perform split with multiple targets
-X_train, X_test, y_train, y_test = perform_stratified_split(
-    df,
-    target_columns=['target1', 'target2'],
-    test_size=0.25,
-    random_state=42,
-    plot=True
-)
-"""
