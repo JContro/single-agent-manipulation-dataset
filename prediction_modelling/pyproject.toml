@@ -13,6 +13,8 @@ pandas = "^2.2.3"
 matplotlib = "^3.9.3"
 seaborn = "^0.13.2"
 scikit-learn = "^1.6.0"
+protobuf = "^5.29.1"
+urllib3 = "^2.2.3"
 
 
 [build-system]
