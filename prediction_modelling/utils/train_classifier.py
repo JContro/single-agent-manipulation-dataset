@@ -5,24 +5,22 @@ import numpy as np
 import logging
 import os
 from datetime import datetime
-import pandas as pd 
+import pandas as pd
 
 def compute_metrics(eval_pred):
     """
     Compute metrics for multi-label classification
     """
     predictions, labels = eval_pred
+    # Move computations to CPU since metrics computation typically expects numpy arrays
     predictions = (torch.sigmoid(torch.Tensor(predictions)) > 0.5).numpy()
-    
     accuracies = [accuracy_score(labels[:, i], predictions[:, i]) for i in range(labels.shape[1])]
     f1_scores = [f1_score(labels[:, i], predictions[:, i], average='binary') for i in range(labels.shape[1])]
     
-    metrics = {
+    return {
         'accuracy': np.mean(accuracies),
         'f1': np.mean(f1_scores),
     }
-    
-    return metrics
 
 def setup_trainer(
     train_dataset,
@@ -40,20 +38,20 @@ def setup_trainer(
     """
     Setup and return a trainer for multi-label classification
     """
-    # Set device
+    # Properly set device
     if device is None:
-        device = "mps" if torch.backends.mps.is_available() else "cpu"
+        device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
-    torch.device(device)
-
-    # Initialize model
+    
+    # Initialize model and move to device
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name,
         num_labels=num_labels,
         problem_type="multi_label_classification"
     )
-
-    # Define training arguments
+    model = model.to(device)
+    
+    # Define training arguments with CUDA optimizations
     training_args = TrainingArguments(
         output_dir=output_dir,
         evaluation_strategy="epoch",
@@ -67,9 +65,13 @@ def setup_trainer(
         metric_for_best_model="eval_f1",
         save_total_limit=2,
         seed=seed,
-        logging_dir=f'logs/runs_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
+        logging_dir=f'logs/runs_{datetime.now().strftime("%Y%m%d_%H%M%S")}',
+        # Add CUDA optimizations
+        fp16=True,  # Enable mixed precision training
+        gradient_accumulation_steps=4,  # Reduce memory usage
+        dataloader_pin_memory=True,  # Improve data transfer to GPU
     )
-
+    
     # Initialize trainer
     trainer = Trainer(
         model=model,
@@ -78,7 +80,11 @@ def setup_trainer(
         eval_dataset=test_dataset,
         compute_metrics=compute_metrics,
     )
-
+    
+    # Enable gradient checkpointing for memory efficiency
+    if hasattr(model, 'gradient_checkpointing_enable'):
+        model.gradient_checkpointing_enable()
+    
     return trainer
 
 def save_predictions(trainer, test_dataset, output_dir, target_columns):
@@ -86,10 +92,9 @@ def save_predictions(trainer, test_dataset, output_dir, target_columns):
     Generate and save predictions
     """
     predictions = trainer.predict(test_dataset)
-    predicted_labels = (torch.sigmoid(torch.Tensor(predictions.predictions)) > 0.5).numpy()
-    
+    # Move predictions to CPU for post-processing
+    predicted_labels = (torch.sigmoid(torch.Tensor(predictions.predictions).cpu()) > 0.5).numpy()
     results_df = pd.DataFrame(predicted_labels, columns=target_columns)
     predictions_path = os.path.join(output_dir, 'predictions.csv')
     results_df.to_csv(predictions_path, index=False)
-    
     return predictions, results_df

@@ -5,24 +5,39 @@ import pandas as pd
 import numpy as np
 
 class ManipulationDataset(Dataset):
-    def __init__(self, X, y, text_column, model, target_columns):
-        self.encodings = create_encodings(X, text_column, model)
+    def __init__(self, X, y, text_column, model, target_columns, max_length=6000):
+        self.X = X
+        self.text_column = text_column
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model,
+            model_max_length=max_length
+        )
+        self.max_length = max_length
         self.labels = create_labels(y, target_columns)
-
+        
     def __len__(self):
         return len(self.labels)
-
+    
     def __getitem__(self, idx):
-        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
-        item['labels'] = torch.tensor(self.labels[idx])
-        return item
-
-def create_encodings(X, text_column, model):
-    tokenizer = AutoTokenizer.from_pretrained(model)
-    return tokenizer(X[text_column].values.tolist(), truncation=True, padding=True)
+        text = self.X[self.text_column].iloc[idx]
+        
+        encoding = self.tokenizer(
+            text,
+            truncation=True,
+            padding='max_length',
+            max_length=self.max_length,
+            return_tensors='pt'
+        )
+        
+        input_ids = encoding['input_ids'].squeeze(0)
+        attention_mask = encoding['attention_mask'].squeeze(0)
+        label = torch.tensor(self.labels[idx]).float()
+        
+        return {
+            'input_ids': input_ids,
+            'attention_mask': attention_mask,
+            'labels': label
+        }
 
 def create_labels(y, target_columns):
-    # Align labels with X indices and convert to numpy array
     return y[target_columns].values
-
-

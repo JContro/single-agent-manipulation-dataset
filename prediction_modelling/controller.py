@@ -3,6 +3,8 @@ from utils.stratified_splitter import perform_stratified_split
 from utils.custom_dataloader import ManipulationDataset
 from utils.train_classifier import setup_trainer, save_predictions
 from torch.utils.data import DataLoader
+import t5_encoder
+
 from datetime import datetime
 import logging
 import os
@@ -38,7 +40,7 @@ def main():
     )
 
     # Create datasets
-    model_name = "meta-llama/Llama-3.2-3B"
+    model_name = "google/t5-v1_1-base"
     text_column = "chat_completion"
     
     train_dataset = ManipulationDataset(
@@ -68,14 +70,15 @@ def main():
         model_name=model_name,
         output_dir=output_dir,
         num_labels=len(target_columns),
-        batch_size=16,
+        batch_size=8,
         num_epochs=10,
-        device="mps"  # Use M1 GPU
+        device="cuda"  
     )
 
     # Train model
     print("Starting training...")
     trainer.train()
+    trainer.model.gradient_checkpointing_enable()
 
     # Save best model
     best_model_path = os.path.join(output_dir, 'best-model')
