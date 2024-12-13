@@ -5,38 +5,38 @@ import pandas as pd
 import numpy as np
 
 class ManipulationDataset(Dataset):
-    def __init__(self, X, y, text_column, model, target_columns, max_length=6000):
+    def __init__(self, X, y, text_column, model, target_columns, max_length=512):
         self.X = X
         self.text_column = text_column
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model,
-            model_max_length=max_length
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model)
+        
+        # Set padding token and strategy
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+            self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
+        
         self.max_length = max_length
         self.labels = create_labels(y, target_columns)
-        
+
     def __len__(self):
         return len(self.labels)
-    
+
     def __getitem__(self, idx):
         text = self.X[self.text_column].iloc[idx]
         
+        # Don't pad here - we'll pad in the collate_fn
         encoding = self.tokenizer(
             text,
             truncation=True,
-            padding='max_length',
             max_length=self.max_length,
-            return_tensors='pt'
+            padding=False,  # Changed this
+            return_tensors=None
         )
         
-        input_ids = encoding['input_ids'].squeeze(0)
-        attention_mask = encoding['attention_mask'].squeeze(0)
-        label = torch.tensor(self.labels[idx]).float()
-        
         return {
-            'input_ids': input_ids,
-            'attention_mask': attention_mask,
-            'labels': label
+            'input_ids': torch.tensor(encoding['input_ids'], dtype=torch.long),
+            'attention_mask': torch.tensor(encoding['attention_mask'], dtype=torch.long),
+            'labels': torch.tensor(self.labels[idx], dtype=torch.float)
         }
 
 def create_labels(y, target_columns):

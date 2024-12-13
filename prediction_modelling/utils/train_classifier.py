@@ -1,11 +1,42 @@
 import torch
-from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
+from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer, AutoTokenizer
 from sklearn.metrics import accuracy_score, f1_score
 import numpy as np
 import logging
 import os
 from datetime import datetime
 import pandas as pd
+
+
+from dataclasses import dataclass
+from typing import Dict, List
+import torch
+from torch.nn.utils.rnn import pad_sequence
+
+@dataclass
+class DataCollatorWithPadding:
+    tokenizer: AutoTokenizer
+    padding: bool = True
+    max_length: int = 512
+    pad_to_multiple_of: int = None
+    return_tensors: str = "pt"
+
+    def __call__(self, features: List[Dict[str, torch.Tensor]]) -> Dict[str, torch.Tensor]:
+        # Separate the input features
+        input_ids = [f["input_ids"] for f in features]
+        attention_mask = [f["attention_mask"] for f in features]
+        labels = torch.stack([f["labels"] for f in features])
+
+        # Pad the sequences
+        input_ids = pad_sequence(input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
+        attention_mask = pad_sequence(attention_mask, batch_first=True, padding_value=0)
+
+        return {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "labels": labels,
+        }
+    
 
 def compute_metrics(eval_pred):
     """
@@ -35,56 +66,55 @@ def setup_trainer(
     seed: int = 42,
     device: str = None
 ):
-    """
-    Setup and return a trainer for multi-label classification
-    """
-    # Properly set device
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
-    
-    # Initialize model and move to device
+
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name,
         num_labels=num_labels,
-        problem_type="multi_label_classification"
+        problem_type="multi_label_classification",
     )
-    model = model.to(device)
     
-    # Define training arguments with CUDA optimizations
+    model.config.pad_token_id = train_dataset.tokenizer.pad_token_id
+    model.config.use_cache = False
+    model = model.to(device)
+
+    # Create data collator
+    data_collator = DataCollatorWithPadding(
+        tokenizer=train_dataset.tokenizer,
+        max_length=train_dataset.max_length
+    )
+
     training_args = TrainingArguments(
         output_dir=output_dir,
         evaluation_strategy="epoch",
-        save_strategy="epoch",
+        save_strategy="no",
         learning_rate=learning_rate,
         per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size,
         num_train_epochs=num_epochs,
         weight_decay=weight_decay,
-        load_best_model_at_end=True,
         metric_for_best_model="eval_f1",
-        save_total_limit=2,
+        save_total_limit=1,
         seed=seed,
         logging_dir=f'logs/runs_{datetime.now().strftime("%Y%m%d_%H%M%S")}',
-        # Add CUDA optimizations
-        fp16=True,  # Enable mixed precision training
-        gradient_accumulation_steps=4,  # Reduce memory usage
-        dataloader_pin_memory=True,  # Improve data transfer to GPU
+        fp16=True,
+        gradient_accumulation_steps=4,
+        dataloader_pin_memory=True,
+        gradient_checkpointing=True,
+        optim="adamw_torch",
     )
-    
-    # Initialize trainer
+
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=test_dataset,
+        data_collator=data_collator,  # Add the custom collator
         compute_metrics=compute_metrics,
     )
-    
-    # Enable gradient checkpointing for memory efficiency
-    if hasattr(model, 'gradient_checkpointing_enable'):
-        model.gradient_checkpointing_enable()
-    
+
     return trainer
 
 def save_predictions(trainer, test_dataset, output_dir, target_columns):

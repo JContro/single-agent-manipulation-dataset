@@ -40,7 +40,7 @@ def main():
     )
 
     # Create datasets
-    model_name = "google/t5-v1_1-base"
+    model_name = "meta-llama/Llama-3.2-1B"
     text_column = "chat_completion"
     
     train_dataset = ManipulationDataset(
@@ -60,7 +60,7 @@ def main():
     )
 
     # Setup output directory
-    output_dir = f"outputs/manipulation_classifier_{timestamp}"
+    output_dir = f"/mnt/ssd/manip-dataset/outputs/manipulation_classifier_{timestamp}"
     os.makedirs(output_dir, exist_ok=True)
 
     # Initialize trainer
@@ -71,14 +71,15 @@ def main():
         output_dir=output_dir,
         num_labels=len(target_columns),
         batch_size=8,
-        num_epochs=10,
+        num_epochs=50,
         device="cuda"  
     )
 
     # Train model
     print("Starting training...")
-    trainer.train()
     trainer.model.gradient_checkpointing_enable()
+    trainer.train()
+    
 
     # Save best model
     best_model_path = os.path.join(output_dir, 'best-model')
