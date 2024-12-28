@@ -101,6 +101,7 @@ def setup_trainer(
     model_name: str,
     output_dir: str,
     num_labels: int,
+    model_cache_dir: str,
     batch_size: int = 16,
     num_epochs: int = 10,
     learning_rate: float = 2e-5,
@@ -117,6 +118,7 @@ def setup_trainer(
         model_name,
         num_labels=num_labels,
         problem_type="multi_label_classification",
+        cache_dir=model_cache_dir
     )
     
     model.config.pad_token_id = train_dataset.tokenizer.pad_token_id

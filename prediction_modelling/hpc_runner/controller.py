@@ -10,6 +10,7 @@ import os
 import argparse
 import wandb
 from dotenv import load_dotenv
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import json
@@ -26,6 +27,8 @@ def parse_args():
                         help='Base path for all saved files (e.g., /scratch_tmp/users/k23108295)')
     parser.add_argument('--model-name', type=str, required=True,
                         help='Name or path of the model to use (e.g., meta-llama/Llama-3.2-1B)')
+    parser.add_argument('--model-cache-dir', type=str, required=True,
+                        help='Path of the directory where to save the models (e.g. /mnt/ssd/transformers-cache/)')
 
     # K-fold validation
     parser.add_argument('--plots-dir', type=str, default='plots',
@@ -63,35 +66,69 @@ def parse_args():
     
     return parser.parse_args()
 
-def setup_wandb(args, timestamp):
+def setup_wandb_for_fold(args, timestamp, fold_idx):
+    """Setup W&B for a specific fold"""
     if not args.disable_wandb:
-        wandb_api_key = os.getenv('WANDB_API_KEY')
-        
-        if not wandb_api_key:
-            raise ValueError("WANDB_API_KEY not found in .env file")
-        
-        wandb.login(key=wandb_api_key)
-        print("Successfully logged into Weights & Biases!")
+        if fold_idx == 0:  # Only login once
+            wandb_api_key = os.getenv('WANDB_API_KEY')
+            if not wandb_api_key:
+                raise ValueError("WANDB_API_KEY not found in .env file")
+            wandb.login(key=wandb_api_key)
+            print("Successfully logged into Weights & Biases!")
 
-        run_name = f'training_run_{timestamp}'
+        run_name = f'fold_{fold_idx}_training_run_{timestamp}'
         
-        # Log key model and training info but avoid heavy parameter logging
+        # Initialize group for this k-fold experiment
+        group_name = f'kfold_experiment_{timestamp}'
+        
         config = {
             'model_name': args.model_name,
             'batch_size': args.batch_size,
             'num_epochs': args.num_epochs,
             'n_folds': args.n_folds,
+            'fold': fold_idx,
             'random_seed': args.random_seed,
             'gpu_available': torch.cuda.is_available(),
             'gpu_name': torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'None'
         }
         
-        wandb.init(
+        # Initialize new run for this fold
+        run = wandb.init(
             project=args.wandb_project,
             entity=args.wandb_entity,
             name=run_name,
-            config=config
+            group=group_name,  # Group all folds together
+            job_type='fold_training',
+            config=config,
+            reinit=True  # Allow multiple runs in the same script
         )
+        
+        return run
+    return None
+
+def log_fold_metrics(trainer, fold_idx, metrics_history):
+    """Log training metrics for a specific fold"""
+    if not wandb.run:
+        return
+    
+    # Log available training metrics
+    for key, value in metrics_history.items():
+        wandb.log({
+            f'fold_{fold_idx}/{key}': value,
+            'epoch': metrics_history.get('epoch', 0)
+        })
+
+    try:
+        # Log final evaluation metrics
+        final_metrics = trainer.evaluate()
+        wandb.log({
+            f'fold_{fold_idx}/final_metrics': final_metrics,
+            'fold': fold_idx
+        })
+        return final_metrics
+    except Exception as e:
+        logging.error(f"Error evaluating model for fold {fold_idx}: {e}")
+        return metrics_history  # Return training metrics if evaluation fails
 
 def setup_logging(args, timestamp):
     # Create full path using base_path
@@ -138,29 +175,23 @@ def setup_plot_directories(base_path, plots_dir, timestamp):
 
 def plot_and_save_fold_metrics(metrics_history, output_dir, fold_idx):
     """Plot and save training metrics for a specific fold."""
-    if not isinstance(metrics_history, dict) or 'train_loss' not in metrics_history:
-        raise ValueError("metrics_history must be a dictionary containing 'train_loss'")
+    if not isinstance(metrics_history, dict):
+        logging.error(f"Metrics history for fold {fold_idx} is not a dictionary")
+        return
         
     plt.figure(figsize=(12, 6))
     
     try:
-        # Plot training and validation loss
-        plt.subplot(1, 2, 1)
-        plt.plot(metrics_history['train_loss'], label='Training Loss')
-        plt.plot(metrics_history['eval_loss'], label='Validation Loss')
-        plt.title(f'Fold {fold_idx} - Training and Validation Loss')
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss')
-        plt.legend()
+        # Plot training metrics
+        numerical_metrics = {k: v for k, v in metrics_history.items() 
+                           if isinstance(v, (int, float)) and k not in ['epoch']}
         
-        # Plot other metrics
-        plt.subplot(1, 2, 2)
-        metrics = [m for m in metrics_history.keys() if m not in ['train_loss', 'eval_loss']]
-        for metric in metrics:
-            plt.plot(metrics_history[metric], label=metric)
-        plt.title(f'Fold {fold_idx} - Evaluation Metrics')
-        plt.xlabel('Epoch')
-        plt.ylabel('Score')
+        for i, (metric_name, metric_value) in enumerate(numerical_metrics.items()):
+            plt.plot([metric_value], label=metric_name, marker='o')
+        
+        plt.title(f'Fold {fold_idx} - Training Metrics')
+        plt.xlabel('Current Step')
+        plt.ylabel('Value')
         plt.legend()
         
         plt.tight_layout()
@@ -168,8 +199,55 @@ def plot_and_save_fold_metrics(metrics_history, output_dir, fold_idx):
         plt.savefig(output_path)
         plt.close()
         
+        # Log plot to W&B
+        if wandb.run:
+            wandb.log({
+                f"fold_{fold_idx}_metrics_plot": wandb.Image(output_path),
+                f"fold_{fold_idx}_metrics": numerical_metrics
+            })
+        
     except Exception as e:
         logging.error(f"Failed to save metrics plot for fold {fold_idx}: {e}")
+        plt.close()
+
+def log_final_cv_results(cv_results, plots_base):
+    """Log final cross-validation results to W&B"""
+    if not wandb.run:
+        return
+        
+    # Log mean and std metrics
+    wandb.log({"final_cv_results": cv_results})
+    
+    # Create and log CV results plot
+    plt.figure(figsize=(12, 6))
+    metrics = list(cv_results.keys())
+    means = [cv_results[m] for m in metrics if m.startswith('mean_')]
+    stds = [cv_results[m] for m in metrics if m.startswith('std_')]
+    
+    try:
+        plt.errorbar(
+            range(len(means)), 
+            means, 
+            yerr=stds, 
+            fmt='o', 
+            capsize=5
+        )
+        
+        plt.xticks(
+            range(len(means)), 
+            [m.replace('mean_', '') for m in metrics if m.startswith('mean_')], 
+            rotation=45
+        )
+        plt.title('Cross-Validation Results with Standard Deviation')
+        plt.tight_layout()
+        
+        cv_plot_path = os.path.join(plots_base, 'cv_results.png')
+        plt.savefig(cv_plot_path)
+        wandb.log({"cv_results_plot": wandb.Image(cv_plot_path)})
+        plt.close()
+        
+    except Exception as e:
+        logging.error(f"Failed to save CV results plot: {e}")
         plt.close()
 
 def main():
@@ -183,9 +261,6 @@ def main():
     plots_base, plots_kfold, plots_folds = setup_plot_directories(
         args.base_path, args.plots_dir, timestamp
     )
-    
-    # Setup W&B
-    setup_wandb(args, timestamp)
     
     # Set device
     device = ("cuda" if torch.cuda.is_available() else "cpu")
@@ -226,6 +301,9 @@ def main():
     for fold_idx, split in fold_splits.items():
         logging.info(f"\nTraining Fold {fold_idx + 1}/{args.n_folds}")
         
+        # Setup W&B for this fold
+        run = setup_wandb_for_fold(args, timestamp, fold_idx)
+        
         # Create fold-specific plot directory
         fold_plot_dir = os.path.join(plots_folds, f'fold_{fold_idx}')
         os.makedirs(fold_plot_dir, exist_ok=True)
@@ -260,7 +338,7 @@ def main():
         )
         os.makedirs(fold_output_dir, exist_ok=True)
         
-        # Modified trainer setup to include metrics history
+        # Setup trainer for this fold
         trainer = setup_trainer(
             train_dataset=train_dataset,
             test_dataset=test_dataset,
@@ -269,7 +347,8 @@ def main():
             num_labels=len(target_columns),
             batch_size=args.batch_size,
             num_epochs=args.num_epochs,
-            device=device
+            device=device,
+            model_cache_dir=args.model_cache_dir,
         )
         
         # Train model for this fold
@@ -278,7 +357,7 @@ def main():
         
         # Plot and save fold metrics
         plot_and_save_fold_metrics(
-            metrics_history=metrics_history,
+            metrics_history=metrics_history.metrics,
             output_dir=fold_plot_dir,
             fold_idx=fold_idx
         )
@@ -286,8 +365,8 @@ def main():
         # Save fold's model
         trainer.save_model(os.path.join(fold_output_dir, 'model'))
         
-        # Evaluate fold
-        test_results = trainer.evaluate(test_dataset)
+        # Log metrics for this fold and get final results
+        test_results = log_fold_metrics(trainer, fold_idx, metrics_history.metrics)
         fold_results.append(test_results)
         
         # Get and save fold's predictions
@@ -302,9 +381,22 @@ def main():
         results_df['fold'] = fold_idx
         all_predictions.append(results_df)
         
-        # Log fold results to W&B
-        if not args.disable_wandb:
-            wandb.log({f"fold_{fold_idx}": test_results})
+        # Log artifacts to W&B
+        if wandb.run:
+            model_artifact = wandb.Artifact(
+                f"model-fold-{fold_idx}", 
+                type="model",
+                description=f"Model checkpoint for fold {fold_idx}"
+            )
+            model_artifact.add_dir(os.path.join(fold_output_dir, 'model'))
+            wandb.log_artifact(model_artifact)
+            
+            # Log predictions
+            predictions_table = wandb.Table(dataframe=results_df)
+            wandb.log({f"fold_{fold_idx}_predictions": predictions_table})
+        
+        if run:
+            run.finish()  # Close this fold's run
     
     # Aggregate results across folds
     cv_results = aggregate_cv_results(fold_results)
@@ -324,40 +416,26 @@ def main():
         index=False
     )
     
-    # Plot aggregate results
-    plt.figure(figsize=(12, 6))
-    metrics = list(cv_results.keys())
-    means = [cv_results[m] for m in metrics if m.startswith('mean_')]
-    stds = [cv_results[m] for m in metrics if m.startswith('std_')]
-    
-    try:
-        plt.errorbar(
-            range(len(means)), 
-            means, 
-            yerr=stds, 
-            fmt='o', 
-            capsize=5
-        )
-        
-        plt.xticks(
-            range(len(means)), 
-            [m.replace('mean_', '') for m in metrics if m.startswith('mean_')], 
-            rotation=45
-        )
-        plt.title('Cross-Validation Results with Standard Deviation')
-        plt.tight_layout()
-        plt.savefig(os.path.join(plots_base, 'cv_results.png'))
-        plt.close()
-        
-        if not args.disable_wandb:
-            wandb.log({"cv_results_plot": wandb.Image(os.path.join(plots_base, 'cv_results.png'))})
-    
-    except Exception as e:
-        logging.error(f"Failed to save CV results plot: {e}")
-        plt.close()
-    
+    # Start a final W&B run for aggregated results if W&B is enabled
     if not args.disable_wandb:
-        wandb.finish()
+        final_run = wandb.init(
+            project=args.wandb_project,
+            entity=args.wandb_entity,
+            name=f'final_cv_results_{timestamp}',
+            group=f'kfold_experiment_{timestamp}',
+            job_type='cv_summary',
+            config=vars(args),
+            reinit=True
+        )
+        
+        # Log final CV results and plots
+        log_final_cv_results(cv_results, plots_base)
+        
+        # Log combined predictions
+        combined_predictions_table = wandb.Table(dataframe=all_predictions_df)
+        wandb.log({"all_folds_predictions": combined_predictions_table})
+        
+        final_run.finish()
 
 if __name__ == "__main__":
     main()

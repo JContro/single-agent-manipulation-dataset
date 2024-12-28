@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 class ManipulationDataset(Dataset):
-    def __init__(self, X, y, text_column, model, target_columns, max_length=512):
+    def __init__(self, X, y, text_column, model, target_columns, max_length=6000):
         self.X = X
         self.text_column = text_column
         self.tokenizer = AutoTokenizer.from_pretrained(model)
@@ -29,9 +29,11 @@ class ManipulationDataset(Dataset):
             text,
             truncation=True,
             max_length=self.max_length,
-            padding=False,  # Changed this
+            padding=True,  # Changed this
             return_tensors=None
         )
+        
+
         
         return {
             'input_ids': torch.tensor(encoding['input_ids'], dtype=torch.long),

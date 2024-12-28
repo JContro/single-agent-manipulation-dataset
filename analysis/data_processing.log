@@ -6686,3 +6686,49 @@ negging_mean                         0.230342  ...      1.000000
 2024-12-02 16:06:31,005 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
 2024-12-02 16:06:31,006 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
 2024-12-02 16:06:31,934 - INFO - Data processing pipeline completed successfully
+2024-12-26 20:27:36,875 - INFO - Starting reliability analysis pipeline
+2024-12-26 20:27:36,929 - INFO - Response cleaning results:
+2024-12-26 20:27:36,929 - INFO - Initial responses: 1935
+2024-12-26 20:27:36,929 - INFO - Valid responses: 1679
+2024-12-26 20:27:36,929 - INFO - Removed responses: 256
+2024-12-26 20:27:36,929 - INFO - Removal rate: 13.23%
+2024-12-26 20:27:36,929 - INFO - Preparing annotation data for reliability analysis
+2024-12-26 20:27:36,933 - INFO - Found 239 unique raters
+2024-12-26 20:27:36,933 - INFO - Found 536 unique conversations
+2024-12-26 20:27:36,933 - INFO - Creating reliability matrix
+2024-12-26 20:27:36,968 - INFO - Created matrix with shape (239, 536)
+2024-12-26 20:27:36,968 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-12-26 20:27:36,985 - INFO - Krippendorff's alpha: 0.447
+2024-12-26 20:27:36,985 - INFO - Reliability level: Weak agreement
+2024-12-26 20:27:36,985 - INFO - Transforming scores to trinary scale
+2024-12-26 20:27:36,989 - INFO - Transformed values present: [-1.  0.  1.]
+2024-12-26 20:27:36,989 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-12-26 20:27:36,992 - INFO - Krippendorff's alpha: 0.387
+2024-12-26 20:27:36,992 - INFO - Reliability level: Weak agreement
+2024-12-26 20:27:36,992 - INFO - Analyzing rater subgroups with minimum 10 ratings
+2024-12-26 20:27:36,995 - INFO - Found 49 raters with 10+ ratings
+2024-12-26 20:27:36,996 - INFO - Average ratings per frequent rater: 21.7
+2024-12-26 20:27:36,996 - INFO - Creating reliability matrix
+2024-12-26 20:27:36,999 - INFO - Created matrix with shape (49, 502)
+2024-12-26 20:27:37,000 - INFO - Calculating Krippendorff's alpha with ordinal level
+2024-12-26 20:27:37,001 - INFO - Krippendorff's alpha: 0.530
+2024-12-26 20:27:37,001 - INFO - Reliability level: Weak agreement
+2024-12-26 20:27:37,001 - INFO - Analyzing pairwise agreement between raters
+2024-12-26 20:27:37,568 - INFO - Analyzed 2055 rating pairs
+2024-12-26 20:27:37,569 - INFO - Average agreement rate: 26.08%
+2024-12-26 20:27:37,569 - INFO - Average score difference: 1.49
+2024-12-26 20:27:37,569 - INFO - Analyzing score distribution
+2024-12-26 20:27:37,618 - INFO - 
+Overall score distribution:
+2024-12-26 20:27:37,618 - INFO - Score 1: 8.9%
+2024-12-26 20:27:37,618 - INFO - Score 2: 15.8%
+2024-12-26 20:27:37,618 - INFO - Score 3: 8.9%
+2024-12-26 20:27:37,618 - INFO - Score 4: 9.6%
+2024-12-26 20:27:37,618 - INFO - Score 5: 18.9%
+2024-12-26 20:27:37,618 - INFO - Score 6: 23.8%
+2024-12-26 20:27:37,618 - INFO - Score 7: 14.1%
+2024-12-26 20:27:37,618 - INFO - 
+Rater statistics:
+2024-12-26 20:27:37,619 - INFO - Mean score range: 1.00 - 7.00
+2024-12-26 20:27:37,619 - INFO - Standard deviation range: 0.00 - 3.03
+2024-12-26 20:27:37,983 - INFO - Reliability analysis completed
