@@ -4,6 +4,7 @@ import json
 from dotenv import load_dotenv
 import logging
 import datetime
+from typing import List, Dict
 
 def setup_logging():
     logging.basicConfig(
@@ -11,19 +12,59 @@ def setup_logging():
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
 
+def process_batch(classifier: ConversationClassifier, 
+                 batch: List[Dict], 
+                 model_type: str) -> List[Dict]:
+    processed_batch = []
+    
+    try:
+        # Process all conversations in the batch using classify_conversation
+        batch_results = [
+            classifier.classify_conversation(conv, model_type)
+            for conv in batch
+        ]
+        
+        # Process results for each conversation in the batch
+        for conv, classification in zip(batch, batch_results):
+            processed_conv = conv.copy()
+            processed_conv['model_classifications'] = {
+                model_type: {
+                    'classification_results': classification,
+                    'model_used': model_type,
+                    'timestamp': datetime.datetime.now().isoformat()
+                }
+            }
+            processed_batch.append(processed_conv)
+            
+    except Exception as e:
+        logging.error(f"Error processing batch with {model_type}: {str(e)}")
+        # Handle failed batch by processing individually
+        for conv in batch:
+            processed_conv = conv.copy()
+            processed_conv['model_classifications'] = {
+                model_type: {
+                    'error': str(e),
+                    'model_used': model_type,
+                    'timestamp': datetime.datetime.now().isoformat()
+                }
+            }
+            processed_batch.append(processed_conv)
+    
+    return processed_batch
+
 def main():
     # Load environment variables
     load_dotenv()
     
     # Setup logging
     setup_logging()
-
+    
     try:
         # Initialize AI models and classifier
         ai_models = AIModels()
         ai_models.setup_all()
         classifier = ConversationClassifier(ai_models)
-
+        
         # Load conversations
         conversations_path = './data/conversations.json'
         
@@ -31,60 +72,56 @@ def main():
         try:
             with open('./data/classification_results.json', 'r') as f:
                 processed_conversations = json.load(f)
-            start_idx = len(processed_conversations)
-            logging.info(f"Resuming from conversation {start_idx}")
+                start_idx = len(processed_conversations)
+                logging.info(f"Resuming from conversation {start_idx}")
         except FileNotFoundError:
             processed_conversations = []
             start_idx = 0
             logging.info("Starting fresh")
-
+        
         # Load all conversations
         with open(conversations_path, 'r') as f:
             conversations = json.load(f)
-
+        
         # Limit number of conversations if specified
         num_conversations = 100
         if num_conversations is not None:
             conversations = conversations[:num_conversations]
-
-        # Process remaining conversations
-        for conversation in conversations[start_idx:]:
-            import time
-            logging.info("sleeping")
-            time.sleep(60)
+        
+        # Process conversations in batches of 10
+        batch_size = 10
+        remaining_conversations = conversations[start_idx:]
+        
+        for i in range(0, len(remaining_conversations), batch_size):
             
-            logging.info(f"Processing conversation ID: {conversation.get('uuid', 'unknown')}")
+            # Get current batch
+            batch = remaining_conversations[i:i + batch_size]
+            logging.info(f"Processing batch {i//batch_size + 1}, conversations {i} to {min(i + batch_size, len(remaining_conversations))}")
             
-            # Create a copy of the conversation data
-            processed_conversation = conversation.copy()
-            processed_conversation['model_classifications'] = {}
-
-            # Classify using each model
+            # Process batch for each model type
+            batch_results = []
             for model_type in ["openai", "anthropic"]:
-                try:
-                    classification = classifier.classify_conversation(conversation, model_type)
-                    processed_conversation['model_classifications'][model_type] = {
-                        'classification_results': classification,
-                        'model_used': model_type,
-                        'timestamp': datetime.datetime.now().isoformat()
-                    }
-                except Exception as e:
-                    logging.error(f"Error processing with {model_type}: {str(e)}")
-                    processed_conversation['model_classifications'][model_type] = {
-                        'error': str(e),
-                        'model_used': model_type,
-                        'timestamp': datetime.datetime.now().isoformat()
-                    }
-
-            processed_conversations.append(processed_conversation)
+                processed_batch = process_batch(classifier, batch, model_type)
+                
+                # Merge results from different models
+                for j, processed_conv in enumerate(processed_batch):
+                    if len(batch_results) <= j:
+                        batch_results.append(processed_conv)
+                    else:
+                        batch_results[j]['model_classifications'].update(
+                            processed_conv['model_classifications']
+                        )
             
-            # Save progress after each conversation
+            # Add processed batch to results
+            processed_conversations.extend(batch_results)
+            
+            # Save progress after each batch
             with open('./data/classification_results.json', 'w') as f:
                 json.dump(processed_conversations, f, indent=2)
             logging.info("Progress saved")
-
+        
         logging.info("All processing complete")
-
+        
     except Exception as e:
         logging.error(f"Error in main execution: {str(e)}")
         raise
