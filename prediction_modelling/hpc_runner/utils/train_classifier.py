@@ -1,6 +1,6 @@
 import torch
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer, AutoTokenizer
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 import numpy as np
 import logging
 import os
@@ -32,6 +32,8 @@ class CustomWandbCallback(TrainerCallback):
                 'eval_loss': metrics.get('eval_loss', 0),
                 'eval_f1': metrics.get('eval_f1', 0),
                 'eval_accuracy': metrics.get('eval_accuracy', 0),
+                'eval_precision': metrics.get('eval_precision', 0),  # Added
+                'eval_recall': metrics.get('eval_recall', 0),       # Added
                 'learning_rate': metrics.get('learning_rate', 0)
             }
             
@@ -80,20 +82,28 @@ class DataCollatorWithPadding:
         }
     
 
+
 def compute_metrics(eval_pred):
     """
-    Compute metrics for multi-label classification
+    Compute metrics for multi-label classification including precision and recall
     """
     predictions, labels = eval_pred
     # Move computations to CPU since metrics computation typically expects numpy arrays
     predictions = (torch.sigmoid(torch.Tensor(predictions)) > 0.5).numpy()
+    
+    # Calculate metrics for each label
     accuracies = [accuracy_score(labels[:, i], predictions[:, i]) for i in range(labels.shape[1])]
     f1_scores = [f1_score(labels[:, i], predictions[:, i], average='binary') for i in range(labels.shape[1])]
+    precisions = [precision_score(labels[:, i], predictions[:, i], average='binary') for i in range(labels.shape[1])]
+    recalls = [recall_score(labels[:, i], predictions[:, i], average='binary') for i in range(labels.shape[1])]
     
     return {
         'accuracy': np.mean(accuracies),
         'f1': np.mean(f1_scores),
+        'precision': np.mean(precisions),
+        'recall': np.mean(recalls),
     }
+
 
 def setup_trainer(
     train_dataset,

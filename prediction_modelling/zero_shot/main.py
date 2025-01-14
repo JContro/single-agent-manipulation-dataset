@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import logging
 import datetime
 from typing import List, Dict
+import sys
 
 def setup_logging():
     logging.basicConfig(
@@ -52,6 +53,25 @@ def process_batch(classifier: ConversationClassifier,
     
     return processed_batch
 
+def save_progress(processed_conversations: List[Dict], output_path: str):
+    """Save progress with error handling and backup creation."""
+    backup_path = output_path + '.backup'
+    try:
+        # First save to backup file
+        with open(backup_path, 'w') as f:
+            json.dump(processed_conversations, f, indent=2)
+        
+        # Then rename to actual output file
+        import os
+        if os.path.exists(output_path):
+            os.replace(output_path, output_path + '.old')
+        os.rename(backup_path, output_path)
+        
+        logging.info(f"Progress saved successfully to {output_path}")
+    except Exception as e:
+        logging.error(f"Error saving progress: {str(e)}")
+        raise
+
 def main():
     # Load environment variables
     load_dotenv()
@@ -59,44 +79,47 @@ def main():
     # Setup logging
     setup_logging()
     
+    # Configure paths
+    conversations_path = './data/conversations.json'
+    output_path = './data/classification_results.json'
+    
     try:
         # Initialize AI models and classifier
         ai_models = AIModels()
         ai_models.setup_all()
         classifier = ConversationClassifier(ai_models)
         
-        # Load conversations
-        conversations_path = './data/conversations.json'
-        
         # Try to load existing progress first
         try:
-            with open('./data/classification_results.json', 'r') as f:
+            with open(output_path, 'r') as f:
                 processed_conversations = json.load(f)
                 start_idx = len(processed_conversations)
                 logging.info(f"Resuming from conversation {start_idx}")
         except FileNotFoundError:
             processed_conversations = []
             start_idx = 0
-            logging.info("Starting fresh")
+            logging.info("Starting fresh classification")
         
         # Load all conversations
         with open(conversations_path, 'r') as f:
             conversations = json.load(f)
         
-        # Limit number of conversations if specified
-        num_conversations = 300
-        if num_conversations is not None:
-            conversations = conversations[:num_conversations]
+        total_conversations = len(conversations)
+        logging.info(f"Total conversations to process: {total_conversations}")
         
         # Process conversations in batches of 10
         batch_size = 10
         remaining_conversations = conversations[start_idx:]
         
         for i in range(0, len(remaining_conversations), batch_size):
-            
             # Get current batch
             batch = remaining_conversations[i:i + batch_size]
-            logging.info(f"Processing batch {i//batch_size + 1}, conversations {i} to {min(i + batch_size, len(remaining_conversations))}")
+            current_position = start_idx + i + len(batch)
+            progress_percentage = (current_position / total_conversations) * 100
+            
+            logging.info(f"Processing batch {i//batch_size + 1}, "
+                        f"conversations {current_position}/{total_conversations} "
+                        f"({progress_percentage:.1f}%)")
             
             # Process batch for each model type
             batch_results = []
@@ -116,14 +139,23 @@ def main():
             processed_conversations.extend(batch_results)
             
             # Save progress after each batch
-            with open('./data/classification_results.json', 'w') as f:
-                json.dump(processed_conversations, f, indent=2)
-            logging.info("Progress saved")
+            save_progress(processed_conversations, output_path)
         
         logging.info("All processing complete")
         
+    except KeyboardInterrupt:
+        logging.info("Processing interrupted by user. Saving progress...")
+        save_progress(processed_conversations, output_path)
+        sys.exit(0)
     except Exception as e:
         logging.error(f"Error in main execution: {str(e)}")
+        # Try to save progress even if there's an error
+        if 'processed_conversations' in locals():
+            logging.info("Attempting to save progress after error...")
+            try:
+                save_progress(processed_conversations, output_path)
+            except Exception as save_error:
+                logging.error(f"Could not save progress after error: {save_error}")
         raise
 
 if __name__ == "__main__":
