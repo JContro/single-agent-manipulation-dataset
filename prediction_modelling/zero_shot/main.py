@@ -84,7 +84,7 @@ def main():
             conversations = json.load(f)
         
         # Limit number of conversations if specified
-        num_conversations = 100
+        num_conversations = 300
         if num_conversations is not None:
             conversations = conversations[:num_conversations]
         
