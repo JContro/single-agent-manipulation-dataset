@@ -181,11 +181,23 @@ for col in final_df.columns:
 # Add the new row to final_df
 final_df.loc['prompted manipulation'] = prompted_row
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-# Update rows_of_interest for the plot
-rows_of_interest = ['strong', 'helpful', 'manipulation prompted', 'prompted manipulation']
+# Assuming all previous steps have been executed and final_df is prepared
 
+# Define the rows of interest
+rows_of_interest = ['persuasion', 'helpful', 'manipulation prompted', 'prompted manipulation']
+
+
+# Rename the row
+final_df = final_df.rename(index={'strong': 'persuasion'})
+
+# Select the relevant data
 selected_df = final_df.loc[rows_of_interest]
+
+
 
 # Get manipulation types (columns without '_std' suffix and excluding 'len')
 manipulation_types = [col for col in final_df.columns if not col.endswith('_std') and col != 'len']
@@ -193,28 +205,37 @@ manipulation_types = [col for col in final_df.columns if not col.endswith('_std'
 # Set up the plot
 fig, ax = plt.subplots(figsize=(12, 6))
 
-# Set the width of each bar and positions of the bars
-width = 0.25
+# Set the width of each bar to make them thinner
+width = 0.15  # Reduced from 0.25 to 0.15
+
+# Positions of the bars on the x-axis
 x = np.arange(len(manipulation_types))
 
-# Create bars for each row
-for i, row in enumerate(rows_of_interest):
+# Define a greyscale color palette
+# Use a colormap and extract distinct colors
+cmap = plt.get_cmap('coolwarm')
+colors = cmap(np.linspace(0.3, 0.7, len(rows_of_interest)))  # Adjust the range for better visibility
+
+# Create bars for each row with the defined colors
+for i, (row, color) in enumerate(zip(rows_of_interest, colors)):
     values = selected_df.loc[row, manipulation_types]
     errors = selected_df.loc[row, [f'{col}_std' for col in manipulation_types]]
     
-    bars = ax.bar(x + i*width, values, width, 
-                 label=row,
-                 yerr=errors,
-                 capsize=5)
+    ax.bar(x + i*width, values, width, 
+           label=row,
+           yerr=errors,
+           capsize=5,
+           color=color,
+           edgecolor='black')  # Add edgecolor for better distinction
 
 # Customize the plot
-ax.set_ylabel('Count')
+ax.set_ylabel('Percentage (%)')
 ax.set_title('Manipulation Scores by Type and Category')
-ax.set_xticks(x + width)
+ax.set_xticks(x + width * (len(rows_of_interest)-1) / 2)
 ax.set_xticklabels(manipulation_types, rotation=45, ha='right')
-ax.legend()
+ax.legend(title='Categories')
 
-# Adjust layout to prevent label cutoff
+# Improve layout to prevent label cutoff
 plt.tight_layout()
 
 # Save the plot (you can change the format by changing the extension)
