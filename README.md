@@ -1,4 +1,3 @@
-europe-west2-docker.pkg.dev/eu.gcr.io/alpine-anvil-244411/combined-app:latest
+# Single Agent Manipulation
 
-
-run the docker-tag.sh script to run upload the image to artifact registry
+Code for the survey website and the prediction modelling and analytics of the responses
