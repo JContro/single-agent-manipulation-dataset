@@ -413,7 +413,7 @@ def main():
     )
     all_predictions_df.to_csv(
         os.path.join(combined_output_dir, 'all_fold_predictions.csv'),
-        index=False
+        index=True
     )
     
     # Start a final W&B run for aggregated results if W&B is enabled
