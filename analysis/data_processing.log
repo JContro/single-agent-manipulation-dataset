@@ -1,0 +1,12 @@
+2025-01-30 12:00:51,519 - INFO - Starting data processing pipeline
+2025-01-30 12:00:51,617 - INFO - Response processing results:
+2025-01-30 12:00:51,617 - INFO - Initial responses: 1935
+2025-01-30 12:00:51,617 - INFO - Valid responses: 1679
+2025-01-30 12:00:51,617 - INFO - Removed responses: 256
+2025-01-30 12:00:51,617 - INFO - Removal rate: 13.23%
+2025-01-30 12:00:51,621 - INFO - Found 5 incomplete conversations
+2025-01-30 12:00:51,641 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-01-30 12:00:51,641 - INFO - Starting data analysis
+2025-01-30 12:00:51,765 - INFO - Classification metrics - Accuracy: 0.75, Recall: 0.79
+2025-01-30 12:00:51,765 - INFO - Variance statistics - Mean: 1.63, Median: 1.19, Variance of variance: 2.33
+2025-01-30 12:00:52,872 - INFO - Data processing pipeline completed successfully
