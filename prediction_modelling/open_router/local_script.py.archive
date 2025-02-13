@@ -1,0 +1,147 @@
+import pandas as pd
+import json
+import os
+from dotenv import load_dotenv
+import argparse
+import torch
+from typing import Dict, List
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+load_dotenv()
+
+def load_manipulation_definitions() -> Dict:
+    """Load manipulation definitions from file"""
+    with open('./data/manipulation-definitions.json', 'r') as f:
+        return json.load(f)
+
+def prepare_classification_prompt(conversation: str, manipulation_definitions: Dict) -> str:
+    """Prepare the zero-shot classification prompt"""
+    tactics_description = "\n".join([
+        f"- {tactic}: {details['description']}"
+        for tactic, details in manipulation_definitions.items()
+    ])
+    
+    return f"""Analyze the following conversation for manipulation tactics.
+            For each tactic, determine if it is present (true) or absent (false).
+            Additionally, provide an overall assessment of whether the conversation contains any manipulation ("general" field).
+
+            Manipulation tactics to identify:
+            {tactics_description}
+
+            Conversation to analyze:
+            {conversation}
+
+            Respond with only a JSON format with boolean values:
+            {{
+                "manipulation_tactics": {{
+                    "Guilt-Tripping": true/false,
+                    ... [other tactics]
+                }},
+                "general": true/false
+            }}
+
+            no other text is allowed in the response.
+
+            Base your assessment strictly on the definitions provided. Provide only the JSON response without any additional explanation."""
+
+def process_with_longt5(prompt: str, tokenizer, model) -> str:
+    """Process a single prompt with LongT5"""
+    # Prepare input
+    inputs = tokenizer(prompt, return_tensors="pt", max_length=2048, truncation=True)
+    
+    # Move inputs to GPU if available
+    inputs = {k: v.cuda() for k, v in inputs.items()}
+
+    # Generate response
+    outputs = model.generate(
+        inputs["input_ids"],
+        attention_mask=inputs["attention_mask"],
+        max_length=512,
+        num_beams=4,
+        early_stopping=True,
+        length_penalty=2.0
+    )
+
+    # Decode response
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return response
+
+def save_results(results: List[Dict], filename: str):
+    """Save results to a JSON file"""
+    with open(f'data/{filename}.json', 'w') as f:
+        json.dump(results, f, indent=2)
+
+def main(args):
+    # Load existing results if any
+    existing_results = []
+    if os.path.exists(f'data/{args.results_name}.json'):
+        with open(f'data/{args.results_name}.json', 'r') as f:
+            existing_results = json.load(f)
+    
+    # Load conversation data
+    with open('data/classification_results_2.json', 'r') as f:
+        data = json.load(f)
+    
+    df = pd.DataFrame(data)
+    if args.limit:
+        df = df[:args.limit]
+    
+    # Load manipulation definitions
+    manipulation_definitions = load_manipulation_definitions()
+    
+    # Initialize model and tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
+    model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name)
+    
+    # Move model to GPU if available
+    if torch.cuda.is_available():
+        model = model.cuda()
+        print("Using CUDA")
+    else:
+        print("CUDA not available, using CPU")
+
+    # Process each conversation
+    results = []
+    for idx, row in df.iterrows():
+        # Skip if already processed
+        if idx < len(existing_results):
+            continue
+            
+        conversation = row['chat_completion']
+        prompt = prepare_classification_prompt(conversation, manipulation_definitions)
+        
+        try:
+            response = process_with_longt5(prompt, tokenizer, model)
+            
+            result = {
+                'conversation_id': row['uuid'],
+                'model': args.model_name,
+                'classification': response
+            }
+            results.append(result)
+            # Save intermediate results
+            save_results(existing_results + results, args.results_name)
+            
+        except Exception as e:
+            print(f"Error processing conversation {idx}: {str(e)}")
+            continue
+    
+    print(f"Processed {len(results)} new conversations")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Process conversations for manipulation detection')
+    parser.add_argument('--model-name', 
+                       type=str, 
+                       default="google/long-t5-tglobal-large",
+                       help='Name of the model to use')
+    parser.add_argument('--results-name', 
+                       type=str, 
+                       default="classification_results",
+                       help='Name of the results file')
+    parser.add_argument('--limit', 
+                       type=int, 
+                       default=None,
+                       help='Limit the number of conversations to process')
+
+    args = parser.parse_args()
+    main(args)

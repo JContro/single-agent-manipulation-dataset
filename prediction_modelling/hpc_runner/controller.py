@@ -63,8 +63,13 @@ def parse_args():
                         help='W&B entity/username')
     parser.add_argument('--disable-wandb', action='store_true',
                         help='Disable W&B logging')
-    
+
+    parser.add_argument('--debug', action='store_true', help='Run in debug mode')
     return parser.parse_args()
+
+def get_debug_dataset(df, sample_size=16):
+    
+    return df.sample(n=sample_size, random_state=42)
 
 def setup_wandb_for_fold(args, timestamp, fold_idx):
     """Setup W&B for a specific fold"""
@@ -282,6 +287,12 @@ def main():
         log_level=logging.INFO
     )
     
+    # In main():
+    if args.debug:
+        df = get_debug_dataset(df)
+        args.num_epochs = 2  # Reduce epochs
+        args.n_folds = 2     # 
+
     # Perform k-fold split with plot saving
     fold_splits = perform_kfold_stratified_split(
         df,
@@ -292,6 +303,8 @@ def main():
         plot=True,
         plot_output_dir=plots_kfold
     )
+
+    
     
     # Store results for each fold
     fold_results = []
@@ -352,7 +365,6 @@ def main():
         )
         
         # Train model for this fold
-        trainer.model.gradient_checkpointing_enable()
         metrics_history = trainer.train()
         
         # Plot and save fold metrics
@@ -381,6 +393,7 @@ def main():
         results_df['fold'] = fold_idx
         all_predictions.append(results_df)
         
+
         # Log artifacts to W&B
         if wandb.run:
             model_artifact = wandb.Artifact(
@@ -405,7 +418,8 @@ def main():
         logging.info(f"{metric}: {value:.4f}")
     
     # Save combined predictions
-    all_predictions_df = pd.concat(all_predictions, ignore_index=True)
+    all_predictions_df = pd.concat(all_predictions, ignore_index=False)
+
     combined_output_dir = os.path.join(
         args.base_path, 
         args.output_dir, 

@@ -1,3 +1,4 @@
+import backoff
 from utils.llm_apis import AIModels
 from utils.conversation_classifier import ConversationClassifier
 import json
@@ -6,6 +7,7 @@ import logging
 import datetime
 from typing import List, Dict
 import sys
+import openai
 
 def setup_logging():
     logging.basicConfig(
@@ -13,43 +15,58 @@ def setup_logging():
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
 
-def process_batch(classifier: ConversationClassifier, 
+class ConversationClassifierWithBackoff(ConversationClassifier):
+    @backoff.on_exception(
+        backoff.expo,
+        openai.RateLimitError,
+        max_time=60,
+        max_tries=6
+    )
+    def classify_conversation_openai(self, conversation, model_type):
+        """Wrapper method with backoff for OpenAI API calls"""
+        return super().classify_conversation(conversation, "openai")
+
+def process_batch(classifier: ConversationClassifierWithBackoff, 
                  batch: List[Dict], 
                  model_type: str) -> List[Dict]:
     processed_batch = []
     
     try:
-        # Process all conversations in the batch using classify_conversation
-        batch_results = [
-            classifier.classify_conversation(conv, model_type)
-            for conv in batch
-        ]
-        
-        # Process results for each conversation in the batch
-        for conv, classification in zip(batch, batch_results):
-            processed_conv = conv.copy()
-            processed_conv['model_classifications'] = {
-                model_type: {
-                    'classification_results': classification,
-                    'model_used': model_type,
-                    'timestamp': datetime.datetime.now().isoformat()
-                }
-            }
-            processed_batch.append(processed_conv)
-            
-    except Exception as e:
-        logging.error(f"Error processing batch with {model_type}: {str(e)}")
-        # Handle failed batch by processing individually
+        # Process conversations one at a time
         for conv in batch:
-            processed_conv = conv.copy()
-            processed_conv['model_classifications'] = {
-                model_type: {
-                    'error': str(e),
-                    'model_used': model_type,
-                    'timestamp': datetime.datetime.now().isoformat()
+            try:
+                if model_type == "openai":
+                    classification = classifier.classify_conversation_openai(conv, model_type)
+                else:
+                    # Use regular classification for Anthropic
+                    classification = classifier.classify_conversation(conv, model_type)
+                
+                processed_conv = conv.copy()
+                processed_conv['model_classifications'] = {
+                    model_type: {
+                        'classification_results': classification,
+                        'model_used': model_type,
+                        'timestamp': datetime.datetime.now().isoformat()
+                    }
                 }
-            }
-            processed_batch.append(processed_conv)
+                processed_batch.append(processed_conv)
+                logging.info(f"Successfully processed conversation with {model_type}")
+                
+            except Exception as e:
+                logging.error(f"Error processing conversation with {model_type}: {str(e)}")
+                processed_conv = conv.copy()
+                processed_conv['model_classifications'] = {
+                    model_type: {
+                        'error': str(e),
+                        'model_used': model_type,
+                        'timestamp': datetime.datetime.now().isoformat()
+                    }
+                }
+                processed_batch.append(processed_conv)
+    
+    except Exception as e:
+        logging.error(f"Error in batch processing with {model_type}: {str(e)}")
+        raise
     
     return processed_batch
 
@@ -87,7 +104,7 @@ def main():
         # Initialize AI models and classifier
         ai_models = AIModels()
         ai_models.setup_all()
-        classifier = ConversationClassifier(ai_models)
+        classifier = ConversationClassifierWithBackoff(ai_models)
         
         # Try to load existing progress first
         try:
@@ -108,7 +125,7 @@ def main():
         logging.info(f"Total conversations to process: {total_conversations}")
         
         # Process conversations in batches of 10
-        batch_size = 10
+        batch_size = 1
         remaining_conversations = conversations[start_idx:]
         
         for i in range(0, len(remaining_conversations), batch_size):

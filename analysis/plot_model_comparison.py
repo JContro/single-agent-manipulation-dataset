@@ -194,7 +194,7 @@ for model in models:
     # Add the new row to final_df for this model
     final_df.loc[f'prompted manipulation ({model})'] = prompted_row
 
-import pdb;pdb.set_trace()
+
 
 
 # import matplotlib.pyplot as plt
@@ -382,7 +382,6 @@ plt.savefig('persuasion_scores_by_model.png', dpi=300, bbox_inches='tight')
 plt.savefig('persuasion_scores_by_model.pdf', bbox_inches='tight')
 
 plt.show()
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -390,12 +389,28 @@ import pandas as pd
 # Define the models and types we want to plot
 models = ['gpt4', 'llama', 'gemini']
 
-# Get manipulation types (columns without '_std' suffix and excluding 'len' and 'model')
+# Get manipulation types and reorder them with 'general' first
 manipulation_types = [col for col in df.columns if not col.endswith('_std') 
                      and col not in ['len', 'model']]
+# Remove 'general' and add it at the beginning
+manipulation_types.remove('general')
+manipulation_types = ['general'] + manipulation_types
 
-# Set up the plot
-fig, ax = plt.subplots(figsize=(12, 6))
+# Create a mapping for displaying names
+display_names = {
+    'general':  'manipulative (in general)',
+    'peer pressure': 'peer pressure',
+    'reciprocity pressure': 'reciprocity pressure',
+    'gaslighting': 'gaslighting',
+    'guilt-tripping': 'guilt-tripping',
+    'emotional blackmail': 'emotional blackmail',
+    'fear enhancement': 'fear enhancement',
+    'negging': 'negging'
+}
+
+# Set up the plot with more square figure size
+plt.rcParams.update({'font.size': 18})  # Increase base font size
+fig, ax = plt.subplots(figsize=(12, 10))  # More square aspect ratio
 
 # Set the width of each bar
 width = 0.25
@@ -446,14 +461,19 @@ legend_elements = [
     for i, model in enumerate(models)
 ]
 
-
-# Customize the plot
-ax.set_ylabel('Percentage of conversations perceived to be manipulative')
-ax.set_xlabel('Type of perceived manipulation')
-ax.set_title('Persuasion Scores by Model\n(with Helpful scores shown as lighter portion)')
+# Customize the plot with larger fonts
+ax.set_ylabel('Percentage of conversations perceived\nto be manipulative', fontsize=22)
+ax.set_xlabel('Type of perceived manipulation', fontsize=22)
+ax.set_title('Persuasion Scores by Model\n(with Helpful scores shown as lighter portion)', 
+             fontsize=24, pad=20)
 ax.set_xticks(x + width)
-ax.set_xticklabels(manipulation_types, rotation=45, ha='right')
-ax.legend(handles=legend_elements, title='Models')
+ax.set_xticklabels([display_names[t] for t in manipulation_types], 
+                   rotation=45, ha='right', fontsize=20)
+ax.tick_params(axis='y', labelsize=20)
+
+# Place legend inside the plot
+ax.legend(handles=legend_elements, fontsize=20, 
+         loc='upper right')
 
 # Add grid for better readability
 ax.grid(True, axis='y', linestyle='--', alpha=0.7)

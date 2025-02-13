@@ -10,6 +10,11 @@ class ManipulationDataset(Dataset):
         self.text_column = text_column
         self.tokenizer = AutoTokenizer.from_pretrained(model)
         
+        # Store UUIDs
+        self.uuids = X.index.tolist()  # Assuming UUID is the index
+        # Alternative if UUID is a column:
+        # self.uuids = X['uuid'].tolist()
+        
         # Set padding token and strategy
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
@@ -23,23 +28,23 @@ class ManipulationDataset(Dataset):
 
     def __getitem__(self, idx):
         text = self.X[self.text_column].iloc[idx]
+        uuid = self.uuids[idx]
         
-        # Don't pad here - we'll pad in the collate_fn
         encoding = self.tokenizer(
             text,
             truncation=True,
             max_length=self.max_length,
-            padding=True,  # Changed this
+            padding=True,
             return_tensors=None
         )
-        
-
         
         return {
             'input_ids': torch.tensor(encoding['input_ids'], dtype=torch.long),
             'attention_mask': torch.tensor(encoding['attention_mask'], dtype=torch.long),
-            'labels': torch.tensor(self.labels[idx], dtype=torch.float)
+            'labels': torch.tensor(self.labels[idx], dtype=torch.float),
+            'uuid': uuid
         }
+
 
 def create_labels(y, target_columns):
     return y[target_columns].values

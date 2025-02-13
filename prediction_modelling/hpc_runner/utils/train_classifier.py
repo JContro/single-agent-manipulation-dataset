@@ -157,7 +157,7 @@ def setup_trainer(
         fp16=True,
         gradient_accumulation_steps=4,
         dataloader_pin_memory=True,
-        gradient_checkpointing=True,
+        gradient_checkpointing=False,
         optim="adamw_torch",
         # Add more frequent logging
         logging_steps=10,          # Log every 10 steps
@@ -179,14 +179,57 @@ def setup_trainer(
 
     return trainer
 
+# def save_predictions(trainer, test_dataset, output_dir, target_columns):
+#     """
+#     Generate and save predictions
+#     """
+#     predictions = trainer.predict(test_dataset)
+#     # Move predictions to CPU for post-processing
+#     predicted_labels = (torch.sigmoid(torch.Tensor(predictions.predictions).cpu()) > 0.5).numpy()
+#     results_df = pd.DataFrame(predicted_labels, columns=target_columns)
+#     predictions_path = os.path.join(output_dir, 'predictions.csv')
+#     results_df.to_csv(predictions_path, index=False)
+#     return predictions, results_df
+
 def save_predictions(trainer, test_dataset, output_dir, target_columns):
     """
-    Generate and save predictions
+    Generate and save predictions with UUIDs
     """
     predictions = trainer.predict(test_dataset)
-    # Move predictions to CPU for post-processing
+    
+    # Get UUIDs from dataset
+    uuids = test_dataset.uuids
+    
+    # Move predictions to CPU and apply sigmoid activation and threshold
     predicted_labels = (torch.sigmoid(torch.Tensor(predictions.predictions).cpu()) > 0.5).numpy()
-    results_df = pd.DataFrame(predicted_labels, columns=target_columns)
+    
+    # Create DataFrame with UUIDs and predictions
+    results_df = pd.DataFrame(
+        predicted_labels,
+        columns=target_columns,
+        index=uuids
+    )
+    
+    # Add raw probabilities if needed
+    raw_probs = torch.sigmoid(torch.Tensor(predictions.predictions).cpu()).numpy()
+    prob_df = pd.DataFrame(
+        raw_probs,
+        columns=[f"{col}_prob" for col in target_columns],
+        index=uuids
+    )
+    results_df = pd.concat([results_df, prob_df], axis=1)
+    
+    # Add true labels if available
+    if hasattr(predictions, 'label_ids'):
+        true_labels = pd.DataFrame(
+            predictions.label_ids,
+            columns=[f"{col}_true" for col in target_columns],
+            index=uuids
+        )
+        results_df = pd.concat([results_df, true_labels], axis=1)
+    
+    # Save predictions
     predictions_path = os.path.join(output_dir, 'predictions.csv')
-    results_df.to_csv(predictions_path, index=False)
+    results_df.to_csv(predictions_path)  # Including index (UUIDs) in output
+    
     return predictions, results_df

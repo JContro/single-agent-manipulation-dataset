@@ -223,6 +223,7 @@ def perform_kfold_stratified_split(df, stratify_columns, target_columns=None, n_
     try:
         # Perform k-fold split
         for fold_idx, (train_idx, test_idx) in enumerate(skf.split(X, combined_strat)):
+
             X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
             y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
             

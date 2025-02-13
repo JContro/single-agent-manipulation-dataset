@@ -66,7 +66,7 @@ analytics_df = get_analytics_df()
 
 new_data  = analyze_manipulation_by_category(analytics_df)
 
-import pdb; pdb.set_trace()
+
 
 import pandas as pd
 
@@ -247,35 +247,40 @@ plt.savefig('manipulation_scores_plot.pdf', bbox_inches='tight')
 
 # Show the plot
 plt.show()
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-# Define the rows of interest with all four categories
-rows_of_interest = ['manipulation prompted', 'prompted manipulation']
-
-# Rename the rows
-final_df = final_df.rename(index={
-    'strong': 'persuasion',
-    'prompted manipulation': 'this manipulation',
-    'manipulation prompted': 'other manipulation types'
+# Set global plotting parameters
+plt.rcParams.update({
+    'font.size': 18,
+    'axes.titlesize': 18,
+    'axes.labelsize': 18,
+    'xtick.labelsize': 18,
+    'ytick.labelsize': 18,
+    'legend.fontsize': 14,
 })
 
-# Update rows_of_interest with new names
-rows_of_interest = ['persuasion', 'helpful']
+# First rename both the main column and its standard deviation column
+final_df = final_df.rename(columns={
+    'general': 'manipulative (in general)',
+    'general_std': 'manipulative (in general)_std'
+})
+
+# Then create the manipulation_types list
+manipulation_types = ['manipulative (in general)'] + [col for col in final_df.columns 
+    if not col.endswith('_std') and col != 'len' and col != 'manipulative (in general)']
+
+rows_of_interest = ['requested specific manipulation', 'average of other requested manipulation types']
 
 # Select the relevant data
 selected_df = final_df.loc[rows_of_interest]
 
-# Get manipulation types (columns without '_std' suffix and excluding 'len')
-manipulation_types = [col for col in final_df.columns if not col.endswith('_std') and col != 'len']
-
 # Set up the plot
-fig, ax = plt.subplots(figsize=(12, 6))
+fig, ax = plt.subplots(figsize=(10, 8))
 
 # Set the width of each bar
-width = 0.2  # Adjusted for four categories
+width = 0.4
 
 # Positions of the bars on the x-axis
 x = np.arange(len(manipulation_types))
@@ -287,7 +292,8 @@ colors = cmap(np.linspace(0.2, 0.8, len(rows_of_interest)))
 # Create bars for each row with the defined colors
 for i, (row, color) in enumerate(zip(rows_of_interest, colors)):
     values = selected_df.loc[row, manipulation_types]
-    errors = selected_df.loc[row, [f'{col}_std' for col in manipulation_types]]
+    std_columns = [f'{col}_std' for col in manipulation_types]
+    errors = selected_df.loc[row, std_columns]
     
     ax.bar(x + i*width, values, width, 
            label=row,
@@ -297,19 +303,47 @@ for i, (row, color) in enumerate(zip(rows_of_interest, colors)):
            edgecolor='black')
 
 # Customize the plot
-ax.set_ylabel('Percentage of conversations perceived to be manipulative')
+ax.set_ylabel('Percentage of conversations\nperceived to be manipulative')
 ax.set_xlabel('Type of perceived manipulation')
-ax.set_title('Percentage of conversations perceived to be manipulative, when models requested to be helpful/persuasive')
+ax.set_title('Percentage of conversations perceived to be manipulative,\n when asked to be a specific manipulation')
 ax.set_xticks(x + width * (len(rows_of_interest)-1) / 2)
-ax.set_xticklabels(manipulation_types, rotation=45, ha='right')
-ax.legend(title='Conversations generated to be')
+ax.set_xticklabels(manipulation_types, rotation=45, ha='right', rotation_mode='anchor')
+ax.set_ylim(0,105)
+ax.legend(title='Conversation type', loc='upper right')
 
-# Improve layout to prevent label cutoff
 plt.tight_layout()
+plt.savefig('manipulation_scores_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('manipulation_scores_plot.pdf', bbox_inches='tight')
+plt.show()
 
-# Save the plot
+# Second plot
+rows_of_interest = ['persuasion', 'helpful']
+selected_df = final_df.loc[rows_of_interest]
+
+fig, ax = plt.subplots(figsize=(8, 8))
+width = 0.4
+x = np.arange(len(manipulation_types))
+colors = cmap(np.linspace(0.2, 0.8, len(rows_of_interest)))
+
+for i, (row, color) in enumerate(zip(rows_of_interest, colors)):
+    values = selected_df.loc[row, manipulation_types]
+    std_columns = [f'{col}_std' for col in manipulation_types]
+    errors = selected_df.loc[row, std_columns]
+    
+    ax.bar(x + i * width, values, width, 
+           label=row,
+           yerr=errors,
+           capsize=5,
+           color=color,
+           edgecolor='black')
+
+ax.set_ylabel('Percentage of conversations\n perceived to be manipulative')
+ax.set_xlabel('Type of perceived manipulation')
+ax.set_xticks(x + width * (len(rows_of_interest) - 1) / 2)
+ax.set_xticklabels(manipulation_types, rotation=45, ha='right', rotation_mode='anchor')
+ax.legend(title='Conversation type', title_fontsize='14', loc='upper right')
+
+plt.tight_layout()
 plt.savefig('persuasion_scores_plot.png', dpi=300, bbox_inches='tight')
 plt.savefig('persuasion_scores_plot.pdf', bbox_inches='tight')
-
-# Show the plot
 plt.show()
