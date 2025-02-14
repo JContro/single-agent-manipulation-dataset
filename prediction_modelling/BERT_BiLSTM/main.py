@@ -12,8 +12,10 @@ import wandb
 from dotenv import load_dotenv
 import argparse
 from datetime import datetime
-
-# At the top of the file, keep your original import
+from tqdm import tqdm
+import re
+import json
+from pathlib import Path
 from utils.load_data import process_conversation_data
 
 # Load environment variables
@@ -35,77 +37,75 @@ def parse_args():
                         help='Run in debug mode with small dataset')
     return parser.parse_args()
 
-class ConversationDataset(Dataset):
-    def __init__(self, conversations, labels, tokenizer, max_length=512):
-        self.conversations = conversations
+class PrecomputedConversationDataset(Dataset):
+    def __init__(self, conversations, labels, tokenizer, bert_model, device, max_length=512):
         self.labels = labels
-        self.tokenizer = tokenizer
-        self.max_length = max_length
+        self.max_utterances = 50
+        
+        # Pre-compute all BERT embeddings
+        self.precomputed_embeddings = []
+        self.valid_utterance_masks = []
+        
+        print("Pre-computing BERT embeddings...")
+        bert_model.eval()
+        bert_model.to(device)
+        
+        for conversation in tqdm(conversations, desc="Processing conversations"):
+            # Split conversation into utterances by AGENT and USER
+            utterances = conversation.split("@@@")
+            
+            utterances = utterances[:self.max_utterances]
+            
+            # Create mask for valid utterances
+            valid_mask = torch.zeros(self.max_utterances)
+            valid_mask[:len(utterances)] = 1
+            self.valid_utterance_masks.append(valid_mask)
+            
+            # Encode and get embeddings for each utterance
+            utterance_embeddings = []
+            for utterance in utterances:
+                if utterance.strip():
+                    encoding = tokenizer(
+                        utterance,
+                        max_length=max_length,
+                        padding='max_length',
+                        truncation=True,
+                        return_tensors='pt'
+                    ).to(device)
+                    
+                    with torch.no_grad():
+                        outputs = bert_model(**encoding)
+                        embedding = outputs.last_hidden_state[:, 0, :].cpu()
+                    utterance_embeddings.append(embedding)
+
+            # Pad if necessary
+            while len(utterance_embeddings) < self.max_utterances:
+                utterance_embeddings.append(torch.zeros_like(utterance_embeddings[0]))
+            
+            # Stack all utterance embeddings for this conversation
+            conversation_tensor = torch.cat(utterance_embeddings, dim=0)
+            self.precomputed_embeddings.append(conversation_tensor)
+        
+        # Convert to tensor
+        self.precomputed_embeddings = torch.stack(self.precomputed_embeddings)
+        self.valid_utterance_masks = torch.stack(self.valid_utterance_masks)
 
     def __len__(self):
-        return len(self.conversations)
+        return len(self.labels)
 
     def __getitem__(self, idx):
-        conversation = self.conversations[idx]
-        labels = self.labels[idx]
-        
-        # Split conversation into utterances
-        utterances = conversation.split('\n')  # Adjust split pattern based on your data format
-        
-        # Encode each utterance separately
-        utterance_embeddings = []
-        for utterance in utterances:
-            if utterance.strip():  # Skip empty utterances
-                encoding = self.tokenizer(
-                    utterance,
-                    max_length=self.max_length,
-                    padding='max_length',
-                    truncation=True,
-                    return_tensors='pt'
-                )
-                utterance_embeddings.append({
-                    'input_ids': encoding['input_ids'].squeeze(),
-                    'attention_mask': encoding['attention_mask'].squeeze(),
-                })
-        
-        # Pad sequence of utterances if necessary
-        max_utterances = 50  # Adjust based on your needs
-        while len(utterance_embeddings) < max_utterances:
-            # Add padding utterance
-            padding_encoding = self.tokenizer(
-                '',
-                max_length=self.max_length,
-                padding='max_length',
-                truncation=True,
-                return_tensors='pt'
-            )
-            utterance_embeddings.append({
-                'input_ids': padding_encoding['input_ids'].squeeze(),
-                'attention_mask': padding_encoding['attention_mask'].squeeze(),
-            })
-        
-        # Truncate if too many utterances
-        utterance_embeddings = utterance_embeddings[:max_utterances]
-        
-        # Stack tensors
-        input_ids = torch.stack([u['input_ids'] for u in utterance_embeddings])
-        attention_mask = torch.stack([u['attention_mask'] for u in utterance_embeddings])
-        
         return {
-            'input_ids': input_ids,
-            'attention_mask': attention_mask,
-            'labels': torch.FloatTensor(labels)
+            'embeddings': self.precomputed_embeddings[idx],
+            'valid_mask': self.valid_utterance_masks[idx],
+            'labels': torch.FloatTensor(self.labels[idx])
         }
 
 class BERTBiLSTMClassifier(nn.Module):
-    def __init__(self, bert_model, num_classes, hidden_size=256, num_layers=2, dropout=0.5):
+    def __init__(self, bert_hidden_size, num_classes, hidden_size=256, num_layers=2, dropout=0.5):
         super().__init__()
-        self.bert = bert_model
-        self.hidden_size = hidden_size
         
-        # BiLSTM layer
         self.lstm = nn.LSTM(
-            input_size=bert_model.config.hidden_size,
+            input_size=bert_hidden_size,
             hidden_size=hidden_size,
             num_layers=num_layers,
             bidirectional=True,
@@ -117,171 +117,230 @@ class BERTBiLSTMClassifier(nn.Module):
         self.classifier = nn.Linear(hidden_size * 2, num_classes)
         self.sigmoid = nn.Sigmoid()
 
-    def forward(self, input_ids, attention_mask):
-        batch_size = input_ids.size(0)
-        num_utterances = input_ids.size(1)
-        
-        # Reshape for BERT processing
-        input_ids = input_ids.view(-1, input_ids.size(-1))
-        attention_mask = attention_mask.view(-1, attention_mask.size(-1))
-        
-        # Get BERT embeddings for each utterance
-        with torch.no_grad():
-            bert_outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-            # Use [CLS] token embedding for each utterance
-            utterance_embeddings = bert_outputs.last_hidden_state[:, 0, :]
-        
-        # Reshape back to (batch_size, num_utterances, bert_hidden_size)
-        utterance_embeddings = utterance_embeddings.view(batch_size, num_utterances, -1)
-        
-        # Pass through BiLSTM
-        lstm_output, (hidden, cell) = self.lstm(utterance_embeddings)
-        
-        # Get final hidden states from both directions
+    def forward(self, embeddings, valid_mask=None):
+        lstm_output, (hidden, cell) = self.lstm(embeddings)
         hidden_forward = hidden[-2, :, :]
         hidden_backward = hidden[-1, :, :]
         final_hidden = torch.cat((hidden_forward, hidden_backward), dim=1)
-        
-        # Classification layers
         dropped = self.dropout(final_hidden)
         logits = self.classifier(dropped)
         outputs = self.sigmoid(logits)
-        
         return outputs
-
-def setup_wandb(args, device):
-    """Initialize Weights & Biases"""
-    if not args.disable_wandb:
-        wandb_api_key = os.getenv('WANDB_API_KEY')
-        if not wandb_api_key:
-            raise ValueError("WANDB_API_KEY not found in .env file")
-        
-        wandb.login(key=wandb_api_key)
-        config = {
-            "model_type": "bert-bilstm",
-            "bert_model": "bert-base-uncased",
-            "num_epochs": args.num_epochs,
-            "batch_size": args.batch_size,
-            "learning_rate": args.learning_rate,
-            "device": str(device)
-        }
-        wandb.init(
-            project="conversation-classifier",
-            config=config
-        )
 
 def train_epoch(model, data_loader, optimizer, criterion, device, args):
     model.train()
     total_loss = 0
-    for batch_idx, batch in enumerate(data_loader):
-        input_ids = batch['input_ids'].to(device)      # Shape: [batch_size, num_utterances, seq_len]
-        attention_mask = batch['attention_mask'].to(device)
+    progress_bar = tqdm(data_loader, desc="Training")
+    
+    for batch_idx, batch in enumerate(progress_bar):
+        embeddings = batch['embeddings'].to(device)
+        valid_mask = batch['valid_mask'].to(device)
         labels = batch['labels'].to(device)
         
         optimizer.zero_grad()
-        outputs = model(input_ids, attention_mask)
+        outputs = model(embeddings, valid_mask)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
         
         total_loss += loss.item()
+        progress_bar.set_postfix({'loss': f'{loss.item():.4f}'})
         
         if not args.disable_wandb and batch_idx % 10 == 0:
             wandb.log({
                 "batch_loss": loss.item(),
                 "batch": batch_idx
             })
-            
-    return total_loss / len(data_loader)
     
+    return total_loss / len(data_loader)
+
 def evaluate(model, data_loader, criterion, device):
     model.eval()
     total_loss = 0
     all_preds = []
+    all_probs = []
     all_labels = []
     
+    progress_bar = tqdm(data_loader, desc="Evaluating")
     with torch.no_grad():
-        for batch in data_loader:
-            input_ids = batch['input_ids'].to(device)
-            attention_mask = batch['attention_mask'].to(device)
+        for batch in progress_bar:
+            embeddings = batch['embeddings'].to(device)
+            valid_mask = batch['valid_mask'].to(device)
             labels = batch['labels'].to(device)
             
-            outputs = model(input_ids, attention_mask)
+            outputs = model(embeddings, valid_mask)
             loss = criterion(outputs, labels)
             total_loss += loss.item()
             
             preds = (outputs > 0.5).float()
             all_preds.extend(preds.cpu().numpy())
+            all_probs.extend(outputs.cpu().numpy())
             all_labels.extend(labels.cpu().numpy())
-            
-    return total_loss / len(data_loader), np.array(all_preds), np.array(all_labels)
+    
+    return total_loss / len(data_loader), np.array(all_preds), np.array(all_probs), np.array(all_labels)
 
+def save_fold_predictions(fold_metrics, binary_cols, save_dir, conversations, val_idx, df):
+    fold = fold_metrics['fold']
+    predictions = fold_metrics['val_predictions']
+    probabilities = fold_metrics['val_probabilities']
+    labels = fold_metrics['val_labels']
+    
+    # Create temporary DataFrame with conversations and their predictions
+    temp_df = pd.DataFrame({'conversation': [conversations[i] for i in val_idx]})
+    
+    # Match conversations with the original DataFrame to get UUIDs
+    # Create a temporary conversation column in the original df for matching
+    df_temp = df.copy()
+    df_temp['conversation'] = df['chat_completion']
+    
+    # Merge to get the UUIDs
+    results_df = temp_df.merge(df_temp[['conversation', 'uuid']], 
+                             on='conversation', 
+                             how='left',
+                             validate='1:1')  # Ensure one-to-one matching
+    
+    # Verify the merge worked correctly
+    if len(results_df) != len(temp_df):
+        raise ValueError(f"Mismatch in merge: {len(results_df)} results vs {len(temp_df)} predictions")
+    
+    if results_df['uuid'].isna().any():
+        raise ValueError("Some conversations could not be matched to UUIDs")
+    
+    # Drop the conversation column as it's no longer needed
+    results_df = results_df.drop('conversation', axis=1)
+    
+    # Add predicted labels (binary)
+    for i, col in enumerate(binary_cols):
+        results_df[col] = predictions[:, i]
+    
+    # Add probabilities
+    for i, col in enumerate(binary_cols):
+        results_df[f'{col}_prob'] = probabilities[:, i]
+    
+    # Add true labels
+    for i, col in enumerate(binary_cols):
+        results_df[f'{col}_true'] = labels[:, i]
+    
+    # Add fold number
+    results_df['fold'] = fold
+    
+    # Save to CSV
+    csv_path = save_dir / f'fold_{fold}_predictions.csv'
+    results_df.to_csv(csv_path, index=False)
+    
+    return csv_path
 
-def get_debug_dataset(df, sample_size=16):
+def combine_fold_predictions(save_dir):
+    all_predictions = []
+    for file in save_dir.glob('fold_*_predictions.csv'):
+        df = pd.read_csv(file)
+        all_predictions.append(df)
+    
+    combined_df = pd.concat(all_predictions, axis=0, ignore_index=True)
+    combined_path = save_dir / 'all_fold_predictions.csv'
+    combined_df.to_csv(combined_path, index=False)
+    return combined_path
+
+def get_debug_dataset(df, sample_size=10):
     return df.sample(n=sample_size, random_state=42)
 
 def main():
     args = parse_args()
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     
+    # Create directory for saving predictions
+    save_dir = Path(f'results/run_{timestamp}')
+    save_dir.mkdir(parents=True, exist_ok=True)
+    
     # Setup device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
     
-    # Setup W&B
-    setup_wandb(args, device)
+    # Setup W&B with group
+    run_group = f"exp_{timestamp}"
+    if not args.disable_wandb:
+        wandb_api_key = os.getenv('WANDB_API_KEY')
+        if not wandb_api_key:
+            raise ValueError("WANDB_API_KEY not found in .env file")
+        wandb.login(key=wandb_api_key)
     
     # Load and process data
     df = process_conversation_data(args.data_dir)
+    df = df.reset_index()
+    import pdb; pdb.set_trace()
     
     if args.debug:
+        print("Running in debug mode with reduced dataset")
         df = get_debug_dataset(df)
         args.num_epochs = 2
     
-    # Prepare data
     conversations = df['chat_completion'].tolist()
     binary_cols = [col for col in df.columns if col.endswith('_binary')]
     labels = df[binary_cols].values
     
-    # Initialize tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
     bert_model = AutoModel.from_pretrained('bert-base-uncased')
     
-    # Setup cross-validation
     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     all_metrics = []
     
+    config = {
+        "timestamp": timestamp,
+        "model_type": "bert-bilstm",
+        "bert_model": "bert-base-uncased",
+        "num_epochs": args.num_epochs,
+        "batch_size": args.batch_size,
+        "learning_rate": args.learning_rate,
+        "device": str(device),
+        "binary_columns": binary_cols,
+        "debug_mode": args.debug
+    }
+    
+    with open(save_dir / 'config.json', 'w') as f:
+        json.dump(config, f, indent=2)
+    
     for fold, (train_idx, val_idx) in enumerate(skf.split(conversations, np.argmax(labels, axis=1)), 1):
-        print(f'\nFold {fold}')
         if not args.disable_wandb:
-            wandb.log({"fold": fold})
+            wandb.init(
+                project="conversation-classifier",
+                group=run_group,
+                name=f"fold_{fold}",
+                config=config,
+                reinit=True
+            )
         
-        # Create datasets
-        train_dataset = ConversationDataset(
+        print(f'\nFold {fold}')
+        
+        train_dataset = PrecomputedConversationDataset(
             [conversations[i] for i in train_idx],
             labels[train_idx],
-            tokenizer
+            tokenizer,
+            bert_model,
+            device
         )
-        val_dataset = ConversationDataset(
+        val_dataset = PrecomputedConversationDataset(
             [conversations[i] for i in val_idx],
             labels[val_idx],
-            tokenizer
+            tokenizer,
+            bert_model,
+            device
         )
         
         train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
         val_loader = DataLoader(val_dataset, batch_size=args.batch_size)
         
-        # Initialize model and optimizer
-        model = BERTBiLSTMClassifier(bert_model, num_classes=len(binary_cols))
+        model = BERTBiLSTMClassifier(
+            bert_hidden_size=bert_model.config.hidden_size,
+            num_classes=len(binary_cols)
+        )
         model.to(device)
         
         criterion = nn.BCELoss()
         optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate)
         
-        # Training loop
         for epoch in range(args.num_epochs):
             train_loss = train_epoch(model, train_loader, optimizer, criterion, device, args)
-            val_loss, val_preds, val_labels = evaluate(model, val_loader, criterion, device)
+            val_loss, val_preds, val_probs, val_labels = evaluate(model, val_loader, criterion, device)
             
             if not args.disable_wandb:
                 wandb.log({
@@ -294,7 +353,6 @@ def main():
             print(f'Train Loss: {train_loss:.4f}')
             print(f'Val Loss: {val_loss:.4f}')
             
-            # Log metrics for each binary column
             for i, col in enumerate(binary_cols):
                 report = classification_report(val_labels[:, i], val_preds[:, i], output_dict=True)
                 if not args.disable_wandb:
@@ -311,14 +369,25 @@ def main():
             'fold': fold,
             'final_val_loss': val_loss,
             'val_predictions': val_preds,
+            'val_probabilities': val_probs,
             'val_labels': val_labels
         }
+        
+        save_path = save_fold_predictions(fold_metrics, binary_cols, save_dir, conversations, val_idx, df)
+        print(f"Saved fold {fold} predictions to {save_path}")
+        
+        if not args.disable_wandb:
+            wandb.save(str(save_path))
+            wandb.finish()
+        
         all_metrics.append(fold_metrics)
     
-    if not args.disable_wandb:
-        wandb.finish()
+    # Combine all fold predictions
+    combined_path = combine_fold_predictions(save_dir)
+    print(f"Combined predictions saved to: {combined_path}")
     
-    return all_metrics
+    return all_metrics, save_dir
 
 if __name__ == "__main__":
-    main()
+    metrics, save_dir = main()
+    print(f"\nResults saved in: {save_dir}")
