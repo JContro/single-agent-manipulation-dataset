@@ -25,7 +25,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train conversation classifier')
     parser.add_argument('--data-dir', type=str, default='data',
                         help='Directory containing the data')
-    parser.add_argument('--num-epochs', type=int, default=30,
+    parser.add_argument('--num-epochs', type=int, default=20,
                         help='Number of training epochs')
     parser.add_argument('--batch-size', type=int, default=8,
                         help='Training batch size')
