@@ -25,11 +25,11 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train conversation classifier')
     parser.add_argument('--data-dir', type=str, default='data',
                         help='Directory containing the data')
-    parser.add_argument('--num-epochs', type=int, default=10,
+    parser.add_argument('--num-epochs', type=int, default=30,
                         help='Number of training epochs')
-    parser.add_argument('--batch-size', type=int, default=16,
+    parser.add_argument('--batch-size', type=int, default=8,
                         help='Training batch size')
-    parser.add_argument('--learning-rate', type=float, default=2e-5,
+    parser.add_argument('--learning-rate', type=float, default=0.001,
                         help='Learning rate')
     parser.add_argument('--disable-wandb', action='store_true',
                         help='Disable W&B logging')
@@ -101,7 +101,7 @@ class PrecomputedConversationDataset(Dataset):
         }
 
 class BERTBiLSTMClassifier(nn.Module):
-    def __init__(self, bert_hidden_size, num_classes, hidden_size=256, num_layers=2, dropout=0.5):
+    def __init__(self, bert_hidden_size, num_classes, hidden_size=128, num_layers=2, dropout=0.5):
         super().__init__()
         
         self.lstm = nn.LSTM(
@@ -244,6 +244,24 @@ def combine_fold_predictions(save_dir):
 def get_debug_dataset(df, sample_size=10):
     return df.sample(n=sample_size, random_state=42)
 
+def get_folds(conversations, df, fold_pred_path):
+    conv_df = pd.DataFrame({"chat_completion" : conversations})
+    conv_df = conv_df.reset_index()
+    merged_df = pd.merge(df, conv_df, on='chat_completion', how='inner')  
+    
+    
+    fold_df = pd.read_csv(fold_pred_path)
+    final_df = pd.merge(fold_df, merged_df, on='uuid', how='inner')
+    final_df[['uuid', 'fold', 'index', 'chat_completion']]
+    all_idx = set(final_df['index'])
+    fold_info = []
+    for fold in final_df['fold'].unique():
+        val_idx = set(final_df[final_df['fold'] == fold]['index'])
+        train_idx = all_idx - val_idx
+        fold_info.append((fold, list(train_idx), list(val_idx)))
+    return fold_info
+
+
 def main():
     args = parse_args()
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -267,7 +285,7 @@ def main():
     # Load and process data
     df = process_conversation_data(args.data_dir)
     df = df.reset_index()
-    import pdb; pdb.set_trace()
+    
     
     if args.debug:
         print("Running in debug mode with reduced dataset")
@@ -299,7 +317,10 @@ def main():
     with open(save_dir / 'config.json', 'w') as f:
         json.dump(config, f, indent=2)
     
-    for fold, (train_idx, val_idx) in enumerate(skf.split(conversations, np.argmax(labels, axis=1)), 1):
+    fold_info = get_folds(conversations, df, fold_pred_path='data/longformer_all_fold_predictions.csv')
+
+    for (fold, train_idx, val_idx) in fold_info:
+        
         if not args.disable_wandb:
             wandb.init(
                 project="conversation-classifier",

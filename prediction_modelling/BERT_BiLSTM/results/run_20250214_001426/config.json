@@ -1,0 +1,20 @@
+{
+  "timestamp": "20250214_001426",
+  "model_type": "bert-bilstm",
+  "bert_model": "bert-base-uncased",
+  "num_epochs": 2,
+  "batch_size": 16,
+  "learning_rate": 2e-05,
+  "device": "cuda",
+  "binary_columns": [
+    "peer pressure_binary",
+    "reciprocity pressure_binary",
+    "gaslighting_binary",
+    "guilt-tripping_binary",
+    "emotional blackmail_binary",
+    "general_binary",
+    "fear enhancement_binary",
+    "negging_binary"
+  ],
+  "debug_mode": true
+}

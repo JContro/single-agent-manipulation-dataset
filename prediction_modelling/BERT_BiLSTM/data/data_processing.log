@@ -180,3 +180,199 @@
 2025-02-14 00:04:09,334 - WARNING - Found 8 empty lists in column emotional blackmail
 2025-02-14 00:04:09,344 - WARNING - Found 4 empty lists in column fear enhancement
 2025-02-14 00:04:09,349 - WARNING - Found 4 empty lists in column negging
+2025-02-14 00:16:10,123 - INFO - Response processing results:
+2025-02-14 00:16:10,123 - INFO - Initial responses: 1935
+2025-02-14 00:16:10,123 - INFO - Valid responses: 1679
+2025-02-14 00:16:10,123 - INFO - Removed responses: 256
+2025-02-14 00:16:10,123 - INFO - Removal rate: 13.23%
+2025-02-14 00:16:10,126 - INFO - Found 5 incomplete conversations
+2025-02-14 00:16:10,140 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 00:16:10,145 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 00:16:10,148 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 00:16:10,152 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 00:16:10,156 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 00:16:10,159 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 00:16:10,166 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 00:16:10,170 - WARNING - Found 4 empty lists in column negging
+2025-02-14 00:16:35,943 - INFO - Response processing results:
+2025-02-14 00:16:35,943 - INFO - Initial responses: 1935
+2025-02-14 00:16:35,943 - INFO - Valid responses: 1679
+2025-02-14 00:16:35,943 - INFO - Removed responses: 256
+2025-02-14 00:16:35,944 - INFO - Removal rate: 13.23%
+2025-02-14 00:16:35,946 - INFO - Found 5 incomplete conversations
+2025-02-14 00:16:35,960 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 00:16:35,966 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 00:16:35,969 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 00:16:35,973 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 00:16:35,976 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 00:16:35,980 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 00:16:35,987 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 00:16:35,991 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:28:19,911 - INFO - Response processing results:
+2025-02-14 10:28:19,912 - INFO - Initial responses: 1935
+2025-02-14 10:28:19,912 - INFO - Valid responses: 1679
+2025-02-14 10:28:19,912 - INFO - Removed responses: 256
+2025-02-14 10:28:19,912 - INFO - Removal rate: 13.23%
+2025-02-14 10:28:19,915 - INFO - Found 5 incomplete conversations
+2025-02-14 10:28:19,930 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:28:19,936 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:28:19,940 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:28:19,943 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:28:19,947 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:28:19,951 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:28:19,958 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:28:19,962 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:32:58,739 - INFO - Response processing results:
+2025-02-14 10:32:58,739 - INFO - Initial responses: 1935
+2025-02-14 10:32:58,739 - INFO - Valid responses: 1679
+2025-02-14 10:32:58,740 - INFO - Removed responses: 256
+2025-02-14 10:32:58,740 - INFO - Removal rate: 13.23%
+2025-02-14 10:32:58,742 - INFO - Found 5 incomplete conversations
+2025-02-14 10:32:58,758 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:32:58,763 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:32:58,767 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:32:58,770 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:32:58,774 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:32:58,778 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:32:58,785 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:32:58,789 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:40:56,443 - INFO - Response processing results:
+2025-02-14 10:40:56,443 - INFO - Initial responses: 1935
+2025-02-14 10:40:56,443 - INFO - Valid responses: 1679
+2025-02-14 10:40:56,443 - INFO - Removed responses: 256
+2025-02-14 10:40:56,443 - INFO - Removal rate: 13.23%
+2025-02-14 10:40:56,446 - INFO - Found 5 incomplete conversations
+2025-02-14 10:40:56,461 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:40:56,467 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:40:56,470 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:40:56,474 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:40:56,477 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:40:56,481 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:40:56,488 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:40:56,492 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:45:53,302 - INFO - Response processing results:
+2025-02-14 10:45:53,302 - INFO - Initial responses: 1935
+2025-02-14 10:45:53,302 - INFO - Valid responses: 1679
+2025-02-14 10:45:53,302 - INFO - Removed responses: 256
+2025-02-14 10:45:53,302 - INFO - Removal rate: 13.23%
+2025-02-14 10:45:53,305 - INFO - Found 5 incomplete conversations
+2025-02-14 10:45:53,320 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:45:53,326 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:45:53,329 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:45:53,333 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:45:53,337 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:45:53,340 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:45:53,348 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:45:53,352 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:53:13,277 - INFO - Response processing results:
+2025-02-14 10:53:13,277 - INFO - Initial responses: 1935
+2025-02-14 10:53:13,277 - INFO - Valid responses: 1679
+2025-02-14 10:53:13,277 - INFO - Removed responses: 256
+2025-02-14 10:53:13,277 - INFO - Removal rate: 13.23%
+2025-02-14 10:53:13,280 - INFO - Found 5 incomplete conversations
+2025-02-14 10:53:13,296 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:53:13,302 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:53:13,305 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:53:13,309 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:53:13,313 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:53:13,317 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:53:13,325 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:53:13,329 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:54:00,115 - INFO - Response processing results:
+2025-02-14 10:54:00,116 - INFO - Initial responses: 1935
+2025-02-14 10:54:00,116 - INFO - Valid responses: 1679
+2025-02-14 10:54:00,116 - INFO - Removed responses: 256
+2025-02-14 10:54:00,116 - INFO - Removal rate: 13.23%
+2025-02-14 10:54:00,119 - INFO - Found 5 incomplete conversations
+2025-02-14 10:54:00,134 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:54:00,140 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:54:00,144 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:54:00,147 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:54:00,151 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:54:00,155 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:54:00,162 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:54:00,166 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:55:18,313 - INFO - Response processing results:
+2025-02-14 10:55:18,313 - INFO - Initial responses: 1935
+2025-02-14 10:55:18,313 - INFO - Valid responses: 1679
+2025-02-14 10:55:18,313 - INFO - Removed responses: 256
+2025-02-14 10:55:18,313 - INFO - Removal rate: 13.23%
+2025-02-14 10:55:18,316 - INFO - Found 5 incomplete conversations
+2025-02-14 10:55:18,331 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:55:18,337 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:55:18,340 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:55:18,344 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:55:18,353 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:55:18,364 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:55:18,379 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:55:18,383 - WARNING - Found 4 empty lists in column negging
+2025-02-14 10:55:41,577 - INFO - Response processing results:
+2025-02-14 10:55:41,577 - INFO - Initial responses: 1935
+2025-02-14 10:55:41,577 - INFO - Valid responses: 1679
+2025-02-14 10:55:41,578 - INFO - Removed responses: 256
+2025-02-14 10:55:41,578 - INFO - Removal rate: 13.23%
+2025-02-14 10:55:41,582 - INFO - Found 5 incomplete conversations
+2025-02-14 10:55:41,603 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 10:55:41,611 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 10:55:41,616 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 10:55:41,621 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 10:55:41,626 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 10:55:41,631 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 10:55:41,642 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 10:55:41,647 - WARNING - Found 4 empty lists in column negging
+2025-02-14 11:09:58,359 - INFO - Response processing results:
+2025-02-14 11:09:58,359 - INFO - Initial responses: 1935
+2025-02-14 11:09:58,359 - INFO - Valid responses: 1679
+2025-02-14 11:09:58,359 - INFO - Removed responses: 256
+2025-02-14 11:09:58,360 - INFO - Removal rate: 13.23%
+2025-02-14 11:09:58,364 - INFO - Found 5 incomplete conversations
+2025-02-14 11:09:58,388 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 11:09:58,395 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 11:09:58,401 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 11:09:58,407 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 11:09:58,413 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 11:09:58,418 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 11:09:58,430 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 11:09:58,436 - WARNING - Found 4 empty lists in column negging
+2025-02-14 16:21:19,996 - INFO - Response processing results:
+2025-02-14 16:21:19,996 - INFO - Initial responses: 1935
+2025-02-14 16:21:19,996 - INFO - Valid responses: 1679
+2025-02-14 16:21:19,996 - INFO - Removed responses: 256
+2025-02-14 16:21:19,996 - INFO - Removal rate: 13.23%
+2025-02-14 16:21:19,999 - INFO - Found 5 incomplete conversations
+2025-02-14 16:21:20,013 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 16:21:20,018 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 16:21:20,022 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 16:21:20,025 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 16:21:20,029 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 16:21:20,033 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 16:21:20,040 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 16:21:20,044 - WARNING - Found 4 empty lists in column negging
+2025-02-14 16:32:04,895 - INFO - Response processing results:
+2025-02-14 16:32:04,895 - INFO - Initial responses: 1935
+2025-02-14 16:32:04,896 - INFO - Valid responses: 1679
+2025-02-14 16:32:04,896 - INFO - Removed responses: 256
+2025-02-14 16:32:04,896 - INFO - Removal rate: 13.23%
+2025-02-14 16:32:04,898 - INFO - Found 5 incomplete conversations
+2025-02-14 16:32:04,913 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 16:32:04,918 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 16:32:04,921 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 16:32:04,925 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 16:32:04,928 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 16:32:04,932 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 16:32:04,939 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 16:32:04,943 - WARNING - Found 4 empty lists in column negging
+2025-02-14 16:37:47,355 - INFO - Response processing results:
+2025-02-14 16:37:47,355 - INFO - Initial responses: 1935
+2025-02-14 16:37:47,356 - INFO - Valid responses: 1679
+2025-02-14 16:37:47,356 - INFO - Removed responses: 256
+2025-02-14 16:37:47,356 - INFO - Removal rate: 13.23%
+2025-02-14 16:37:47,360 - INFO - Found 5 incomplete conversations
+2025-02-14 16:37:47,380 - INFO - Created merged DataFrame with shape: (746, 24)
+2025-02-14 16:37:47,387 - WARNING - Found 9 empty lists in column peer pressure
+2025-02-14 16:37:47,392 - WARNING - Found 5 empty lists in column reciprocity pressure
+2025-02-14 16:37:47,397 - WARNING - Found 3 empty lists in column gaslighting
+2025-02-14 16:37:47,402 - WARNING - Found 7 empty lists in column guilt-tripping
+2025-02-14 16:37:47,407 - WARNING - Found 8 empty lists in column emotional blackmail
+2025-02-14 16:37:47,417 - WARNING - Found 4 empty lists in column fear enhancement
+2025-02-14 16:37:47,422 - WARNING - Found 4 empty lists in column negging
